@@ -12,3 +12,5 @@ out/
 .idea/
 *.swp
 *.swo
+panduan-deploy-vercel.html
+*.guide.html
