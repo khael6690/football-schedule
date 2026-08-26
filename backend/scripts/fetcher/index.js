@@ -84,9 +84,22 @@ function requireApiKey() {
       '[Fatal] FOOTBALL_DATA_API_KEY is not set or empty.\n'
       + '  1. Register at https://www.football-data.org/client/register\n'
       + '  2. Copy your API token\n'
-      + '  3. Set it in backend/.env or backend/scripts/fetcher/.env:\n'
+      + '  3. Set it in backend/.env or GitHub Secrets:\n'
       + '     FOOTBALL_DATA_API_KEY=your_token_here\n'
       + '  4. Re-run: npm run fetcher:seed'
+    );
+    process.exit(1);
+  }
+}
+
+function requireMongoUrl() {
+  const mongoUrl = process.env.MONGODB_URL || process.env.MONGODB_URI;
+  if (!mongoUrl || !mongoUrl.trim() || (process.env.NODE_ENV === 'production' && mongoUrl.includes('localhost'))) {
+    console.error(
+      '\n❌ [Fatal] MONGODB_URL is not set or points to localhost in production/CI.\n'
+      + '  Please add MONGODB_URL in GitHub Repo Settings -> Secrets and variables -> Actions:\n'
+      + '  Name: MONGODB_URL\n'
+      + '  Value: mongodb+srv://<user>:<password>@cluster0.xxx.mongodb.net/soccer?retryWrites=true&w=majority\n'
     );
     process.exit(1);
   }
@@ -464,6 +477,7 @@ async function syncStandingsForLeague(SoccerStanding, leagueConfig) {
 // --- Modes ---
 
 async function runSeed() {
+  requireMongoUrl();
   const mongoose = require('../../database');
   const SoccerLeague = require('../../models/soccerLeague');
   const SoccerClub = require('../../models/soccerClub');
@@ -471,6 +485,12 @@ async function runSeed() {
   const SoccerStanding = require('../../models/soccerStanding');
 
   console.log('=== Starting Full Seed ===');
+  if (mongoose.connection.readyState !== 1) {
+    console.log('⏳ Waiting for MongoDB connection...');
+    await mongoose.connection.asPromise();
+  }
+  console.log('✅ Connected to MongoDB Atlas');
+
   const today = new Date();
   const next7Days = new Date();
   next7Days.setDate(today.getDate() + 7);
