@@ -41,10 +41,10 @@ function DatePill({ date, active, onClick }: { date: Date; active: boolean; onCl
     <button
       onClick={onClick}
       className={cn(
-        'px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors',
+        'px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors shadow-xs',
         active
-          ? 'bg-green-600 text-white shadow-sm'
-          : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
+          ? 'bg-green-600 text-white shadow-sm font-semibold'
+          : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800/80 dark:text-zinc-300 dark:hover:bg-zinc-700'
       )}
     >
       {label}
@@ -59,13 +59,13 @@ function LeagueTab({ league, active, onClick }: { league: typeof LEAGUES[number]
       className={cn(
         'px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors relative',
         active
-          ? 'text-green-600'
-          : 'text-zinc-400 hover:text-zinc-200'
+          ? 'text-green-600 dark:text-green-400 font-semibold'
+          : 'text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-200'
       )}
     >
       {league.name}
       {active && (
-        <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-green-600" />
+        <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-green-600 dark:bg-green-500" />
       )}
     </button>
   );
@@ -115,12 +115,12 @@ function FixturesContent() {
     .filter((g) => g.events.length > 0);
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+    <div className="min-h-screen text-zinc-900 dark:text-zinc-100">
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header & Status Filter Bar */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-          <h1 className="text-3xl font-bold">Fixtures</h1>
-          <div className="flex items-center gap-1.5 p-1 bg-zinc-900 border border-zinc-800 rounded-lg">
+          <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">Fixtures</h1>
+          <div className="flex items-center gap-1.5 p-1 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg shadow-xs">
             {STATUS_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
@@ -131,7 +131,7 @@ function FixturesContent() {
                     ? opt.value === 'live'
                       ? 'bg-red-600 text-white animate-pulse'
                       : 'bg-green-600 text-white'
-                    : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800'
+                    : 'text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100 hover:bg-zinc-200/60 dark:hover:bg-zinc-800'
                 )}
               >
                 {opt.label}
@@ -155,7 +155,7 @@ function FixturesContent() {
         </div>
 
         {/* League filter tabs */}
-        <div className="mb-6 overflow-x-auto scrollbar-hide border-b border-zinc-800">
+        <div className="mb-6 overflow-x-auto scrollbar-hide border-b border-zinc-200 dark:border-zinc-800">
           <div className="flex gap-1">
             {LEAGUES.map((league) => (
               <LeagueTab
@@ -170,16 +170,16 @@ function FixturesContent() {
 
         {/* Content */}
         {error && (
-          <div className="bg-red-950/20 border border-red-900/50 text-red-400 px-4 py-3 rounded-lg">
+          <div className="bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 px-4 py-3 rounded-lg">
             Failed to load fixtures. {error.message}
           </div>
         )}
 
         {isLoading && (
           <div className="space-y-6">
-            <div className="bg-zinc-900 rounded-lg border border-zinc-800 overflow-hidden">
-              <div className="sticky top-0 bg-zinc-900 border-b border-zinc-800 px-4 py-2">
-                <div className="h-4 bg-zinc-700 rounded w-32 animate-pulse" />
+            <div className="bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-xs">
+              <div className="sticky top-0 bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 px-4 py-2">
+                <div className="h-4 bg-zinc-200 dark:bg-zinc-700 rounded w-32 animate-pulse" />
               </div>
               <SkeletonMatchRow />
               <SkeletonMatchRow />
@@ -189,8 +189,8 @@ function FixturesContent() {
         )}
 
         {!isLoading && !error && filteredGroups.length === 0 && (
-          <div className="text-center py-12 text-zinc-500">
-            No {selectedStatus !== 'all' ? selectedStatus : ''} fixtures found for this selection.
+          <div className="text-center py-16 text-zinc-500 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-900/30 rounded-xl border border-zinc-200 dark:border-zinc-800">
+            Tidak ada pertandingan {selectedStatus !== 'all' ? selectedStatus : ''} untuk tanggal ini.
           </div>
         )}
 
@@ -199,10 +199,10 @@ function FixturesContent() {
             {filteredGroups.map((group) => (
               <div
                 key={group.leagueSlug}
-                className="bg-zinc-900 rounded-lg border border-zinc-800 overflow-hidden"
+                className="bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-xs"
               >
                 {/* League group header (sticky) */}
-                <div className="sticky top-0 bg-zinc-900 border-b border-zinc-800 px-4 py-2.5 flex items-center gap-2 z-10">
+                <div className="sticky top-0 bg-zinc-50 dark:bg-zinc-900/90 border-b border-zinc-200 dark:border-zinc-800 px-4 py-2.5 flex items-center gap-2.5 z-10">
                   {group.leagueLogo && (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
@@ -210,19 +210,19 @@ function FixturesContent() {
                       alt={group.leagueName}
                       width={18}
                       height={18}
-                      className="rounded"
+                      className="rounded object-contain"
                     />
                   )}
-                  <h2 className="text-sm font-semibold text-zinc-100">
+                  <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
                     {group.leagueName}
                   </h2>
-                  <span className="text-xs text-zinc-500 ml-auto">
+                  <span className="text-xs text-zinc-500 dark:text-zinc-400 ml-auto font-medium">
                     {group.events.length} {group.events.length === 1 ? 'match' : 'matches'}
                   </span>
                 </div>
 
                 {/* Match rows */}
-                <div>
+                <div className="divide-y divide-zinc-100 dark:divide-zinc-800">
                   {group.events.map((event) => (
                     <MatchRow key={event.id} match={event} />
                   ))}
@@ -238,7 +238,7 @@ function FixturesContent() {
 
 export default function FixturesPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-zinc-950 p-10 text-center text-zinc-500">Loading fixtures...</div>}>
+    <Suspense fallback={<div className="min-h-screen p-10 text-center text-zinc-500 dark:text-zinc-400">Loading fixtures...</div>}>
       <FixturesContent />
     </Suspense>
   );

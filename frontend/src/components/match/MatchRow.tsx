@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { formatKickoffTime } from '@/lib/date';
 import type { ApiScoreboardEvent, ApiCompetitor } from '@/types/football';
@@ -19,14 +18,14 @@ function TeamLogo({ club, size = 24 }: { club: ApiCompetitor['team']; size?: num
         alt={club.abbreviation ?? club.displayName}
         width={size}
         height={size}
-        className="rounded-full object-contain"
+        className="rounded-full object-contain shrink-0"
         style={{ width: size, height: size }}
       />
     );
   }
   return (
     <div
-      className="rounded-full flex items-center justify-center bg-zinc-700 text-zinc-300 text-[9px] font-bold uppercase"
+      className="rounded-full flex items-center justify-center bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-[9px] font-bold uppercase shrink-0"
       style={{ width: size, height: size }}
     >
       {(club.abbreviation ?? club.displayName).slice(0, 3)}
@@ -40,21 +39,23 @@ function StatusBadge({ match }: { match: ApiScoreboardEvent }) {
 
   if (state === 'in') {
     return (
-      <span className="px-1.5 py-0.5 rounded bg-green-600 text-white font-bold uppercase text-[10px] tracking-wide whitespace-nowrap">
+      <span className="px-1.5 py-0.5 rounded bg-green-600 text-white font-bold uppercase text-[10px] tracking-wide whitespace-nowrap animate-pulse">
         LIVE {detail}
       </span>
     );
   }
   if (state === 'post') {
     const desc = match.status.type.description || '';
-    if (desc.toLowerCase().includes('half')) {
-      return <span className="text-xs font-mono text-zinc-400">HT</span>;
-    }
-    return <span className="text-xs font-mono text-zinc-400">FT</span>;
+    const label = desc.toLowerCase().includes('half') ? 'HT' : 'FT';
+    return (
+      <span className="px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-mono text-xs font-semibold">
+        {label}
+      </span>
+    );
   }
   if (state === 'unknown') {
     return (
-      <span className="px-1.5 py-0.5 rounded bg-zinc-700 text-zinc-400 text-[10px] uppercase">
+      <span className="px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-400 text-[10px] font-bold uppercase">
         {detail || 'PPD'}
       </span>
     );
@@ -62,7 +63,11 @@ function StatusBadge({ match }: { match: ApiScoreboardEvent }) {
   // pre — show kick-off time in WIB
   const kickoff = formatKickoffTime(match.date, true);
   if (kickoff) {
-    return <span className="text-xs font-mono text-zinc-400 font-medium whitespace-nowrap">{kickoff}</span>;
+    return (
+      <span className="text-xs font-mono text-zinc-600 dark:text-zinc-400 font-medium whitespace-nowrap">
+        {kickoff}
+      </span>
+    );
   }
   return null;
 }
@@ -88,29 +93,30 @@ export function MatchRow({ match }: Props) {
     <Link
       href={`/match/${matchId}`}
       className={cn(
-        'flex items-center gap-3 px-4 py-3 border-b border-zinc-800 last:border-b-0',
-        'hover:bg-zinc-800/40 transition-colors group cursor-pointer'
+        'flex items-center gap-3 px-4 py-3.5 transition-colors group cursor-pointer',
+        'hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
       )}
     >
       {/* Time / live indicator */}
       <div className="w-12 shrink-0 text-right">
         {isLive ? (
-          <span className="w-2 h-2 rounded-full bg-green-600 animate-pulse inline-block" />
+          <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse inline-block shadow-sm" />
         ) : (
-          <span className="text-xs font-mono text-zinc-400">
+          <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400 font-medium">
             {isFinished ? '' : formatKickoffTime(match.date, false)}
           </span>
         )}
       </div>
 
       {/* Home team */}
-      <div className="flex items-center gap-2 flex-1 min-w-0">
+      <div className="flex items-center gap-2.5 flex-1 min-w-0">
         <TeamLogo club={home.team} size={22} />
         <span
           className={cn(
-            'text-sm truncate',
-            home.winner ? 'text-zinc-100 font-semibold' : 'text-zinc-300',
-            !isFinished && !isLive && 'text-zinc-300'
+            'text-sm truncate transition-colors',
+            home.winner
+              ? 'text-zinc-950 dark:text-zinc-50 font-bold'
+              : 'text-zinc-800 dark:text-zinc-200 font-medium group-hover:text-green-600 dark:group-hover:text-green-400'
           )}
         >
           {home.team.shortDisplayName || home.team.displayName}
@@ -120,21 +126,24 @@ export function MatchRow({ match }: Props) {
       {/* Score / vs */}
       <div className="w-16 shrink-0 text-center font-mono font-bold text-base">
         {hasScore ? (
-          <span className={cn(isLive ? 'text-green-400' : 'text-zinc-100')}>
+          <span className={cn(isLive ? 'text-green-600 dark:text-green-400' : 'text-zinc-900 dark:text-zinc-100')}>
             {homeScore} – {awayScore}
           </span>
         ) : (
-          <span className="text-zinc-600 font-normal text-sm">vs</span>
+          <span className="text-zinc-400 dark:text-zinc-500 font-semibold text-xs uppercase tracking-wider">
+            vs
+          </span>
         )}
       </div>
 
       {/* Away team */}
-      <div className="flex items-center gap-2 flex-1 min-w-0 justify-end">
+      <div className="flex items-center gap-2.5 flex-1 min-w-0 justify-end">
         <span
           className={cn(
-            'text-sm truncate text-right',
-            away.winner ? 'text-zinc-100 font-semibold' : 'text-zinc-300',
-            !isFinished && !isLive && 'text-zinc-300'
+            'text-sm truncate text-right transition-colors',
+            away.winner
+              ? 'text-zinc-950 dark:text-zinc-50 font-bold'
+              : 'text-zinc-800 dark:text-zinc-200 font-medium group-hover:text-green-600 dark:group-hover:text-green-400'
           )}
         >
           {away.team.shortDisplayName || away.team.displayName}

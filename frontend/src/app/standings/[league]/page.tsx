@@ -15,6 +15,8 @@ import { StandingsTable } from "@/components/league/StandingsTable";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 function entryToStanding(e: ApiStandingEntry): Standing {
   const stat = (name: string) =>
@@ -22,7 +24,7 @@ function entryToStanding(e: ApiStandingEntry): Standing {
 
   const team: Club = {
     _id: e.team.id,
-    name: e.team.displayName,
+    name: e.team.displayName || e.team.name,
     logo: e.team.logo || undefined,
   };
 
@@ -55,7 +57,7 @@ export default function StandingsPage() {
     queryKey: ["leagues"],
     queryFn: () =>
       fetchAPI<ApiLeaguesResponse>("/get/soccer/leagues").then((r) =>
-        r.leagues.find((l) => l.slug === league)
+        r.leagues?.find((l) => l.slug === league)
       ),
   });
 
@@ -74,7 +76,7 @@ export default function StandingsPage() {
         </header>
         <div className="space-y-2">
           {Array.from({ length: 10 }).map((_, i) => (
-            <Skeleton key={i} variant="rect" className="h-12" />
+            <Skeleton key={i} variant="rect" className="h-12 rounded-lg" />
           ))}
         </div>
       </div>
@@ -82,20 +84,31 @@ export default function StandingsPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-10">
-      <header className="mb-8 flex items-center gap-4">
-        {leagueInfo?.logo && (
-          <img src={leagueInfo.logo} alt={leagueInfo.name} className="w-10 h-10 rounded" />
-        )}
-        <div>
-          <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-100">
-            {standingsData?.name ?? leagueInfo?.name ?? "Standings"}
-          </h1>
-          <p className="text-zinc-500 dark:text-zinc-400 text-sm">
-            {standingsData?.season ?? leagueInfo?.season?.display_name}
-          </p>
-        </div>
-      </header>
+    <div className="max-w-7xl mx-auto px-4 py-10 min-h-screen">
+      <div className="mb-6">
+        <Link
+          href="/leagues"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-500 dark:text-zinc-400 hover:text-green-600 dark:hover:text-green-400 mb-4 transition-colors"
+        >
+          <ArrowLeft className="w-3.5 h-3.5" />
+          Kembali ke Daftar Liga
+        </Link>
+        <header className="flex items-center gap-4">
+          {leagueInfo?.logo && (
+            <div className="w-12 h-12 rounded-xl bg-zinc-50 dark:bg-zinc-800 p-1.5 flex items-center justify-center border border-zinc-200 dark:border-zinc-700 shadow-xs shrink-0">
+              <img src={leagueInfo.logo} alt={leagueInfo.name} className="w-full h-full object-contain" />
+            </div>
+          )}
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+              Klasemen {standingsData?.name ?? leagueInfo?.name ?? "Liga"}
+            </h1>
+            <p className="text-zinc-600 dark:text-zinc-400 text-sm mt-0.5">
+              Musim {standingsData?.season ?? leagueInfo?.season?.year ?? 2026}
+            </p>
+          </div>
+        </header>
+      </div>
 
       {groups.length > 1 && (
         <div className="flex gap-2 mb-6 overflow-x-auto pb-1">
@@ -104,10 +117,10 @@ export default function StandingsPage() {
               key={g.id}
               onClick={() => setActiveGroup(i)}
               className={cn(
-                "px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition",
+                "px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition shadow-xs",
                 i === activeGroup
-                  ? "bg-green-600 text-white"
-                  : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700"
+                  ? "bg-green-600 text-white font-semibold"
+                  : "bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700"
               )}
             >
               {g.name}
@@ -119,9 +132,9 @@ export default function StandingsPage() {
       {standings.length > 0 ? (
         <StandingsTable standings={standings} leagueSlug={league} />
       ) : (
-        <p className="text-zinc-500 dark:text-zinc-400 text-center py-16">
-          No standings data available yet.
-        </p>
+        <div className="text-zinc-500 dark:text-zinc-400 text-center py-16 bg-zinc-50 dark:bg-zinc-900/30 rounded-xl border border-zinc-200 dark:border-zinc-800">
+          Data klasemen belum tersedia untuk kompetisi ini.
+        </div>
       )}
     </div>
   );

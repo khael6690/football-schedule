@@ -29,7 +29,7 @@ export default function LandingPage() {
     staleTime: 60000,
   });
 
-  // 2. Fetch Real Today's Matches
+  // 2. Fetch Real Today's Matches (with tz_offset=7 for WIB)
   const { data: todaysMatches, isLoading: matchesLoading } = useQuery({
     queryKey: ["landingTodaysMatches", todayDateParam],
     queryFn: async () => {
@@ -66,24 +66,24 @@ export default function LandingPage() {
   });
 
   return (
-    <div className="flex flex-col gap-20 pb-20">
-      {/* 1. Clean Hero Section (No Dummy Ticker) */}
-      <section className="relative pt-12 pb-8 max-w-7xl mx-auto px-4 w-full">
+    <div className="flex flex-col gap-16 md:gap-24 pb-20">
+      {/* 1. Hero Section */}
+      <section className="relative pt-12 pb-6 max-w-7xl mx-auto px-4 w-full">
         <div className="flex flex-col items-center text-center max-w-3xl mx-auto gap-6">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-green-500/10 border border-green-500/20 text-green-600 dark:text-green-400 text-xs font-semibold tracking-wide shadow-sm">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-green-500/10 border border-green-500/20 text-green-700 dark:text-green-400 text-xs font-semibold tracking-wide shadow-xs">
             <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
             <span>Jadwal & Skor Langsung Sepak Bola Real-Time</span>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 leading-tight">
+          <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-zinc-950 dark:text-zinc-50 leading-tight">
             Setiap Gol. Setiap Menit.<br />
-            <span className="bg-gradient-to-r from-green-600 to-teal-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-green-600 to-teal-500 dark:from-green-400 dark:to-teal-400 bg-clip-text text-transparent">
               Live & Akurat (WIB).
             </span>
           </h1>
 
-          <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl leading-relaxed">
-            Pantau jadwal pertandingan, skor terkini, klasemen liga top dunia dengan penyesuaian otomatis Waktu Indonesia Barat.
+          <p className="text-base sm:text-lg text-zinc-700 dark:text-zinc-300 max-w-2xl leading-relaxed">
+            Pantau jadwal pertandingan, skor terkini, dan klasemen liga top dunia dengan penyesuaian otomatis Waktu Indonesia Barat.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
@@ -96,9 +96,9 @@ export default function LandingPage() {
             </Link>
             <Link
               href="/fixtures"
-              className="px-6 py-3 rounded-lg border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-900 text-zinc-900 dark:text-zinc-100 font-medium text-sm transition flex items-center gap-2"
+              className="px-6 py-3 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-900 dark:text-zinc-100 font-medium text-sm transition flex items-center gap-2 shadow-xs"
             >
-              <Calendar className="w-4 h-4" />
+              <Calendar className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
               Semua Jadwal
             </Link>
           </div>
@@ -110,9 +110,9 @@ export default function LandingPage() {
         <div className="flex justify-between items-center mb-6">
           <div>
             <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">Top Leagues</h2>
-            <p className="text-xs text-zinc-500 mt-0.5">Kompetisi utama Eropa & Internasional</p>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Kompetisi utama Eropa & Internasional</p>
           </div>
-          <Link href="/leagues" className="text-sm font-medium text-green-600 hover:underline flex items-center gap-1">
+          <Link href="/leagues" className="text-sm font-medium text-green-600 dark:text-green-400 hover:underline flex items-center gap-1">
             Semua liga <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
@@ -129,10 +129,10 @@ export default function LandingPage() {
               <Link
                 key={l.slug}
                 href={`/standings/${l.slug}`}
-                className="p-5 rounded-lg bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-green-600/50 group transition flex items-center justify-between shadow-sm"
+                className="p-5 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-green-600/60 dark:hover:border-green-500/50 group transition flex items-center justify-between shadow-xs hover:shadow-md"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-lg bg-white dark:bg-zinc-800 p-1 flex items-center justify-center border border-zinc-200 dark:border-zinc-700/50 shrink-0 relative overflow-hidden">
+                  <div className="w-12 h-12 rounded-lg bg-zinc-50 dark:bg-zinc-800 p-1.5 flex items-center justify-center border border-zinc-200 dark:border-zinc-700/50 shrink-0 relative overflow-hidden">
                     {l.logo ? (
                       <img
                         src={l.logo}
@@ -144,18 +144,18 @@ export default function LandingPage() {
                     )}
                   </div>
                   <div>
-                    <h3 className="font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-green-600 transition text-sm sm:text-base">
+                    <h3 className="font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-green-600 dark:group-hover:text-green-400 transition text-sm sm:text-base">
                       {l.name}
                     </h3>
-                    <p className="text-xs text-zinc-500">{l.country}</p>
+                    <p className="text-xs text-zinc-500 dark:text-zinc-400">{l.country}</p>
                   </div>
                 </div>
-                <span className="text-xs text-zinc-400 group-hover:translate-x-1 transition font-medium">Klasemen →</span>
+                <span className="text-xs text-zinc-500 dark:text-zinc-400 group-hover:translate-x-1 group-hover:text-green-600 dark:group-hover:text-green-400 transition font-medium">Klasemen →</span>
               </Link>
             ))}
           </div>
         ) : (
-          <div className="p-8 text-center text-zinc-500 bg-zinc-900/30 rounded-lg border border-zinc-800">
+          <div className="p-8 text-center text-zinc-500 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-900/40 rounded-lg border border-zinc-200 dark:border-zinc-800">
             Daftar liga akan muncul setelah data disinkronkan.
           </div>
         )}
@@ -165,14 +165,12 @@ export default function LandingPage() {
       <section className="max-w-7xl mx-auto px-4 w-full">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <div className="flex items-center gap-2.5">
-              <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
-                Jadwal Pertandingan Hari Ini
-              </h2>
-            </div>
-            <p className="text-xs text-zinc-500 mt-0.5 capitalize">{todayFormatted}</p>
+            <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+              Jadwal Pertandingan Hari Ini
+            </h2>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 capitalize">{todayFormatted}</p>
           </div>
-          <Link href="/fixtures" className="text-sm font-medium text-green-600 hover:underline flex items-center gap-1">
+          <Link href="/fixtures" className="text-sm font-medium text-green-600 dark:text-green-400 hover:underline flex items-center gap-1">
             Lihat semua jadwal →
           </Link>
         </div>
@@ -199,26 +197,26 @@ export default function LandingPage() {
                 <Link
                   key={event.id}
                   href={`/match/${leagueSlug}/${event.id}`}
-                  className="p-4 rounded-lg bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex flex-col justify-between gap-4 hover:border-green-600/50 transition group shadow-sm"
+                  className="p-4 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex flex-col justify-between gap-4 hover:border-green-600/60 dark:hover:border-green-500/50 transition group shadow-xs hover:shadow-md"
                 >
-                  <div className="flex justify-between items-center text-xs text-zinc-500">
-                    <span className="font-semibold text-zinc-400">{leagueName}</span>
+                  <div className="flex justify-between items-center text-xs text-zinc-500 dark:text-zinc-400">
+                    <span className="font-semibold text-zinc-700 dark:text-zinc-300">{leagueName}</span>
                     {isLive ? (
                       <span className="px-2 py-0.5 rounded bg-green-600 text-white font-bold uppercase text-[10px] animate-pulse">
                         LIVE {detail}
                       </span>
                     ) : isFinished ? (
-                      <span className="px-2 py-0.5 rounded bg-zinc-200 dark:bg-zinc-800 font-mono font-medium text-zinc-700 dark:text-zinc-300">
+                      <span className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 font-mono font-medium text-zinc-700 dark:text-zinc-300">
                         FT
                       </span>
                     ) : (
-                      <span className="px-2 py-0.5 rounded bg-zinc-200 dark:bg-zinc-800 font-mono font-medium text-zinc-700 dark:text-zinc-300">
+                      <span className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 font-mono font-medium text-zinc-700 dark:text-zinc-300">
                         {kickoffTimeWib}
                       </span>
                     )}
                   </div>
 
-                  <div className="flex flex-col gap-2 font-medium text-sm">
+                  <div className="flex flex-col gap-2.5 font-medium text-sm">
                     {/* Home Team */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2.5">
@@ -229,7 +227,7 @@ export default function LandingPage() {
                             className="w-5 h-5 object-contain"
                           />
                         ) : (
-                          <div className="w-5 h-5 rounded-full bg-zinc-700 text-zinc-300 text-[8px] flex items-center justify-center font-bold">
+                          <div className="w-5 h-5 rounded-full bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-[8px] flex items-center justify-center font-bold">
                             {(home?.team?.displayName || "H").slice(0, 2)}
                           </div>
                         )}
@@ -237,7 +235,7 @@ export default function LandingPage() {
                           {home?.team?.displayName || home?.team?.name || "Home"}
                         </span>
                       </div>
-                      <span className="font-mono text-zinc-900 dark:text-zinc-100 font-semibold">
+                      <span className="font-mono text-zinc-900 dark:text-zinc-100 font-bold">
                         {home?.score ?? (isFinished || isLive ? 0 : "")}
                       </span>
                     </div>
@@ -252,7 +250,7 @@ export default function LandingPage() {
                             className="w-5 h-5 object-contain"
                           />
                         ) : (
-                          <div className="w-5 h-5 rounded-full bg-zinc-700 text-zinc-300 text-[8px] flex items-center justify-center font-bold">
+                          <div className="w-5 h-5 rounded-full bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-[8px] flex items-center justify-center font-bold">
                             {(away?.team?.displayName || "A").slice(0, 2)}
                           </div>
                         )}
@@ -260,14 +258,14 @@ export default function LandingPage() {
                           {away?.team?.displayName || away?.team?.name || "Away"}
                         </span>
                       </div>
-                      <span className="font-mono text-zinc-900 dark:text-zinc-100 font-semibold">
+                      <span className="font-mono text-zinc-900 dark:text-zinc-100 font-bold">
                         {away?.score ?? (isFinished || isLive ? 0 : "")}
                       </span>
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-center pt-2 border-t border-zinc-200 dark:border-zinc-800 text-[11px] text-zinc-400">
-                    <span className={isLive ? "text-green-500 font-bold flex items-center gap-1" : "text-zinc-500"}>
+                  <div className="flex justify-between items-center pt-2.5 border-t border-zinc-100 dark:border-zinc-800 text-[11px] text-zinc-500 dark:text-zinc-400">
+                    <span className={isLive ? "text-green-600 dark:text-green-400 font-bold flex items-center gap-1" : ""}>
                       {isLive ? (
                         <>
                           <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
@@ -279,7 +277,7 @@ export default function LandingPage() {
                         `Kickoff: ${kickoffTimeWib}`
                       )}
                     </span>
-                    <span className="text-green-600 font-medium group-hover:underline">
+                    <span className="text-green-600 dark:text-green-400 font-medium group-hover:underline">
                       Detail Pertandingan →
                     </span>
                   </div>
@@ -289,14 +287,14 @@ export default function LandingPage() {
           </div>
         ) : (
           /* Empty State */
-          <div className="text-center py-14 px-6 rounded-xl bg-zinc-900/40 border border-zinc-800/80 flex flex-col items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-zinc-800/80 flex items-center justify-center text-zinc-400 mb-1">
-              <Calendar className="w-6 h-6 text-zinc-400" />
+          <div className="text-center py-14 px-6 rounded-xl bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 flex flex-col items-center gap-3">
+            <div className="w-12 h-12 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center text-zinc-600 dark:text-zinc-400 mb-1">
+              <Calendar className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-semibold text-zinc-200">
+            <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
               Tidak ada jadwal pertandingan hari ini
             </h3>
-            <p className="text-sm text-zinc-500 max-w-md">
+            <p className="text-sm text-zinc-600 dark:text-zinc-400 max-w-md">
               Tidak ada laga yang dijadwalkan pada tanggal {todayFormatted}. Silakan periksa jadwal pertandingan mendatang.
             </p>
             <Link
@@ -315,30 +313,30 @@ export default function LandingPage() {
           Dibuat untuk Penggemar Sepak Bola
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="pl-4 border-l-2 border-green-600 flex flex-col gap-2">
+          <div className="pl-4 border-l-2 border-green-600 dark:border-green-500 flex flex-col gap-2">
             <h3 className="font-bold text-lg text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Zap className="w-5 h-5 text-green-500" />
+              <Zap className="w-5 h-5 text-green-600 dark:text-green-400" />
               Skor Real-Time
             </h3>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            <p className="text-sm text-zinc-600 dark:text-zinc-400">
               Pembaruan skor otomatis saat pertandingan berlangsung dengan jeda minim.
             </p>
           </div>
-          <div className="pl-4 border-l-2 border-green-600 flex flex-col gap-2">
+          <div className="pl-4 border-l-2 border-green-600 dark:border-green-500 flex flex-col gap-2">
             <h3 className="font-bold text-lg text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-green-500" />
+              <Calendar className="w-5 h-5 text-green-600 dark:text-green-400" />
               Waktu Indonesia (WIB)
             </h3>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            <p className="text-sm text-zinc-600 dark:text-zinc-400">
               Seluruh jadwal dan kickoff waktu Eropa otomatis dikonversi ke waktu lokal Anda.
             </p>
           </div>
-          <div className="pl-4 border-l-2 border-green-600 flex flex-col gap-2">
+          <div className="pl-4 border-l-2 border-green-600 dark:border-green-500 flex flex-col gap-2">
             <h3 className="font-bold text-lg text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-green-500" />
+              <ShieldCheck className="w-5 h-5 text-green-600 dark:text-green-400" />
               Bebas Iklan Mengganggu
             </h3>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            <p className="text-sm text-zinc-600 dark:text-zinc-400">
               Tampilan bersih, responsif, dan fokus murni pada statistik dan jadwal pertandingan.
             </p>
           </div>
