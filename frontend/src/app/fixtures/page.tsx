@@ -2,12 +2,12 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { format, addDays, subDays, isToday, isSameDay } from 'date-fns';
+import { addDays, subDays, isToday, isSameDay } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { formatShortMatchDate } from '@/lib/date';
 import { useFixtures } from '@/hooks/useFixtures';
 import { MatchRow } from '@/components/match/MatchRow';
 import { SkeletonMatchRow } from '@/components/match/SkeletonMatchRow';
-import { ComingSoonBadge } from '@/components/ui/ComingSoonBadge';
 
 const LEAGUES = [
   { slug: 'all', name: 'All Leagues' },
@@ -20,9 +20,9 @@ const LEAGUES = [
 ];
 
 const STATUS_OPTIONS = [
-  { value: 'all', label: 'All Matches' },
+  { value: 'all', label: 'Semua Laga' },
   { value: 'live', label: 'Live 🔴' },
-  { value: 'finished', label: 'Finished' },
+  { value: 'finished', label: 'Selesai' },
 ];
 
 function getDateRange(): Date[] {
@@ -36,14 +36,14 @@ function getDateRange(): Date[] {
 }
 
 function DatePill({ date, active, onClick }: { date: Date; active: boolean; onClick: () => void }) {
-  const label = isToday(date) ? 'Today' : format(date, 'EEE d');
+  const label = isToday(date) ? 'Hari Ini' : formatShortMatchDate(date, 'id-ID');
   return (
     <button
       onClick={onClick}
       className={cn(
         'px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors',
         active
-          ? 'bg-green-600 text-white'
+          ? 'bg-green-600 text-white shadow-sm'
           : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
       )}
     >
@@ -216,9 +216,6 @@ function FixturesContent() {
                   <h2 className="text-sm font-semibold text-zinc-100">
                     {group.leagueName}
                   </h2>
-                  {group.isMock && (
-                    <ComingSoonBadge text="Demo Fixtures" variant="warning" size="sm" />
-                  )}
                   <span className="text-xs text-zinc-500 ml-auto">
                     {group.events.length} {group.events.length === 1 ? 'match' : 'matches'}
                   </span>

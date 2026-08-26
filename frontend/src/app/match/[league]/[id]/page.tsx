@@ -10,6 +10,7 @@ import { Skeleton } from "@/components/ui/Skeleton";
 
 import { ComingSoonBadge, ComingSoonSection } from "@/components/ui/ComingSoonBadge";
 import { Users, BarChart3, Clock } from "lucide-react";
+import { formatKickoffTime } from "@/lib/date";
 
 export default function MatchDetailPage() {
   const { league, id } = useParams<{ league: string; id: string }>();
@@ -50,7 +51,7 @@ export default function MatchDetailPage() {
               {match.homeTeam.name}
             </div>
             <div className="text-6xl font-mono">
-              {match.homeScore ?? 0} - {match.awayScore ?? 0}
+              {match.homeScore ?? (match.status === "scheduled" ? 0 : 0)} - {match.awayScore ?? (match.status === "scheduled" ? 0 : 0)}
             </div>
             <div className="flex items-center gap-3">
               {match.awayTeam.name}
@@ -61,6 +62,12 @@ export default function MatchDetailPage() {
             <div className="flex items-center gap-2 px-3 py-1 rounded bg-green-600 text-xs font-bold uppercase tracking-wide">
               <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
               LIVE {match.minute}'
+            </div>
+          )}
+          {match.status === "scheduled" && match.startTime && (
+            <div className="flex items-center gap-1.5 px-3 py-1 rounded bg-zinc-800 text-zinc-300 text-xs font-mono">
+              <Clock className="w-3.5 h-3.5 text-zinc-400" />
+              <span>Kickoff: {formatKickoffTime(match.startTime, true)}</span>
             </div>
           )}
         </div>

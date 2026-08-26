@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { formatKickoffTime } from '@/lib/date';
 import type { ApiScoreboardEvent, ApiCompetitor } from '@/types/football';
 
 interface Props {
@@ -58,13 +59,12 @@ function StatusBadge({ match }: { match: ApiScoreboardEvent }) {
       </span>
     );
   }
-  // pre — show kick-off time
-  try {
-    const kickoff = format(new Date(match.date), 'HH:mm');
-    return <span className="text-xs font-mono text-zinc-500">{kickoff}</span>;
-  } catch {
-    return null;
+  // pre — show kick-off time in WIB
+  const kickoff = formatKickoffTime(match.date, true);
+  if (kickoff) {
+    return <span className="text-xs font-mono text-zinc-400 font-medium whitespace-nowrap">{kickoff}</span>;
   }
+  return null;
 }
 
 export function MatchRow({ match }: Props) {
@@ -93,20 +93,12 @@ export function MatchRow({ match }: Props) {
       )}
     >
       {/* Time / live indicator */}
-      <div className="w-10 shrink-0 text-right">
+      <div className="w-12 shrink-0 text-right">
         {isLive ? (
           <span className="w-2 h-2 rounded-full bg-green-600 animate-pulse inline-block" />
         ) : (
-          <span className="text-xs font-mono text-zinc-500">
-            {isFinished
-              ? ''
-              : (() => {
-                  try {
-                    return format(new Date(match.date), 'HH:mm');
-                  } catch {
-                    return '';
-                  }
-                })()}
+          <span className="text-xs font-mono text-zinc-400">
+            {isFinished ? '' : formatKickoffTime(match.date, false)}
           </span>
         )}
       </div>
