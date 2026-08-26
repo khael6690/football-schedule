@@ -1,0 +1,60 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  test-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm install
+      - name: Syntax-check backend entry
+        working-directory: backend
+        run: node -c index.js
+
+  test-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - name: Install and build frontend
+        working-directory: frontend
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:3050
+        run: npm install && npm run build
+
+  deploy-backend:
+    needs: test-backend
+    runs-on: ubuntu-latest
+    if: ${{ secrets.RENDER_DEPLOY_WEBHOOK_BACKEND != '' }}
+    steps:
+      - name: Trigger Render deploy
+        run: |
+          curl -X POST "${{ secrets.RENDER_DEPLOY_WEBHOOK_BACKEND }}" \
+            -H "Content-Type: application/json"
+
+  deploy-frontend:
+    needs: test-frontend
+    runs-on: ubuntu-latest
+    if: ${{ secrets.VERCEL_TOKEN != '' }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - name: Deploy to Vercel
+        working-directory: frontend
+        run: |
+          npx vercel deploy \
+            --token "${{ secrets.VERCEL_TOKEN }}" \
+            --prod \
+            --yes

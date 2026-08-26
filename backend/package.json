@@ -1,0 +1,82 @@
+{
+  "name": "soccer-clubs-data-api",
+  "version": "2.0.0",
+  "description": "Free open-source football API for live scores, fixtures, results, standings and match events across the Premier League, LaLiga and more leagues.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "set NODE_ENV=development&& nodemon index.js",
+    "prod": "set NODE_ENV=production&& node index.js",
+    "start:dev": "cross-env NODE_ENV=development nodemon index.js",
+    "start:prod": "cross-env NODE_ENV=production node index.js",
+    "db:init-live": "node scripts/init-live-storage.js",
+    "fetcher:seed": "node scripts/fetcher/index.js --mode seed",
+    "fetcher:live": "node scripts/fetcher/index.js --mode live",
+    "fetcher:check": "node scripts/fetcher/index.js --mode check",
+    "test:soccer": "node --test test/*.test.js"
+  },
+  "keywords": [
+    "club-football",
+    "multi-league-api",
+    "football-api",
+    "soccer-api",
+    "free-api",
+    "free-football-api",
+    "free-soccer-api",
+    "free-sports-api",
+    "live-scores",
+    "live-score-api",
+    "live-results",
+    "rest-api",
+    "express",
+    "node",
+    "mongodb",
+    "swagger",
+    "openapi",
+    "real-time-scores",
+    "sports-api",
+    "sports-data",
+    "football-clubs",
+    "league-standings",
+    "football-fixtures",
+    "football-data",
+    "soccer-data",
+    "open-source",
+    "premier-league-api",
+    "la-liga-api",
+    "football-live-scores-today",
+    "football-results",
+    "football-schedule",
+    "football-api-github",
+    "json-football-api"
+  ],
+  "author": "jp2435",
+  "license": "ISC",
+  "homepage": "https://worldcup26.ir",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rezarahiminia/livescoreFootball.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rezarahiminia/livescoreFootball/issues"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "compression": "^1.8.1",
+    "cors": "^2.8.6",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.2",
+    "express-rate-limit": "^8.2.1",
+    "helmet": "^8.1.0",
+    "mongoose": "^6.2.5",
+    "morgan": "^1.10.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0",
+    "nodemon": "^2.0.15"
+  }
+}

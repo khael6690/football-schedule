@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{SEO_TITLE}}</title>
+    <meta name="description" content="{{SEO_DESCRIPTION}}">
+    <meta name="author" content="Free Football Live Scores">
+    <meta name="robots" content="{{SEO_ROBOTS}}">
+    <meta name="theme-color" content="#07101d">
+    <link rel="canonical" href="{{SEO_CANONICAL}}">
+    <link rel="stylesheet" href="/assets/styles.css?v=seo-pages-3">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.webmanifest">
+
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Free Football Live Scores">
+    <meta property="og:url" content="{{SEO_CANONICAL}}">
+    <meta property="og:title" content="{{SEO_TITLE}}">
+    <meta property="og:description" content="{{SEO_DESCRIPTION}}">
+    <meta property="og:image" content="{{SEO_IMAGE}}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="{{SEO_IMAGE_ALT}}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{SEO_TITLE}}">
+    <meta name="twitter:description" content="{{SEO_DESCRIPTION}}">
+    <meta name="twitter:image" content="{{SEO_IMAGE}}">
+    <meta name="twitter:image:alt" content="{{SEO_IMAGE_ALT}}">
+
+    <script type="application/ld+json">
+    {{SEO_JSON_LD}}
+    </script>
+</head>
+<body data-page-kind="{{PAGE_KIND}}" data-league-slug="{{LEAGUE_SLUG}}" data-country="{{COUNTRY_NAME}}">
+    <a class="skip-link" href="#main-content">Skip to football scores</a>
+    <header class="site-header">
+        <nav class="nav shell" aria-label="Main navigation">
+            <a class="brand" href="/" aria-label="Free Football Live Scores home">
+                <span class="brand-ball" aria-hidden="true">●</span>
+                <span>
+                    <strong>Live Football</strong>
+                    <small>SCORES &amp; API</small>
+                </span>
+            </a>
+            <div class="nav-status" id="service-status">
+                <span class="status-dot"></span>
+                <span>Connecting to service</span>
+            </div>
+            <div class="nav-actions"><a href="/football-api">Free API</a><a class="docs-link" href="/api-docs/">API Documentation <span aria-hidden="true">↗</span></a></div>
+        </nav>
+    </header>
+
+    <main id="main-content">
+        <section class="hero shell" aria-labelledby="page-title">
+            <div class="hero-copy">
+                <p class="overline">{{SEO_OVERLINE}}</p>
+                <h1 id="page-title">{{SEO_HEADING}}</h1>
+                <p>{{SEO_LEDE}}</p>
+                <a class="coffee-link" href="https://www.buymeacoffee.com/rahiminia" target="_blank" rel="noreferrer noopener"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&amp;emoji=&amp;slug=rahiminia&amp;button_colour=FFDD00&amp;font_colour=000000&amp;font_family=Arial&amp;outline_colour=000000&amp;coffee_colour=ffffff" alt="Buy me a coffee"></a>
+            </div>
+            <div class="hero-numbers" aria-label="Service coverage statistics">
+                <div><strong id="stat-competitions">—</strong><span>Active competitions</span></div>
+                <div><strong id="stat-matches">—</strong><span>Matches</span></div>
+                <div><strong id="stat-events">—</strong><span>Match events</span></div>
+            </div>
+        </section>
+
+        {{SEO_CONTENT}}
+
+        <section class="explorer shell" aria-label="Choose a league and explore its matches">
+            <aside class="filters-panel">
+                <div class="panel-heading">
+                    <span class="step-number">1</span>
+                    <div><h2>Choose a competition</h2><p>Select a country, then choose a league.</p></div>
+                </div>
+
+                <label class="field" for="country-select">
+                    <span>Country</span>
+                    <span class="select-wrap">
+                        <span class="field-icon" aria-hidden="true">◎</span>
+                        <select id="country-select" disabled>
+                            <option value="">Loading countries…</option>
+                        </select>
+                    </span>
+                </label>
+
+                <label class="field" for="league-select">
+                    <span>League or competition</span>
+                    <span class="select-wrap">
+                        <span class="field-icon" aria-hidden="true">◆</span>
+                        <select id="league-select" disabled>
+                            <option value="">Choose a country first</option>
+                        </select>
+                    </span>
+                </label>
+
+                <div class="league-card" id="league-card" hidden>
+                    <div class="league-logo" id="league-logo">SC</div>
+                    <div class="league-identity">
+                        <strong id="league-name">—</strong>
+                        <span id="league-season">—</span>
+                    </div>
+                    <dl class="coverage-list">
+                        <div><dt>Matches</dt><dd id="coverage-matches">0</dd></div>
+                        <div><dt>Clubs</dt><dd id="coverage-clubs">0</dd></div>
+                        <div><dt>Tables</dt><dd id="coverage-tables">0</dd></div>
+                    </dl>
+                </div>
+
+                <div class="api-note">
+                    <span aria-hidden="true">{ }</span>
+                    <p>Every value on this page is loaded exclusively from endpoints documented in Swagger.</p>
+                </div>
+            </aside>
+
+            <section class="data-panel" aria-live="polite">
+                <div class="empty-welcome" id="welcome-state">
+                    <div class="pitch" aria-hidden="true"><span></span><i></i></div>
+                    <h2>Choose a league</h2>
+                    <p>Its fixtures, results and standings will appear here.</p>
+                </div>
+
+                <div id="league-dashboard" hidden>
+                    <div class="dashboard-header">
+                        <div>
+                            <p class="overline" id="dashboard-country">—</p>
+                            <h2 id="dashboard-title">—</h2>
+                        </div>
+                        <button class="refresh-button" id="refresh-button" type="button" title="Refresh data">
+                            <span aria-hidden="true">↻</span> Refresh
+                        </button>
+                    </div>
+
+                    <div class="tabs" role="tablist" aria-label="League information">
+                        <button class="tab is-active" id="fixtures-tab" type="button" role="tab" aria-selected="true" aria-controls="fixtures-view" data-view="fixtures">
+                            Fixtures &amp; results <span id="fixture-count">0</span>
+                        </button>
+                        <button class="tab" id="standings-tab" type="button" role="tab" aria-selected="false" aria-controls="standings-view" data-view="standings">
+                            Standings
+                        </button>
+                    </div>
+
+                    <div class="view" id="fixtures-view" role="tabpanel" aria-labelledby="fixtures-tab">
+                        <div class="fixture-toolbar">
+                            <label>From <input id="date-from" type="date"></label>
+                            <label>To <input id="date-to" type="date"></label>
+                            <label>Status
+                                <select id="fixture-status">
+                                    <option value="all">All matches</option>
+                                    <option value="scheduled">Scheduled</option>
+                                    <option value="live">Live</option>
+                                    <option value="finished">Finished</option>
+                                </select>
+                            </label>
+                            <button class="filter-button" id="apply-fixture-filter" type="button">Apply filters</button>
+                        </div>
+                        <div class="content-state" id="fixtures-loading" hidden><span class="loader"></span><p>Loading fixtures…</p></div>
+                        <div class="content-state" id="fixtures-empty" hidden><span class="empty-icon">⌁</span><p>No matches are stored for these filters.</p></div>
+                        <div class="fixtures-list" id="fixtures-list"></div>
+                        <button class="load-more" id="fixtures-load-more" type="button" hidden>Load more matches</button>
+                    </div>
+
+                    <div class="view" id="standings-view" role="tabpanel" aria-labelledby="standings-tab" hidden>
+                        <div class="content-state" id="standings-loading" hidden><span class="loader"></span><p>Loading standings…</p></div>
+                        <div class="content-state" id="standings-empty" hidden><span class="empty-icon">≡</span><p>Standings have not been stored for this league yet.</p></div>
+                        <div id="standings-content"></div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <noscript><p class="shell noscript-note">JavaScript is required for interactive live updates. League guides, fixtures and SEO content remain available below.</p></noscript>
+
+        <section class="service-intro shell" aria-labelledby="service-title">
+            <div>
+                <p class="overline">Powered by documented services</p>
+                <h2 id="service-title">From league discovery to the final whistle</h2>
+                <p>Leagues, fixtures, standings, summaries and play-by-play are read from MongoDB. The browser never calls an upstream provider directly.</p>
+            </div>
+            <div class="service-flow" aria-label="Data request flow">
+                <span>League Catalog</span><i>→</i><span>MongoDB API</span><i>→</i><span>This page</span>
+            </div>
+        </section>
+    </main>
+
+    <dialog class="match-dialog" id="match-dialog" aria-labelledby="match-dialog-title">
+        <div class="dialog-shell">
+            <header class="dialog-header">
+                <div>
+                    <span class="match-state" id="dialog-status">—</span>
+                    <p id="dialog-date">—</p>
+                </div>
+                <button class="close-button" id="close-dialog" type="button" aria-label="Close match details">×</button>
+            </header>
+            <div class="dialog-content" id="dialog-content">
+                <div class="content-state"><span class="loader"></span><p>Loading match details…</p></div>
+            </div>
+        </div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+    <footer>
+        <div class="shell footer-row">
+            <div><strong>Free Football Live Scores</strong><span>Live scores, fixtures, results, tables and open football data</span></div>
+            <div><a href="/#today">Scores today</a><a href="/#competitions">Football leagues</a><a href="/football-api">Free football API</a><a href="/api-docs/">API docs</a><a href="https://github.com/rezarahiminia/livescoreFootball">GitHub</a></div>
+        </div>
+    </footer>
+
+    <script src="/assets/app.js?v=seo-pages-3" defer></script>
+</body>
+</html>
