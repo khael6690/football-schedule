@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import { useFixtures } from '@/hooks/useFixtures';
 import { MatchRow } from '@/components/match/MatchRow';
 import { SkeletonMatchRow } from '@/components/match/SkeletonMatchRow';
+import { ComingSoonBadge } from '@/components/ui/ComingSoonBadge';
 
 const LEAGUES = [
   { slug: 'all', name: 'All Leagues' },
@@ -215,6 +216,9 @@ function FixturesContent() {
                   <h2 className="text-sm font-semibold text-zinc-100">
                     {group.leagueName}
                   </h2>
+                  {group.isMock && (
+                    <ComingSoonBadge text="Demo Fixtures" variant="warning" size="sm" />
+                  )}
                   <span className="text-xs text-zinc-500 ml-auto">
                     {group.events.length} {group.events.length === 1 ? 'match' : 'matches'}
                   </span>

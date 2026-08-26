@@ -3,13 +3,33 @@
 import Link from "next/link";
 import { format } from "date-fns";
 import { ArrowRight } from "lucide-react";
-
+import { useQuery } from "@tanstack/react-query";
+import { fetchAPI } from "@/lib/api";
 import { MOCK_LEAGUES, MOCK_TODAYS_MATCHES } from "@/lib/mockData";
+import { ComingSoonBadge } from "@/components/ui/ComingSoonBadge";
 
 export const mockLeagues = MOCK_LEAGUES;
 
 export default function LandingPage() {
   const todayFormatted = format(new Date(), "EEEE, MMMM d");
+
+  const { data: leaguesData } = useQuery({
+    queryKey: ["landingLeagues"],
+    queryFn: async () => {
+      try {
+        const res = await fetchAPI<any>("/get/soccer/leagues");
+        if (res && Array.isArray(res.leagues) && res.leagues.length > 0) {
+          return res.leagues;
+        }
+        if (Array.isArray(res) && res.length > 0) return res;
+      } catch (e) {
+        // Fallback
+      }
+      return MOCK_LEAGUES;
+    },
+  });
+
+  const displayLeagues = leaguesData && leaguesData.length > 0 ? leaguesData.slice(0, 6) : MOCK_LEAGUES;
 
   const liveMatches = [
     { id: 1, league: "Premier League", home: "Arsenal", away: "Chelsea", homeScore: 2, awayScore: 1, minute: "78'" },
@@ -28,7 +48,7 @@ export default function LandingPage() {
           <div className="lg:col-span-7 flex flex-col gap-6">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-600 dark:text-green-400 text-xs font-medium w-fit">
               <span className="w-2 h-2 rounded-full bg-green-600 animate-pulse" />
-              <span>38 matches in progress</span>
+              <span>Real-time football data & schedules</span>
             </div>
 
             <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 leading-tight">
@@ -41,7 +61,7 @@ export default function LandingPage() {
 
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <Link
-                href="/live"
+                href="/fixtures?status=live"
                 className="px-6 py-3 rounded-lg bg-green-600 hover:bg-green-700 text-white font-medium text-sm transition shadow-sm flex items-center gap-2"
               >
                 Watch Live
@@ -59,10 +79,13 @@ export default function LandingPage() {
           {/* Right Side (40% -> col-span-5) Live Match Ticker */}
           <div className="lg:col-span-5 flex flex-col gap-3">
             <div className="flex items-center justify-between px-1">
-              <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">Live Ticker</span>
-              <span className="flex items-center gap-1.5 text-xs text-green-600 font-medium">
-                <span className="w-1.5 h-1.5 rounded-full bg-green-600 animate-pulse" />
-                Updating
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">Live Ticker</span>
+                <ComingSoonBadge text="Dummy Preview" variant="warning" />
+              </div>
+              <span className="flex items-center gap-1.5 text-xs text-amber-500/90 font-medium">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                Demo Feed
               </span>
             </div>
 
@@ -74,8 +97,8 @@ export default function LandingPage() {
                 <div className="absolute top-0 right-0 w-24 h-24 bg-green-500/5 rounded-full blur-xl group-hover:bg-green-500/10 transition" />
                 <div className="flex justify-between items-center text-xs text-zinc-400 mb-2">
                   <span>{m.league}</span>
-                  <span className="px-2 py-0.5 rounded bg-green-600 text-white font-bold uppercase tracking-wide text-[10px]">
-                    LIVE {m.minute}
+                  <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold uppercase tracking-wide text-[10px]">
+                    DEMO {m.minute}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
@@ -104,7 +127,7 @@ export default function LandingPage() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {mockLeagues.map((l) => (
+          {displayLeagues.map((l: any) => (
             <Link
               key={l.slug}
               href={`/standings/${l.slug}`}
@@ -122,7 +145,7 @@ export default function LandingPage() {
                       if (target.parentElement) {
                         const fallback = document.createElement('div');
                         fallback.className = 'w-full h-full flex items-center justify-center font-bold text-xs text-zinc-700 dark:text-zinc-300';
-                        fallback.innerText = l.name.split(' ').map(n => n[0]).join('').slice(0, 3);
+                        fallback.innerText = (l.name || '').split(' ').map((n: string) => n[0]).join('').slice(0, 3);
                         target.parentElement.appendChild(fallback);
                       }
                     }}
@@ -142,9 +165,14 @@ export default function LandingPage() {
       {/* 7C: Today's Matches Preview */}
       <section className="max-w-7xl mx-auto px-4 w-full">
         <div className="flex justify-between items-center mb-6">
-          <div>
-            <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">Today&apos;s Matches</h2>
-            <p className="text-xs text-zinc-500 mt-0.5">{todayFormatted}</p>
+          <div className="flex items-center gap-3">
+            <div>
+              <div className="flex items-center gap-2.5">
+                <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">Today&apos;s Matches</h2>
+                <ComingSoonBadge text="Dummy Preview" variant="warning" />
+              </div>
+              <p className="text-xs text-zinc-500 mt-0.5">{todayFormatted}</p>
+            </div>
           </div>
           <Link href="/fixtures" className="text-sm font-medium text-green-600 hover:underline flex items-center gap-1">
             View all fixtures →

@@ -18,6 +18,7 @@ export interface FixtureGroup {
   leagueSlug: string;
   leagueName: string;
   leagueLogo?: string;
+  isMock?: boolean;
   events: ApiScoreboardEvent[];
 }
 
@@ -69,6 +70,7 @@ export function useFixtures(date: Date, league?: string) {
           leagueSlug: "eng.1",
           leagueName: "Premier League",
           leagueLogo: "https://a.espncdn.com/i/leaguelogos/soccer/500/23.png",
+          isMock: true,
           events: [
             {
               id: "m1",
@@ -106,6 +108,7 @@ export function useFixtures(date: Date, league?: string) {
           leagueSlug: "esp.1",
           leagueName: "La Liga",
           leagueLogo: "https://a.espncdn.com/i/leaguelogos/soccer/500/15.png",
+          isMock: true,
           events: [
             {
               id: "m6",

@@ -5,6 +5,7 @@ import { useClub } from "@/hooks/useClub";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { Shield, User, MapPin, Trophy, Calendar, Users } from "lucide-react";
 import Link from "next/link";
+import { ComingSoonBadge } from "@/components/ui/ComingSoonBadge";
 
 export default function ClubPage() {
   const { league, id } = useParams<{ league: string; id: string }>();
@@ -107,10 +108,13 @@ export default function ClubPage() {
         {/* Matches Section */}
         <section className="space-y-6">
           <div className="flex justify-between items-center border-b border-zinc-800 pb-3">
-            <h2 className="text-xl font-bold flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-green-500" />
-              Club Fixtures & Recent Results
-            </h2>
+            <div className="flex items-center gap-3">
+              <h2 className="text-xl font-bold flex items-center gap-2">
+                <Calendar className="w-5 h-5 text-green-500" />
+                Club Fixtures & Recent Results
+              </h2>
+              <ComingSoonBadge text="Dummy Preview" variant="warning" />
+            </div>
             <Link href="/fixtures" className="text-xs font-semibold text-green-500 hover:underline">
               View All Fixtures →
             </Link>
@@ -168,10 +172,13 @@ export default function ClubPage() {
         {/* Squad Section */}
         <section className="space-y-6">
           <div className="flex justify-between items-center border-b border-zinc-800 pb-3">
-            <h2 className="text-xl font-bold flex items-center gap-2">
-              <Users className="w-5 h-5 text-green-500" />
-              Squad Players
-            </h2>
+            <div className="flex items-center gap-3">
+              <h2 className="text-xl font-bold flex items-center gap-2">
+                <Users className="w-5 h-5 text-green-500" />
+                Squad Players
+              </h2>
+              <ComingSoonBadge text="Dummy Preview" variant="warning" />
+            </div>
             <span className="text-xs text-zinc-400 font-mono">
               {club.squad?.length || 0} Registered Players
             </span>
