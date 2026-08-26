@@ -32,7 +32,7 @@ export function useFixtures(date: Date, league?: string) {
         if (league && league !== 'all') {
           // League-scoped scoreboard
           const res = await fetchAPI<ApiLeagueScoreboardResponse>(
-            `/get/soccer/${league}/scoreboard?dates=${dateParam}`
+            `/get/soccer/${league}/scoreboard?dates=${dateParam}&tz_offset=7`
           );
           const leagueInfo = res.leagues?.[0];
           return [
@@ -47,7 +47,7 @@ export function useFixtures(date: Date, league?: string) {
 
         // Cross-league scoreboard
         const res = await fetchAPI<ApiScoreboardResponse>(
-          `/get/soccer/scoreboard?dates=${dateParam}`
+          `/get/soccer/scoreboard?dates=${dateParam}&tz_offset=7`
         );
         if (res.leagues && res.leagues.length > 0) {
           return res.leagues.map((g: ApiScoreboardLeagueGroup) => ({

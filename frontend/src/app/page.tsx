@@ -35,7 +35,7 @@ export default function LandingPage() {
     queryFn: async () => {
       try {
         const res = await fetchAPI<ApiScoreboardResponse>(
-          `/get/soccer/scoreboard?dates=${todayDateParam}`
+          `/get/soccer/scoreboard?dates=${todayDateParam}&tz_offset=7`
         );
         if (res && Array.isArray(res.leagues)) {
           const list: Array<{

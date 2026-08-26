@@ -39,6 +39,26 @@ function isValidDateKey(value) {
         && date.getUTCDate() === day;
 }
 
+function buildScoreboardDateFilter(dates, tzOffsetParam) {
+    const offsetHours = (tzOffsetParam !== undefined && !Number.isNaN(Number(tzOffsetParam))) 
+        ? Number(tzOffsetParam) 
+        : 7; // Default: +7 (WIB / Asia/Jakarta)
+
+    const year = Number.parseInt(dates.slice(0, 4), 10);
+    const month = Number.parseInt(dates.slice(4, 6), 10);
+    const day = Number.parseInt(dates.slice(6, 8), 10);
+
+    const startUtc = new Date(Date.UTC(year, month - 1, day, -offsetHours, 0, 0, 0));
+    const endUtc = new Date(Date.UTC(year, month - 1, day, 23 - offsetHours, 59, 59, 999));
+
+    return {
+        $or: [
+            { date: { $gte: startUtc, $lte: endUtc } },
+            { scoreboard_date: dates, date: null }
+        ]
+    };
+}
+
 function parsePositiveInteger(value, fallback, max) {
     const parsed = Number.parseInt(value, 10);
     if (!Number.isFinite(parsed) || parsed < 1) return fallback;
@@ -295,9 +315,10 @@ router.get('/:league/scoreboard', validateLeague, async(req, res) => {
         const league = await getLeague(req.params.league);
         if (!league) return res.status(404).json({ error: 'League not found' });
 
+        const dateFilter = buildScoreboardDateFilter(dates, req.query.tz_offset);
         const matches = await SoccerMatch.find({
             league_slug: req.params.league,
-            scoreboard_date: dates
+            ...dateFilter
         }).sort({ date: 1 }).lean();
 
         const live = matches.some(match => match.status?.state === 'in');
@@ -806,9 +827,10 @@ router.get('/scoreboard', async(req, res) => {
             return res.status(400).json({ error: 'dates must be a valid YYYYMMDD date' });
         }
 
-        const matches = await SoccerMatch.find({
-            scoreboard_date: dates
-        }).sort({ league_slug: 1, date: 1 }).lean();
+        const dateFilter = buildScoreboardDateFilter(dates, req.query.tz_offset);
+        const matches = await SoccerMatch.find(dateFilter)
+            .sort({ league_slug: 1, date: 1 })
+            .lean();
 
         const leagueSlugs = [...new Set(matches.map(m => m.league_slug))];
         const leagues = await SoccerLeague.find({
