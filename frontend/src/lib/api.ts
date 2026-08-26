@@ -1,20 +1,21 @@
 export function getApiBase(): string {
-  // If explicitly specified in environment variable with custom domain (non-localhost)
-  if (process.env.NEXT_PUBLIC_API_URL && !process.env.NEXT_PUBLIC_API_URL.includes("localhost")) {
-    return process.env.NEXT_PUBLIC_API_URL.replace(/\/$/, "");
-  }
-
-  // In the browser, ALWAYS use relative path (e.g. `/get/soccer/...`)
-  // This automatically routes to the same origin on Vercel production, preview, and dev!
+  // 1. In the browser (Client-side), ALWAYS use relative path ""
+  // Requests will automatically route to current domain (e.g. /get/soccer/...)
   if (typeof window !== "undefined") {
     return "";
   }
 
-  // For Server-Side Rendering (SSR) fallback
-  if (process.env.NEXT_PUBLIC_API_URL) {
+  // 2. Vercel deployment SSR environment
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+
+  // 3. Explicit custom external API URL (non-localhost)
+  if (process.env.NEXT_PUBLIC_API_URL && !process.env.NEXT_PUBLIC_API_URL.includes("localhost")) {
     return process.env.NEXT_PUBLIC_API_URL.replace(/\/$/, "");
   }
 
+  // 4. Local development fallback
   return process.env.NODE_ENV === "production" ? "" : "http://localhost:3050";
 }
 
