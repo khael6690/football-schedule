@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { format, addDays, subDays, isToday, isSameDay } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { useFixtures } from '@/hooks/useFixtures';
@@ -15,6 +16,12 @@ const LEAGUES = [
   { slug: 'ita.1', name: 'Serie A' },
   { slug: 'fra.1', name: 'Ligue 1' },
   { slug: 'uefa.cl', name: 'Champions League' },
+];
+
+const STATUS_OPTIONS = [
+  { value: 'all', label: 'All Matches' },
+  { value: 'live', label: 'Live 🔴' },
+  { value: 'finished', label: 'Finished' },
 ];
 
 function getDateRange(): Date[] {
@@ -63,21 +70,74 @@ function LeagueTab({ league, active, onClick }: { league: typeof LEAGUES[number]
   );
 }
 
-export default function FixturesPage() {
+function FixturesContent() {
+  const searchParams = useSearchParams();
   const dateRange = getDateRange();
   const [selectedDate, setSelectedDate] = useState<Date>(dateRange[1]); // today
   const [selectedLeague, setSelectedLeague] = useState<string>('all');
+  const [selectedStatus, setSelectedStatus] = useState<string>('all');
+
+  useEffect(() => {
+    const statusParam = searchParams.get('status');
+    if (statusParam && ['live', 'finished', 'all'].includes(statusParam.toLowerCase())) {
+      setSelectedStatus(statusParam.toLowerCase());
+    }
+  }, [searchParams]);
 
   const { groups, isLoading, error } = useFixtures(
     selectedDate,
     selectedLeague === 'all' ? undefined : selectedLeague
   );
 
+  // Filter events per group based on selectedStatus
+  const filteredGroups = groups
+    .map((g) => {
+      const events = g.events.filter((ev: any) => {
+        if (selectedStatus === 'live') {
+          return (
+            ev.status?.type?.state === 'in' ||
+            ev.status?.type?.name?.includes('PROGRESS') ||
+            ev.status?.type?.name?.includes('LIVE')
+          );
+        }
+        if (selectedStatus === 'finished') {
+          return (
+            ev.status?.type?.state === 'post' ||
+            ev.status?.type?.name?.includes('FULL_TIME') ||
+            ev.status?.type?.name?.includes('FINAL')
+          );
+        }
+        return true;
+      });
+      return { ...g, events };
+    })
+    .filter((g) => g.events.length > 0);
+
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Header */}
-        <h1 className="text-3xl font-bold mb-6">Fixtures</h1>
+        {/* Header & Status Filter Bar */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+          <h1 className="text-3xl font-bold">Fixtures</h1>
+          <div className="flex items-center gap-1.5 p-1 bg-zinc-900 border border-zinc-800 rounded-lg">
+            {STATUS_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() => setSelectedStatus(opt.value)}
+                className={cn(
+                  'px-3 py-1.5 rounded-md text-xs font-semibold transition',
+                  selectedStatus === opt.value
+                    ? opt.value === 'live'
+                      ? 'bg-red-600 text-white animate-pulse'
+                      : 'bg-green-600 text-white'
+                    : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800'
+                )}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
 
         {/* Date picker strip */}
         <div className="mb-4 overflow-x-auto scrollbar-hide">
@@ -127,15 +187,15 @@ export default function FixturesPage() {
           </div>
         )}
 
-        {!isLoading && !error && groups.length === 0 && (
+        {!isLoading && !error && filteredGroups.length === 0 && (
           <div className="text-center py-12 text-zinc-500">
-            No fixtures found for this date.
+            No {selectedStatus !== 'all' ? selectedStatus : ''} fixtures found for this selection.
           </div>
         )}
 
-        {!isLoading && !error && groups.length > 0 && (
+        {!isLoading && !error && filteredGroups.length > 0 && (
           <div className="space-y-6">
-            {groups.map((group) => (
+            {filteredGroups.map((group) => (
               <div
                 key={group.leagueSlug}
                 className="bg-zinc-900 rounded-lg border border-zinc-800 overflow-hidden"
@@ -172,5 +232,13 @@ export default function FixturesPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function FixturesPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-zinc-950 p-10 text-center text-zinc-500">Loading fixtures...</div>}>
+      <FixturesContent />
+    </Suspense>
   );
 }

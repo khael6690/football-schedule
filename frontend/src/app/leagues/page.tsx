@@ -7,14 +7,35 @@ import Link from "next/link";
 
 import { Skeleton } from "@/components/ui/Skeleton";
 
+import { MOCK_LEAGUES } from "@/lib/mockData";
+
+function normalizeLeagues(data: any): any[] {
+  if (!data) return MOCK_LEAGUES;
+  if (Array.isArray(data)) return data;
+  if (Array.isArray(data.leagues)) return data.leagues;
+  if (Array.isArray(data.data)) return data.data;
+  if (typeof data.leagues === "object" && data.leagues !== null) {
+    return Object.values(data.leagues);
+  }
+  return MOCK_LEAGUES;
+}
+
 export default function LeaguesPage() {
-  const { data: leagues, isLoading } = useQuery<ApiLeague[], Error>({
+  const { data: leagues, isLoading } = useQuery<any[], Error>({
     queryKey: ["leagues"],
-    queryFn: () =>
-      fetchAPI<ApiLeaguesResponse>("/get/soccer/leagues").then(
-        (r) => r.leagues
-      ),
+    queryFn: async () => {
+      try {
+        const r = await fetchAPI<any>("/get/soccer/leagues");
+        const parsed = normalizeLeagues(r);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch (e) {
+        // Fallback to MOCK_LEAGUES
+      }
+      return MOCK_LEAGUES;
+    },
   });
+
+  const displayLeagues = Array.isArray(leagues) && leagues.length > 0 ? leagues : MOCK_LEAGUES;
 
   if (isLoading) {
     return (
@@ -33,7 +54,7 @@ export default function LeaguesPage() {
     <div className="max-w-7xl mx-auto px-4 py-10">
       <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-100 mb-8">Leagues</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {leagues?.map((league) => (
+        {displayLeagues.map((league: any) => (
           <Link
             key={league.slug}
             href={`/standings/${league.slug}`}

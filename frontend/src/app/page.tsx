@@ -4,44 +4,9 @@ import Link from "next/link";
 import { format } from "date-fns";
 import { ArrowRight } from "lucide-react";
 
-export const mockLeagues = [
-  {
-    slug: "eng.1",
-    name: "Premier League",
-    country: "England",
-    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/4/44/English_Premier_League_logo.svg/1200px-English_Premier_League_logo.svg.png",
-  },
-  {
-    slug: "esp.1",
-    name: "La Liga",
-    country: "Spain",
-    logo: "https://upload.wikimedia.org/wikipedia/es/thumb/2/2e/La_Liga_logo.svg/1200px-La_Liga_logo.svg.png",
-  },
-  {
-    slug: "ger.1",
-    name: "Bundesliga",
-    country: "Germany",
-    logo: "https://upload.wikimedia.org/wikipedia/de/thumb/4/44/Bundesliga_logo.svg/1200px-Bundesliga_logo.svg.png",
-  },
-  {
-    slug: "ita.1",
-    name: "Serie A",
-    country: "Italy",
-    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/4/4a/Serie_A_logo.svg/1200px-Serie_A_logo.svg.png",
-  },
-  {
-    slug: "fra.1",
-    name: "Ligue 1",
-    country: "France",
-    logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/4/44/Ligue_1_logo.svg/1200px-Ligue_1_logo.svg.png",
-  },
-  {
-    slug: "eu.1",
-    name: "Champions League",
-    country: "Europe",
-    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/4/44/UEFA_Champions_League_logo.svg/1200px-UFA_Champions_League_logo.svg.png",
-  },
-];
+import { MOCK_LEAGUES, MOCK_TODAYS_MATCHES } from "@/lib/mockData";
+
+export const mockLeagues = MOCK_LEAGUES;
 
 export default function LandingPage() {
   const todayFormatted = format(new Date(), "EEEE, MMMM d");
@@ -52,14 +17,7 @@ export default function LandingPage() {
     { id: 3, league: "Champions League", home: "Bayern Munich", away: "PSG", homeScore: 3, awayScore: 0, minute: "89'" },
   ];
 
-  const todaysMatches = [
-    { home: "Manchester City", away: "Liverpool", time: "17:30", league: "Premier League", status: "UPCOMING" },
-    { home: "AC Milan", away: "Inter Milan", time: "20:45", league: "Serie A", status: "UPCOMING" },
-    { home: "Borussia Dortmund", away: "RB Leipzig", time: "18:30", league: "Bundesliga", status: "UPCOMING" },
-    { home: "Atletico Madrid", away: "Sevilla", time: "21:00", league: "La Liga", status: "UPCOMING" },
-    { home: "Marseille", away: "Monaco", time: "21:00", league: "Ligue 1", status: "UPCOMING" },
-    { home: "Real Sociedad", away: "Villarreal", time: "19:00", league: "La Liga", status: "UPCOMING" },
-  ];
+  const todaysMatches = MOCK_TODAYS_MATCHES;
 
   return (
     <div className="flex flex-col gap-24 pb-20">
@@ -197,25 +155,45 @@ export default function LandingPage() {
           {todaysMatches.map((m, idx) => (
             <div
               key={idx}
-              className="p-4 rounded-lg bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex flex-col justify-between gap-4"
+              className="p-4 rounded-lg bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex flex-col justify-between gap-4 hover:border-green-600/30 transition"
             >
               <div className="flex justify-between items-center text-xs text-zinc-500">
-                <span>{m.league}</span>
-                <span className="px-2 py-0.5 rounded bg-zinc-200 dark:bg-zinc-800 font-mono font-medium">{m.time}</span>
+                <span className="font-medium">{m.league}</span>
+                <span className="px-2 py-0.5 rounded bg-zinc-200 dark:bg-zinc-800 font-mono font-medium text-zinc-700 dark:text-zinc-300">
+                  {m.status === "LIVE" ? `LIVE ${m.minute || ""}` : m.time}
+                </span>
               </div>
-              <div className="flex flex-col gap-1.5 font-medium text-sm">
-                <div className="flex justify-between">
-                  <span>{m.home}</span>
-                  <span className="font-mono text-zinc-400">-</span>
+              <div className="flex flex-col gap-2 font-medium text-sm">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    {m.homeLogo && (
+                      <img src={m.homeLogo} alt={m.home} className="w-5 h-5 object-contain" />
+                    )}
+                    <span className="text-zinc-900 dark:text-zinc-100">{m.home}</span>
+                  </div>
+                  <span className="font-mono text-zinc-900 dark:text-zinc-100 font-semibold">
+                    {m.homeScore !== undefined ? m.homeScore : ""}
+                  </span>
                 </div>
-                <div className="flex justify-between">
-                  <span>{m.away}</span>
-                  <span className="font-mono text-zinc-400">-</span>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    {m.awayLogo && (
+                      <img src={m.awayLogo} alt={m.away} className="w-5 h-5 object-contain" />
+                    )}
+                    <span className="text-zinc-900 dark:text-zinc-100">{m.away}</span>
+                  </div>
+                  <span className="font-mono text-zinc-900 dark:text-zinc-100 font-semibold">
+                    {m.awayScore !== undefined ? m.awayScore : ""}
+                  </span>
                 </div>
               </div>
               <div className="flex justify-between items-center pt-2 border-t border-zinc-200 dark:border-zinc-800 text-[11px] text-zinc-400">
-                <span>Upcoming</span>
-                <span className="text-green-600 font-medium">Match Details</span>
+                <span className={m.status === "LIVE" ? "text-green-500 font-bold animate-pulse" : "text-zinc-500"}>
+                  {m.status === "LIVE" ? "● Live In Progress" : m.status === "FINISHED" ? "Finished" : "Upcoming Match"}
+                </span>
+                <Link href="/fixtures" className="text-green-600 font-medium hover:underline">
+                  Match Details
+                </Link>
               </div>
             </div>
           ))}

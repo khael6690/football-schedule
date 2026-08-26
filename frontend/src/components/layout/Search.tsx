@@ -76,16 +76,20 @@ export function Search({ open, onClose }: SearchProps) {
                 Leagues
               </div>
               <div className="space-y-1">
-                {leagues.slice(0, 5).map((league) => (
+                {leagues.slice(0, 5).map((league: any) => (
                   <button
                     key={league.slug}
                     onClick={() => handleSelect(`/standings/${league.slug}`)}
                     className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition text-left"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center text-zinc-600 dark:text-zinc-300">
-                        <Trophy className="w-4 h-4" />
-                      </div>
+                      {league.logo ? (
+                        <img src={league.logo} alt={league.name} className="w-8 h-8 rounded object-contain shrink-0" />
+                      ) : (
+                        <div className="w-8 h-8 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center text-zinc-600 dark:text-zinc-300">
+                          <Trophy className="w-4 h-4" />
+                        </div>
+                      )}
                       <div>
                         <div className="font-medium text-sm text-zinc-900 dark:text-zinc-100">{league.name}</div>
                         <div className="text-xs text-zinc-500">{league.country}</div>
@@ -103,27 +107,31 @@ export function Search({ open, onClose }: SearchProps) {
                 Clubs
               </div>
               <div className="space-y-1">
-                {clubs.slice(0, 10).map((club) => (
-                  <button
-                    key={club._id}
-                    onClick={() => handleSelect(`/club/eng.1/${club._id}`)}
-                    className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition text-left"
-                  >
-                    <div className="flex items-center gap-3">
-                      {club.logo ? (
-                        <img src={club.logo} alt={club.name} className="w-8 h-8 rounded-full object-contain" />
-                      ) : (
-                        <div className="w-8 h-8 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center text-zinc-600 dark:text-zinc-300">
-                          <Shield className="w-4 h-4" />
+                {clubs.slice(0, 10).map((club: any) => {
+                  const clubId = club.id || club._id;
+                  const leagueSlug = club.leagueSlug || "eng.1";
+                  return (
+                    <button
+                      key={clubId}
+                      onClick={() => handleSelect(`/club/${leagueSlug}/${clubId}`)}
+                      className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition text-left"
+                    >
+                      <div className="flex items-center gap-3">
+                        {club.logo ? (
+                          <img src={club.logo} alt={club.name} className="w-8 h-8 rounded-full object-contain shrink-0" />
+                        ) : (
+                          <div className="w-8 h-8 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center text-zinc-600 dark:text-zinc-300">
+                            <Shield className="w-4 h-4" />
+                          </div>
+                        )}
+                        <div>
+                          <div className="font-medium text-sm text-zinc-900 dark:text-zinc-100">{club.name}</div>
+                          <div className="text-xs text-zinc-500">{club.shortName || club.city || club.venue || "Club"}</div>
                         </div>
-                      )}
-                      <div>
-                        <div className="font-medium text-sm text-zinc-900 dark:text-zinc-100">{club.name}</div>
-                        <div className="text-xs text-zinc-500">{club.shortName || club.venue?.city || "Club"}</div>
                       </div>
-                    </div>
-                  </button>
-                ))}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
