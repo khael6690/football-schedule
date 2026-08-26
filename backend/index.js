@@ -231,6 +231,11 @@ app.use((error, req, res, next) => {
     })
 });
 
-app.listen(PORT, () => {
-    console.log(`Server started on port ${PORT}`);
-});
+if (!process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`Server started on port ${PORT}`);
+    });
+}
+
+module.exports = app;
+

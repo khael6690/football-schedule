@@ -5,10 +5,25 @@
             "framework": "nextjs"
         },
         "backend": {
-            "root": "backend"
+            "root": "backend",
+            "entrypoint": "index.js"
         }
     },
     "rewrites": [
+        {
+            "source": "/get(/.*)?",
+            "destination": {
+                "type": "service",
+                "service": "backend"
+            }
+        },
+        {
+            "source": "/health",
+            "destination": {
+                "type": "service",
+                "service": "backend"
+            }
+        },
         {
             "source": "/api/backend(/.*)?",
             "destination": {
