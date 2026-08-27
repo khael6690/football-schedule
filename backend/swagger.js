@@ -33,6 +33,10 @@ const options = {
         description: 'Multi-league club data read from MongoDB'
       },
       {
+        name: 'Live Scores',
+        description: 'Real-time scores and caching layer'
+      },
+      {
         name: 'Health',
         description: 'Service and database health'
       }
@@ -229,6 +233,7 @@ const options = {
   },
   apis: [
     './controllers/soccerController.js',
+    './controllers/liveController.js',
     './controllers/healthController.js'
   ]
 };

@@ -77,34 +77,61 @@ export function useFixtures(date: Date, league?: string) {
           }
         }
 
-        // Enrich with real-time live data
+        // Enrich with real-time live & finished data from API-Football
         if (liveRes && liveRes.matches && liveRes.matches.length > 0) {
           const liveMatchesMap = new Map();
-          liveRes.matches.forEach((m: any) => {
+          const liveMatchesList = liveRes.matches;
+
+          liveMatchesList.forEach((m: any) => {
             if (m.providers?.footballData) {
-              liveMatchesMap.set(m.providers.footballData, m);
+              liveMatchesMap.set(String(m.providers.footballData), m);
             }
           });
 
-          // Mutate the events to inject live scores
+          // Mutate the events to inject live/finished scores
           groups.forEach((group) => {
             group.events = group.events.map((ev) => {
-              const liveMatch = liveMatchesMap.get(ev.id);
+              let liveMatch = liveMatchesMap.get(String(ev.id));
+
+              // Fallback fuzzy match by team names if ID mapping is missing
+              if (!liveMatch && ev.competitions && ev.competitions[0]) {
+                const homeComp = ev.competitions[0].competitors.find((c: any) => c.homeAway === 'home');
+                const awayComp = ev.competitions[0].competitors.find((c: any) => c.homeAway === 'away');
+                const evHomeName = (homeComp?.team?.name || homeComp?.team?.displayName || '').toLowerCase();
+                const evAwayName = (awayComp?.team?.name || awayComp?.team?.displayName || '').toLowerCase();
+
+                if (evHomeName && evAwayName) {
+                  liveMatch = liveMatchesList.find((m: any) => {
+                    const mHome = (m.home?.name || '').toLowerCase();
+                    const mAway = (m.away?.name || '').toLowerCase();
+                    return (mHome.includes(evHomeName) || evHomeName.includes(mHome)) &&
+                           (mAway.includes(evAwayName) || evAwayName.includes(mAway));
+                  });
+                }
+              }
+
               if (liveMatch && ev.competitions && ev.competitions[0]) {
-                // Update score
-                ev.competitions[0].competitors.forEach((c) => {
-                  if (c.homeAway === 'home') c.score = String(liveMatch.score.home);
-                  if (c.homeAway === 'away') c.score = String(liveMatch.score.away);
-                });
+                // Update score if liveMatch has non-null score
+                if (liveMatch.score?.home !== undefined && liveMatch.score?.home !== null) {
+                  ev.competitions[0].competitors.forEach((c) => {
+                    if (c.homeAway === 'home') c.score = String(liveMatch.score.home);
+                    if (c.homeAway === 'away') c.score = String(liveMatch.score.away);
+                  });
+                }
 
                 // Update status
                 if (ev.status && ev.status.type) {
-                  ev.status.type.state = liveMatch.status.state as any;
-                  ev.status.type.shortDetail = liveMatch.status.short || ev.status.type.shortDetail;
-                  ev.status.type.detail = liveMatch.status.long || ev.status.type.detail;
-                  if (liveMatch.status.elapsed) {
-                    ev.status.clock = liveMatch.status.elapsed * 60;
-                    ev.status.displayClock = `${liveMatch.status.elapsed}'`;
+                  const state = liveMatch.status?.state;
+                  if (state === 'post' || state === 'in') {
+                    ev.status.type.state = state as any;
+                    ev.status.type.shortDetail = liveMatch.status?.short || (state === 'post' ? 'FT' : ev.status.type.shortDetail);
+                    ev.status.type.detail = liveMatch.status?.long || ev.status.type.detail;
+                    if (liveMatch.status?.elapsed && state === 'in') {
+                      ev.status.clock = liveMatch.status.elapsed * 60;
+                      ev.status.displayClock = `${liveMatch.status.elapsed}'`;
+                    } else if (state === 'post') {
+                      ev.status.displayClock = 'FT';
+                    }
                   }
                 }
               }

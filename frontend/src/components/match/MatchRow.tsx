@@ -119,7 +119,12 @@ export function MatchRow({ match }: Props) {
               : 'text-zinc-800 dark:text-zinc-200 font-medium group-hover:text-green-600 dark:group-hover:text-green-400'
           )}
         >
-          {home.team.shortDisplayName || home.team.displayName}
+          <span className="inline sm:hidden">
+            {home.team.abbreviation || home.team.shortDisplayName || home.team.displayName}
+          </span>
+          <span className="hidden sm:inline">
+            {home.team.displayName || home.team.shortDisplayName}
+          </span>
         </span>
       </div>
 
@@ -146,7 +151,12 @@ export function MatchRow({ match }: Props) {
               : 'text-zinc-800 dark:text-zinc-200 font-medium group-hover:text-green-600 dark:group-hover:text-green-400'
           )}
         >
-          {away.team.shortDisplayName || away.team.displayName}
+          <span className="inline sm:hidden">
+            {away.team.abbreviation || away.team.shortDisplayName || away.team.displayName}
+          </span>
+          <span className="hidden sm:inline">
+            {away.team.displayName || away.team.shortDisplayName}
+          </span>
         </span>
         <TeamLogo club={away.team} size={22} />
       </div>

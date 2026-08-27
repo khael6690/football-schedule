@@ -153,8 +153,14 @@ async function fetchAndCacheLive() {
   // Track total vs filtered
   lastTotalLiveCount = rawFixtures.length;
 
-  // Normalize
-  const normalized = rawFixtures.map(apiFootball.normalizeLiveFixture);
+  // Normalize and enrich with mapped football-data ID
+  const idMapping = require('./idMappingService');
+  const normalized = await Promise.all(rawFixtures.map(async (f) => {
+    const norm = apiFootball.normalizeLiveFixture(f);
+    const fdId = await idMapping.getFootballDataId(norm.providers.apiFootball);
+    if (fdId) norm.providers.footballData = fdId;
+    return norm;
+  }));
   lastLiveCount = normalized.length;
 
   // Track empty polls
@@ -168,7 +174,7 @@ async function fetchAndCacheLive() {
   const previous = await cache.get(cache.KEYS.live());
   const changes = [];
   if (previous && Array.isArray(previous)) {
-    const detected = detectChanges(previous, normalized);
+    const detected = await detectChanges(previous, normalized);
     changes.push(...detected);
   }
 
@@ -220,7 +226,7 @@ async function fetchAndCacheLive() {
 // Change detection
 // ---------------------------------------------------------------------------
 
-function detectChanges(previous, current) {
+async function detectChanges(previous, current) {
   const changes = [];
   const prevMap = new Map(previous.map(f => [f.id, f]));
 
@@ -266,18 +272,32 @@ function detectChanges(previous, current) {
     }
   }
 
-  // Detect finished matches
+  // Detect finished matches and retain them in finished cache
+  const finishedTodayKey = `football:finished:${new Date().toISOString().slice(0, 10).replace(/-/g, '')}`;
+  const existingFinished = (await cache.get(finishedTodayKey)) || [];
+  const finishedMap = new Map(existingFinished.map(f => [f.id, f]));
+
   for (const prev of previous) {
     const still = current.find(c => c.id === prev.id);
-    if (!still) {
+    if (!still && prev.status?.state === 'in') {
+      // Mark as finished (post)
+      const finishedMatch = {
+        ...prev,
+        status: { state: 'post', short: 'FT', long: 'Match Finished', elapsed: 90 },
+      };
+      finishedMap.set(finishedMatch.id, finishedMatch);
+
       changes.push({
         type: 'match_ended',
         match: `${prev.home.name} ${prev.score?.home}-${prev.score?.away} ${prev.away.name}`,
         league: prev.league?.name,
       });
-      console.log(`[LIVE] MATCH ENDED: ${prev.home.name} vs ${prev.away.name}`);
+      console.log(`[LIVE] MATCH ENDED: ${prev.home.name} vs ${prev.away.name} (retained as FT)`);
     }
   }
+
+  const updatedFinished = Array.from(finishedMap.values());
+  await cache.set(finishedTodayKey, updatedFinished, 86400); // 24h TTL
 
   return changes;
 }
@@ -291,12 +311,31 @@ function detectChanges(previous, current) {
  * @returns {Promise<{fixtures: Array, source: string, stale: boolean}>}
  */
 async function getLive() {
-  const cached = await cache.get(cache.KEYS.live());
-  if (cached !== null) {
-    return { fixtures: cached, source: 'cache', stale: false };
+  const liveCached = await cache.get(cache.KEYS.live()) || [];
+  const finishedTodayKey = `football:finished:${new Date().toISOString().slice(0, 10).replace(/-/g, '')}`;
+  const finishedCached = await cache.get(finishedTodayKey) || [];
+
+  const mergedMap = new Map();
+  finishedCached.forEach(m => mergedMap.set(m.id, m));
+  liveCached.forEach(m => mergedMap.set(m.id, m));
+
+  const merged = Array.from(mergedMap.values());
+
+  if (liveCached.length > 0 || finishedCached.length > 0) {
+    return { fixtures: merged, source: 'cache', stale: false };
   }
-  // Cache miss — fetch immediately
-  return fetchAndCacheLive();
+
+  // Cache miss — fetch live immediately
+  const liveResult = await fetchAndCacheLive();
+  const allFinished = await cache.get(finishedTodayKey) || [];
+  const finalMap = new Map();
+  allFinished.forEach(m => finalMap.set(m.id, m));
+  liveResult.fixtures.forEach(m => finalMap.set(m.id, m));
+
+  return {
+    ...liveResult,
+    fixtures: Array.from(finalMap.values())
+  };
 }
 
 /**
@@ -394,10 +433,74 @@ function startWorker() {
     workerTimer = setTimeout(schedule, delay);
   }
 
-  // Load persisted quota state, then start
-  loadPersistedQuota().then(() => {
+  // Load persisted quota state and sync today's finished matches, then start worker
+  loadPersistedQuota().then(async () => {
+    await syncTodayFinishedMatches();
     workerTimer = setTimeout(schedule, 5000);
   });
+}
+
+/**
+ * Fetch and cache all matches for today that have already finished (FT/AET/PEN).
+ * Useful to catch matches that ended before worker startup (e.g. 02:00 WIB matches).
+ */
+async function syncTodayFinishedMatches() {
+  const todayDate = new Date();
+  const yesterdayDate = new Date();
+  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+
+  const datesToFetch = [
+    yesterdayDate.toISOString().slice(0, 10),
+    todayDate.toISOString().slice(0, 10)
+  ];
+
+  console.log(`[LIVE] Syncing finished matches from API-Football for UTC dates: ${datesToFetch.join(', ')}...`);
+  
+  try {
+    const allRaw = [];
+    for (const d of datesToFetch) {
+      const raw = await apiFootball.fetchFixturesByDate(d);
+      if (raw && Array.isArray(raw)) {
+        allRaw.push(...raw);
+      }
+    }
+
+    const idMapping = require('./idMappingService');
+    const finished = allRaw
+      .filter(f => ['FT', 'AET', 'PEN'].includes(f.fixture?.status?.short))
+      .map(apiFootball.normalizeLiveFixture);
+
+    const enriched = await Promise.all(finished.map(async (f) => {
+      const fdId = await idMapping.getFootballDataId(f.providers.apiFootball);
+      if (fdId) f.providers.footballData = fdId;
+      return f;
+    }));
+
+    // Group by WIB local date key (UTC + 7 hours)
+    const grouped = {};
+    for (const match of enriched) {
+      const kickoff = match.kickoff || match.date;
+      if (!kickoff) continue;
+      const matchTimeMs = new Date(kickoff).getTime();
+      const wibDate = new Date(matchTimeMs + 7 * 60 * 60 * 1000);
+      const wibKey = wibDate.toISOString().slice(0, 10).replace(/-/g, '');
+      
+      if (!grouped[wibKey]) grouped[wibKey] = [];
+      // Avoid duplicate matches in same group
+      if (!grouped[wibKey].some(m => m.id === match.id)) {
+        grouped[wibKey].push(match);
+      }
+    }
+
+    // Save to Redis for each WIB group
+    for (const [wibKey, matches] of Object.entries(grouped)) {
+      const redisKey = `football:finished:${wibKey}`;
+      await cache.set(redisKey, matches, 86400); // 24h TTL
+      console.log(`[LIVE] Cached ${matches.length} finished matches under local date key ${redisKey}`);
+    }
+  } catch (err) {
+    console.error('[LIVE] syncTodayFinishedMatches error:', err.message);
+  }
 }
 
 /**
@@ -439,6 +542,7 @@ module.exports = {
   getLiveByLeague,
   startWorker,
   stopWorker,
+  syncTodayFinishedMatches,
   getWorkerStatus,
   addSSEClient,
   getSSEClientCount,

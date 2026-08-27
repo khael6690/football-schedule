@@ -145,8 +145,9 @@ async function fetchLiveFixtures() {
  */
 async function fetchFixturesByDate(date) {
   try {
-    const data = await request('/fixtures', { date, league: PRIORITY_LEAGUE_IDS.join('-') });
-    return data.response || [];
+    const data = await request('/fixtures', { date });
+    const fixtures = data.response || [];
+    return fixtures.filter(f => PRIORITY_LEAGUE_IDS.includes(f.league?.id));
   } catch (err) {
     if (err.code === 'QUOTA_EXHAUSTED') return null;
     console.error('[API-FOOTBALL] fetchFixturesByDate error:', err.message);
