@@ -13,7 +13,9 @@
     "fetcher:seed": "node scripts/fetcher/index.js --mode seed",
     "fetcher:live": "node scripts/fetcher/index.js --mode live",
     "fetcher:check": "node scripts/fetcher/index.js --mode check",
-    "test:soccer": "node --test test/*.test.js"
+    "test:soccer": "node --test test/*.test.js",
+    "test:live": "node --test test/integration-live.test.js",
+    "test:all": "node --test test/*.test.js test/integration-live.test.js"
   },
   "keywords": [
     "club-football",
@@ -64,6 +66,7 @@
     "node": ">=20"
   },
   "dependencies": {
+    "@upstash/redis": "^1.38.3",
     "compression": "^1.8.1",
     "cors": "^2.8.6",
     "dotenv": "^16.0.0",

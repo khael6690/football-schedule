@@ -59,7 +59,7 @@ export default function MatchDetailPage() {
       <header className="bg-zinc-100 dark:bg-zinc-900 border-y border-zinc-200 dark:border-zinc-800 py-8 px-4 transition-colors">
         <div className="max-w-4xl mx-auto flex flex-col items-center gap-4 text-center">
           <div className="text-zinc-500 dark:text-zinc-400 text-xs sm:text-sm font-medium">
-            {match.league.name} • {match.league.season}
+            {match.league?.name || "League"} • {match.league?.season || ""}
           </div>
 
           <div className="flex items-center justify-center gap-6 sm:gap-12 w-full">

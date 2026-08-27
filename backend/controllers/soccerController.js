@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const cache = require('../services/cacheService');
 
 const SoccerLeague = require('../models/soccerLeague');
 const SoccerClub = require('../models/soccerClub');
@@ -178,6 +179,14 @@ router.get('/leagues', async(req, res) => {
             return res.status(400).json({ error: 'available must be true or false' });
         }
 
+        // Redis cache-first
+        const cacheKey = `football:leagues:${kind}:${req.query.available || 'all'}`;
+        const cached = await cache.get(cacheKey);
+        if (cached) {
+            res.set('Cache-Control', 'public, max-age=60');
+            return res.json(cached);
+        }
+
         const filter = { active: true };
         if (kind !== 'all') filter.kind = kind;
 
@@ -192,8 +201,7 @@ router.get('/leagues', async(req, res) => {
             ? enriched.filter(league => league.coverage.hasData)
             : enriched;
 
-        res.set('Cache-Control', 'public, max-age=60');
-        return res.json({
+        const response = {
             meta: {
                 kind,
                 availableOnly: req.query.available === 'true',
@@ -201,7 +209,11 @@ router.get('/leagues', async(req, res) => {
                 generatedAt: new Date().toISOString()
             },
             leagues: visible.map(serializeLeague)
-        });
+        };
+
+        await cache.set(cacheKey, response, cache.TTL.FIXTURES);
+        res.set('Cache-Control', 'public, max-age=60');
+        return res.json(response);
     } catch (error) {
         return sendError(res, error);
     }
@@ -312,6 +324,16 @@ router.get('/:league/scoreboard', validateLeague, async(req, res) => {
             return res.status(400).json({ error: 'dates must be a valid YYYYMMDD date' });
         }
 
+        // Redis cache-first
+        const tzOffset = req.query.tz_offset || '7';
+        const cacheKey = cache.KEYS.scoreboard(req.params.league, `${dates}:${tzOffset}`);
+        const cached = await cache.get(cacheKey);
+        if (cached) {
+            const live = cached.events?.some(e => e.status?.state === 'in' || e.statusState === 'in');
+            res.set('Cache-Control', `public, max-age=${live ? 4 : 30}`);
+            return res.json(cached);
+        }
+
         const league = await getLeague(req.params.league);
         if (!league) return res.status(404).json({ error: 'League not found' });
 
@@ -322,11 +344,15 @@ router.get('/:league/scoreboard', validateLeague, async(req, res) => {
         }).sort({ date: 1 }).lean();
 
         const live = matches.some(match => match.status?.state === 'in');
-        res.set('Cache-Control', `public, max-age=${live ? 4 : 30}`);
-        return res.json({
+        const response = {
             leagues: [serializeLeague(league)],
             events: matches.map(serializeScoreboardEvent)
-        });
+        };
+
+        // Shorter TTL when matches are live
+        await cache.set(cacheKey, response, live ? cache.TTL.LIVE : cache.TTL.SCOREBOARD);
+        res.set('Cache-Control', `public, max-age=${live ? 4 : 30}`);
+        return res.json(response);
     } catch (error) {
         return sendError(res, error);
     }
@@ -784,6 +810,14 @@ router.get('/:league/standings', validateLeague, async(req, res) => {
         let seasonYear = Number.parseInt(req.query.season, 10);
         if (!Number.isFinite(seasonYear)) seasonYear = league.season?.year;
 
+        // Redis cache-first
+        const cacheKey = cache.KEYS.standings(req.params.league, seasonYear || 'current');
+        const cached = await cache.get(cacheKey);
+        if (cached) {
+            res.set('Cache-Control', 'public, max-age=30');
+            return res.json(cached);
+        }
+
         const filter = { league_slug: req.params.league };
         if (seasonYear) filter.season_year = seasonYear;
 
@@ -791,14 +825,17 @@ router.get('/:league/standings', validateLeague, async(req, res) => {
             .sort({ group_name: 1 })
             .lean();
 
-        res.set('Cache-Control', 'public, max-age=30');
-        return res.json({
+        const response = {
             id: league.source?.source_id || league.slug,
             name: league.name,
             abbreviation: league.abbreviation,
             season: seasonYear || null,
             children: groups.map(serializeStandingGroup)
-        });
+        };
+
+        await cache.set(cacheKey, response, cache.TTL.STANDINGS);
+        res.set('Cache-Control', 'public, max-age=30');
+        return res.json(response);
     } catch (error) {
         return sendError(res, error);
     }

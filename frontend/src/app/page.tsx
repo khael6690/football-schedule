@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchAPI } from "@/lib/api";
 import { formatFullMatchDate, formatKickoffTime, toScoreboardDateParam } from "@/lib/date";
 import { Skeleton } from "@/components/ui/Skeleton";
+import LiveScoresWidget from "@/components/LiveScoresWidget";
 import type { ApiLeaguesResponse, ApiScoreboardResponse, ApiScoreboardEvent } from "@/types/football";
 
 export default function LandingPage() {
@@ -103,6 +104,11 @@ export default function LandingPage() {
             </Link>
           </div>
         </div>
+      </section>
+
+      {/* 1.5. Live Scores Widget */}
+      <section className="max-w-7xl mx-auto px-4 w-full">
+        <LiveScoresWidget />
       </section>
 
       {/* 2. Top Leagues Section */}

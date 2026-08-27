@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { isToday } from 'date-fns';
-import { fetchAPI } from '@/lib/api';
+import { fetchAPI, fetchLiveMatches } from '@/lib/api';
 import { toScoreboardDateParam } from '@/lib/date';
 import type {
   ApiScoreboardResponse,
@@ -29,34 +29,91 @@ export function useFixtures(date: Date, league?: string) {
     retry: 1,
     queryFn: async (): Promise<FixtureGroup[]> => {
       try {
+        let scoreboardRes;
+        let liveRes = null;
+
+        // Fetch live matches concurrently if we're looking at today
+        const fetchLive = todayActive ? fetchLiveMatches().catch(() => null) : Promise.resolve(null);
+
         if (league && league !== 'all') {
           // League-scoped scoreboard
-          const res = await fetchAPI<ApiLeagueScoreboardResponse>(
-            `/get/soccer/${league}/scoreboard?dates=${dateParam}&tz_offset=7`
-          );
-          const leagueInfo = res.leagues?.[0];
-          return [
-            {
-              leagueSlug: leagueInfo?.slug ?? league,
-              leagueName: leagueInfo?.name ?? league,
-              leagueLogo: leagueInfo?.logo,
-              events: res.events ?? [],
-            },
-          ];
+          const [res, live] = await Promise.all([
+            fetchAPI<ApiLeagueScoreboardResponse>(`/get/soccer/${league}/scoreboard?dates=${dateParam}&tz_offset=7`),
+            fetchLive
+          ]);
+          scoreboardRes = res;
+          liveRes = live;
+        } else {
+          // Cross-league scoreboard
+          const [res, live] = await Promise.all([
+            fetchAPI<ApiScoreboardResponse>(`/get/soccer/scoreboard?dates=${dateParam}&tz_offset=7`),
+            fetchLive
+          ]);
+          scoreboardRes = res;
+          liveRes = live;
         }
 
-        // Cross-league scoreboard
-        const res = await fetchAPI<ApiScoreboardResponse>(
-          `/get/soccer/scoreboard?dates=${dateParam}&tz_offset=7`
-        );
-        if (res.leagues && res.leagues.length > 0) {
-          return res.leagues.map((g: ApiScoreboardLeagueGroup) => ({
-            leagueSlug: g.league.slug,
-            leagueName: g.league.name,
-            leagueLogo: g.league.logo,
-            events: g.events ?? [],
-          }));
+        // Process scoreboard data
+        let groups: FixtureGroup[] = [];
+
+        if ('leagues' in scoreboardRes && Array.isArray((scoreboardRes as any).leagues) && (scoreboardRes as any).leagues.length > 0) {
+          if (league && league !== 'all') {
+            const leagueInfo = (scoreboardRes as ApiLeagueScoreboardResponse).leagues?.[0];
+            groups = [
+              {
+                leagueSlug: leagueInfo?.slug ?? league,
+                leagueName: leagueInfo?.name ?? league,
+                leagueLogo: leagueInfo?.logo,
+                events: (scoreboardRes as ApiLeagueScoreboardResponse).events ?? [],
+              },
+            ];
+          } else {
+            groups = (scoreboardRes as ApiScoreboardResponse).leagues.map((g: ApiScoreboardLeagueGroup) => ({
+              leagueSlug: g.league?.slug ?? '',
+              leagueName: g.league?.name ?? '',
+              leagueLogo: g.league?.logo,
+              events: g.events ?? [],
+            }));
+          }
         }
+
+        // Enrich with real-time live data
+        if (liveRes && liveRes.matches && liveRes.matches.length > 0) {
+          const liveMatchesMap = new Map();
+          liveRes.matches.forEach((m: any) => {
+            if (m.providers?.footballData) {
+              liveMatchesMap.set(m.providers.footballData, m);
+            }
+          });
+
+          // Mutate the events to inject live scores
+          groups.forEach((group) => {
+            group.events = group.events.map((ev) => {
+              const liveMatch = liveMatchesMap.get(ev.id);
+              if (liveMatch && ev.competitions && ev.competitions[0]) {
+                // Update score
+                ev.competitions[0].competitors.forEach((c) => {
+                  if (c.homeAway === 'home') c.score = String(liveMatch.score.home);
+                  if (c.homeAway === 'away') c.score = String(liveMatch.score.away);
+                });
+
+                // Update status
+                if (ev.status && ev.status.type) {
+                  ev.status.type.state = liveMatch.status.state as any;
+                  ev.status.type.shortDetail = liveMatch.status.short || ev.status.type.shortDetail;
+                  ev.status.type.detail = liveMatch.status.long || ev.status.type.detail;
+                  if (liveMatch.status.elapsed) {
+                    ev.status.clock = liveMatch.status.elapsed * 60;
+                    ev.status.displayClock = `${liveMatch.status.elapsed}'`;
+                  }
+                }
+              }
+              return ev;
+            });
+          });
+        }
+
+        return groups;
       } catch (e) {
         console.warn('Failed to fetch fixtures:', e);
       }

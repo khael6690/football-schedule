@@ -39,3 +39,41 @@ export async function fetchAPI<T>(endpoint: string, options?: RequestInit): Prom
 
   return res.json();
 }
+
+export interface LiveMatchResponse {
+  meta: {
+    count: number;
+    source: string;
+    stale: boolean;
+    quotaExhausted?: boolean;
+    generatedAt: string;
+  };
+  matches: Array<{
+    id: string;
+    providers: { apiFootball: string; footballData: string | null };
+    league: { id: string; name: string; slug: string; logo?: string; country?: string };
+    home: { id: string; name: string; logo?: string; score: number };
+    away: { id: string; name: string; logo?: string; score: number };
+    score: { home: number; away: number };
+    status: { state: string; short: string; long: string; elapsed?: number };
+    kickoff: string;
+    venue?: { name?: string; city?: string };
+    events?: Array<{
+      time: number;
+      extraTime?: number;
+      teamName: string;
+      playerName: string;
+      type: string;
+      detail: string;
+    }>;
+  }>;
+}
+
+export async function fetchLiveMatches(): Promise<LiveMatchResponse> {
+  return fetchAPI<LiveMatchResponse>('/api/live');
+}
+
+export async function fetchLeagueLiveMatches(leagueSlug: string): Promise<LiveMatchResponse> {
+  return fetchAPI<LiveMatchResponse>(`/api/live/${leagueSlug}`);
+}
+

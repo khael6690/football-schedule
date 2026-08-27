@@ -52,16 +52,23 @@ export function Navbar() {
         <nav className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
+            const isLiveLink = link.name === "Live";
             return (
               <Link
                 key={link.name}
                 href={link.href}
-                className={`text-sm font-medium transition-colors ${
+                className={`text-sm font-medium transition-colors inline-flex items-center gap-1.5 ${
                   isActive
                     ? "text-green-600 dark:text-green-500 font-semibold"
                     : "text-zinc-700 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100"
                 }`}
               >
+                {isLiveLink && (
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75 animate-ping" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
+                  </span>
+                )}
                 {link.name}
               </Link>
             );
