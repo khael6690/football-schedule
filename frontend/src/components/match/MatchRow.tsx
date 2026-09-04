@@ -97,16 +97,10 @@ export function MatchRow({ match }: Props) {
   const awayScore = away.score != null ? away.score : null;
   const hasScore = homeScore !== null && awayScore !== null;
 
-  const matchId = match.id;
+  const hasApfId = typeof match.apfId === 'number' && !isNaN(match.apfId);
 
-  return (
-    <Link
-      href={`/match/${matchId}`}
-      className={cn(
-        'flex items-center gap-3 px-4 py-3.5 transition-colors group cursor-pointer',
-        'hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
-      )}
-    >
+  const rowContent = (
+    <>
       {/* Time / live indicator */}
       <div className="w-12 shrink-0 text-right">
         {isLive ? (
@@ -126,7 +120,9 @@ export function MatchRow({ match }: Props) {
             'hidden sm:inline text-sm truncate transition-colors',
             home.winner
               ? 'text-zinc-950 dark:text-zinc-50 font-bold'
-              : 'text-zinc-800 dark:text-zinc-200 font-medium group-hover:text-green-600 dark:group-hover:text-green-400'
+              : hasApfId
+                ? 'text-zinc-800 dark:text-zinc-200 font-medium group-hover:text-green-600 dark:group-hover:text-green-400'
+                : 'text-zinc-800 dark:text-zinc-200 font-medium'
           )}
         >
           {home.team.displayName || home.team.shortDisplayName}
@@ -153,7 +149,9 @@ export function MatchRow({ match }: Props) {
             'hidden sm:inline text-sm truncate text-right transition-colors',
             away.winner
               ? 'text-zinc-950 dark:text-zinc-50 font-bold'
-              : 'text-zinc-800 dark:text-zinc-200 font-medium group-hover:text-green-600 dark:group-hover:text-green-400'
+              : hasApfId
+                ? 'text-zinc-800 dark:text-zinc-200 font-medium group-hover:text-green-600 dark:group-hover:text-green-400'
+                : 'text-zinc-800 dark:text-zinc-200 font-medium'
           )}
         >
           {away.team.displayName || away.team.shortDisplayName}
@@ -165,6 +163,26 @@ export function MatchRow({ match }: Props) {
       <div className="w-16 shrink-0 text-right">
         <StatusBadge match={match} />
       </div>
-    </Link>
+    </>
+  );
+
+  if (hasApfId) {
+    return (
+      <Link
+        href={`/fixture/${match.apfId}`}
+        className={cn(
+          'flex items-center gap-3 px-4 py-3.5 transition-colors group cursor-pointer',
+          'hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
+        )}
+      >
+        {rowContent}
+      </Link>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-3 px-4 py-3.5 select-none">
+      {rowContent}
+    </div>
   );
 }

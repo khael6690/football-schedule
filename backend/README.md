@@ -140,8 +140,140 @@ from dedicated club documents.
 | `soccer_match_events` | Idempotent play-by-play events |
 | `soccer_standings` | League tables and competition groups |
 | `soccer_sync_states` | Listener cursor, polling state, errors, and leases |
+| `apf_fixtures` | Durable API-Football fixture archive (one doc per fixture id) |
+| `apf_fixture_details` | Durable API-Football fixture detail (events, lineups, statistics) |
 
 The listener write contract, indexes, schemas, and upsert examples are documented in [LIVE-LISTENER-DATABASE.md](LIVE-LISTENER-DATABASE.md).
+
+### API-Football archive (`apf_*`)
+
+These two collections are written only by the API-Football code path
+(`services/apfStore.js`). They use a separate id space from `soccer_matches`
+and are never touched by the football-data.org fetcher.
+
+Indexes:
+
+| Collection | Index | Notes |
+|---|---|---|
+| `apf_fixtures` | `{ fixture_id: 1 }` unique | one doc per API-Football fixture |
+| `apf_fixtures` | `{ date_key: 1, 'league.id': 1 }` | date listing (`date_key` is the WIB calendar date) |
+| `apf_fixtures` | `{ 'status.state': 1, date: 1 }` | state scans |
+| `apf_fixture_details` | `{ fixture_id: 1 }` unique | one doc per fixture |
+| `apf_fixture_details` | `{ is_final: 1 }` | final details are served without API calls |
+
+No TTL indexes — this data is durable on purpose.
+
+Read-through order:
+
+- `GET /api/fixtures/date/:date` → Redis → Mongo (`apf_fixtures`) → API-Football
+- `GET /api/fixture/:apfId` → Redis → Mongo (`apf_fixture_details`, final only) → API-Football
+
+Every API-Football response is written through to Mongo. The live worker also
+archives matches as they finish, so the archive grows daily at no extra quota cost.
+
+### Backfilling past fixtures
+
+Manual only — this script is never run by the server or a worker.
+
+```bash
+# last 30 days (default)
+npm run backfill:apf
+
+# plan only, no API calls, no writes
+npm run backfill:apf -- --days=7 --dry-run
+
+# explicit range
+npm run backfill:apf -- --from=2026-08-01 --to=2026-08-31
+```
+
+Required env: `API_FOOTBALL_KEY`, `MONGODB_URL` (or `MONGODB_URI`).
+
+Quota behaviour (API-Football free tier is 100 requests/day, 10/minute):
+
+- 1 request per date, and only when Mongo has no fixtures for that date, so
+  re-running is idempotent and cheap
+- 7 second delay between requests
+- aborts when the remaining daily quota drops to 5 or below; re-run the next day
+  and previously stored dates are skipped automatically
+
+### Seeding older fixtures by hand
+
+The API-Football free plan only serves roughly the last 3 days
+(`API_FOOTBALL_HISTORY_DAYS = 3` in `services/fixturesByDateService.js`).
+Anything older can never be backfilled from the API, so `GET /api/fixtures/date/:date`
+skips the API entirely for those dates and answers from Mongo. Results for that
+period are entered manually.
+
+Put one JSON file per WIB date in `backend/data/manual/`, named `YYYY-MM-DD.json`.
+`backend/data/manual/2026-09-01.example.json` is a fully populated reference.
+
+```jsonc
+{
+  "date_key": "2026-09-01",          // WIB calendar date, must match the filename
+  "source": "manual",
+  "fixtures": [
+    {
+      "fixture_id": null,            // optional: real API-Football id, else omit/null
+      "sources": ["https://..."],    // optional: reference URLs for the result
+      // everything below is the existing FixtureDetail contract, unchanged
+      "league":  { "id": 39, "name": "...", "logo": "...", "country": "...", "season": 2026, "round": "..." },
+      "date":    "2026-09-01T09:00:00+00:00",
+      "venue":   { "name": "...", "city": "..." },
+      "referee": "...",
+      "status":  { "short": "FT", "long": "Match Finished", "elapsed": 90, "state": "post" },
+      "home":    { "id": 33, "name": "...", "logo": "...", "winner": true },
+      "away":    { "id": 34, "name": "...", "logo": "...", "winner": false },
+      "goals":   { "home": 2, "away": 1 },
+      "score":   { "halftime": {...}, "fulltime": {...}, "extratime": {...}, "penalty": {...} },
+      "events":     [ { "minute": 12, "extra": null, "teamId": 33, "teamName": "...",
+                        "player": "...", "assist": "...", "type": "Goal",
+                        "detail": "Normal Goal", "comments": null } ],
+      "lineups":    [ { "teamId": 33, "teamName": "...", "teamLogo": "...", "formation": "4-3-3",
+                        "coach": "...", "startXI": [ /* 11 */ ], "substitutes": [ ... ] } ],
+      "statistics": [ { "teamId": 33, "teamName": "...",
+                        "stats": [ { "type": "Shots on Goal", "value": 6 } ] } ]
+    }
+  ]
+}
+```
+
+`fixture_id` and `sources` are the only two fields added on top of the
+`FixtureDetail` contract. Nothing in the contract itself changes, so the
+frontend types stay untouched.
+
+Run it — always dry-run first:
+
+```bash
+npm run seed:manual -- --date=2026-09-01 --dry-run
+npm run seed:manual -- --date=2026-09-01
+
+npm run seed:manual -- --file=data/manual/2026-09-01.json
+npm run seed:manual -- --all --dry-run
+```
+
+Required env: `MONGODB_URL` (or `MONGODB_URI`). No API key needed — the script
+makes zero API-Football calls.
+
+Validation runs over every file before anything is written; a single fatal error
+aborts the whole run. Fatal: missing/mistyped fields, unknown `status.short`,
+`status.state` disagreeing with `status.short`, `goals` disagreeing with
+`score.fulltime` on a finished match, a `date` whose WIB day differs from
+`date_key`, or a `fixture_id` inside the reserved manual range. Warnings only
+(still writes): `Goal` event count not matching the scoreline, `startXI` other
+than 11 players, or not exactly two lineup/statistics blocks.
+
+**Ids.** When `fixture_id` is omitted the script derives a deterministic id from
+`(date_key, home name, away name)`, mapped into the reserved manual range
+`900000000..999999999` — well clear of real API-Football ids. Re-running the
+seed produces the same id, so it upserts instead of duplicating. Requests for a
+manual id never touch API-Football (`GET /api/fixture/:apfId` answers from Mongo
+or 404s).
+
+**Precedence.** Seeded documents carry an internal `manual: true` flag (plus
+`manual_source`). These fields live only in Mongo and are never included in API
+responses. API syncs may not overwrite a manual document unless the incoming
+data is final *and* carries a genuine API-Football id. Manual data always beats
+non-final API data. When a date has both, the two are merged by fixture id.
 
 ## Getting started
 

@@ -1,3 +1,5 @@
+import type { FixtureDetailResponse } from '@/types/fixtureDetail';
+
 export function getApiBase(): string {
   let url = (process.env.NEXT_PUBLIC_API_URL || "").trim();
 
@@ -75,6 +77,24 @@ export async function fetchLiveMatches(): Promise<LiveMatchResponse> {
 
 export async function fetchFinishedMatches(): Promise<LiveMatchResponse> {
   return fetchAPI<LiveMatchResponse>('/api/live/finished');
+}
+
+export interface FixturesByDateResponse {
+  date: string;
+  count: number;
+  fixtures: LiveMatchResponse['matches'];
+  source: 'cache' | 'api' | 'stale';
+}
+
+/** API-Football fixtures for a date (YYYY-MM-DD). Same item shape as /api/live. */
+export async function fetchFixturesByDate(date: string): Promise<FixturesByDateResponse> {
+  return fetchAPI<FixturesByDateResponse>(`/api/fixtures/date/${date}`);
+}
+
+/** Full fixture detail (events, lineups, statistics) by API-Football fixture id. */
+export async function fetchFixtureDetail(apfId: string | number): Promise<FixtureDetailResponse> {
+  const id = String(apfId).replace(/^apf-/, '');
+  return fetchAPI<FixtureDetailResponse>(`/api/fixture/${id}`);
 }
 
 export async function fetchLeagueLiveMatches(leagueSlug: string): Promise<LiveMatchResponse> {

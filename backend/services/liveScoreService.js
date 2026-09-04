@@ -15,6 +15,7 @@
 
 const cache = require('./cacheService');
 const apiFootball = require('../providers/apiFootballProvider');
+const apfStore = require('./apfStore');
 
 // How often the worker polls (ms)
 const POLL_INTERVAL_ACTIVE   = 60 * 1000;       // 60s  — matches are live
@@ -277,6 +278,8 @@ async function detectChanges(previous, current) {
   const existingFinished = (await cache.get(finishedTodayKey)) || [];
   const finishedMap = new Map(existingFinished.map(f => [f.id, f]));
 
+  const newlyFinished = [];
+
   for (const prev of previous) {
     const still = current.find(c => c.id === prev.id);
     if (!still && prev.status?.state === 'in') {
@@ -286,6 +289,7 @@ async function detectChanges(previous, current) {
         status: { state: 'post', short: 'FT', long: 'Match Finished', elapsed: prev.status?.elapsed ?? null },
       };
       finishedMap.set(finishedMatch.id, finishedMatch);
+      newlyFinished.push(finishedMatch);
 
       changes.push({
         type: 'match_ended',
@@ -298,6 +302,12 @@ async function detectChanges(previous, current) {
 
   const updatedFinished = Array.from(finishedMap.values());
   await cache.set(finishedTodayKey, updatedFinished, 86400); // 24h TTL
+
+  // Archive newly-finished matches durably (best-effort, never throws).
+  // Grows the archive daily without extra API calls.
+  if (newlyFinished.length > 0) {
+    await apfStore.saveFixtures(newlyFinished);
+  }
 
   return changes;
 }
@@ -510,6 +520,12 @@ async function syncTodayFinishedMatches() {
       const redisKey = `football:finished:${wibKey}`;
       await cache.set(redisKey, matches, 86400); // 24h TTL
       console.log(`[LIVE] Cached ${matches.length} finished matches under local date key ${redisKey}`);
+    }
+
+    // Archive durably (best-effort, never throws)
+    if (enriched.length > 0) {
+      const saved = await apfStore.saveFixtures(enriched);
+      console.log(`[LIVE] Archived finished matches to Mongo — upserted=${saved.upserted} modified=${saved.modified}`);
     }
   } catch (err) {
     console.error('[LIVE] syncTodayFinishedMatches error:', err.message);

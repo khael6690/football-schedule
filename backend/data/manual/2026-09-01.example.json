@@ -1,0 +1,202 @@
+{
+  "date_key": "2026-09-01",
+  "source": "manual",
+  "fixtures": [
+    {
+      "fixture_id": null,
+      "sources": [
+        "https://example.com/report/example-united-vs-example-city",
+        "https://example.com/stats/example-united-vs-example-city"
+      ],
+      "league": {
+        "id": 39,
+        "name": "Premier League",
+        "logo": "https://media.api-sports.io/football/leagues/39.png",
+        "country": "England",
+        "season": 2026,
+        "round": "Regular Season - 3"
+      },
+      "date": "2026-09-01T09:00:00+00:00",
+      "venue": { "name": "Example Stadium", "city": "Exampleton" },
+      "referee": "A. Referee",
+      "status": { "short": "FT", "long": "Match Finished", "elapsed": 90, "state": "post" },
+      "home": {
+        "id": 33,
+        "name": "Example United",
+        "logo": "https://media.api-sports.io/football/teams/33.png",
+        "winner": true
+      },
+      "away": {
+        "id": 34,
+        "name": "Example City",
+        "logo": "https://media.api-sports.io/football/teams/34.png",
+        "winner": false
+      },
+      "goals": { "home": 2, "away": 1 },
+      "score": {
+        "halftime": { "home": 1, "away": 1 },
+        "fulltime": { "home": 2, "away": 1 },
+        "extratime": { "home": null, "away": null },
+        "penalty": { "home": null, "away": null }
+      },
+      "events": [
+        {
+          "minute": 12,
+          "extra": null,
+          "teamId": 33,
+          "teamName": "Example United",
+          "player": "Home Striker",
+          "assist": "Home Winger",
+          "type": "Goal",
+          "detail": "Normal Goal",
+          "comments": null
+        },
+        {
+          "minute": 34,
+          "extra": null,
+          "teamId": 34,
+          "teamName": "Example City",
+          "player": "Away Forward",
+          "assist": null,
+          "type": "Goal",
+          "detail": "Penalty",
+          "comments": null
+        },
+        {
+          "minute": 45,
+          "extra": 2,
+          "teamId": 34,
+          "teamName": "Example City",
+          "player": "Away Midfielder",
+          "assist": null,
+          "type": "Card",
+          "detail": "Yellow Card",
+          "comments": "Foul"
+        },
+        {
+          "minute": 62,
+          "extra": null,
+          "teamId": 33,
+          "teamName": "Example United",
+          "player": "Home Substitute",
+          "assist": "Home Midfielder",
+          "type": "subst",
+          "detail": "Substitution 1",
+          "comments": null
+        },
+        {
+          "minute": 78,
+          "extra": null,
+          "teamId": 33,
+          "teamName": "Example United",
+          "player": "Home Substitute",
+          "assist": null,
+          "type": "Goal",
+          "detail": "Normal Goal",
+          "comments": null
+        },
+        {
+          "minute": 88,
+          "extra": null,
+          "teamId": 33,
+          "teamName": "Example United",
+          "player": "Home Defender",
+          "assist": null,
+          "type": "Card",
+          "detail": "Red Card",
+          "comments": "Violent Conduct"
+        }
+      ],
+      "lineups": [
+        {
+          "teamId": 33,
+          "teamName": "Example United",
+          "teamLogo": "https://media.api-sports.io/football/teams/33.png",
+          "formation": "4-3-3",
+          "coach": "Home Coach",
+          "startXI": [
+            { "id": 1001, "name": "Home Keeper", "number": 1, "pos": "G", "grid": "1:1" },
+            { "id": 1002, "name": "Home Right Back", "number": 2, "pos": "D", "grid": "2:1" },
+            { "id": 1003, "name": "Home Centre Back A", "number": 4, "pos": "D", "grid": "2:2" },
+            { "id": 1004, "name": "Home Centre Back B", "number": 5, "pos": "D", "grid": "2:3" },
+            { "id": 1005, "name": "Home Left Back", "number": 3, "pos": "D", "grid": "2:4" },
+            { "id": 1006, "name": "Home Midfielder", "number": 6, "pos": "M", "grid": "3:1" },
+            { "id": 1007, "name": "Home Playmaker", "number": 8, "pos": "M", "grid": "3:2" },
+            { "id": 1008, "name": "Home Box To Box", "number": 10, "pos": "M", "grid": "3:3" },
+            { "id": 1009, "name": "Home Winger", "number": 7, "pos": "F", "grid": "4:1" },
+            { "id": 1010, "name": "Home Striker", "number": 9, "pos": "F", "grid": "4:2" },
+            { "id": 1011, "name": "Home Left Winger", "number": 11, "pos": "F", "grid": "4:3" }
+          ],
+          "substitutes": [
+            { "id": 1012, "name": "Home Substitute", "number": 17, "pos": "F" },
+            { "id": 1013, "name": "Home Backup Keeper", "number": 13, "pos": "G" }
+          ]
+        },
+        {
+          "teamId": 34,
+          "teamName": "Example City",
+          "teamLogo": "https://media.api-sports.io/football/teams/34.png",
+          "formation": "4-2-3-1",
+          "coach": "Away Coach",
+          "startXI": [
+            { "id": 2001, "name": "Away Keeper", "number": 1, "pos": "G", "grid": "1:1" },
+            { "id": 2002, "name": "Away Right Back", "number": 2, "pos": "D", "grid": "2:1" },
+            { "id": 2003, "name": "Away Centre Back A", "number": 4, "pos": "D", "grid": "2:2" },
+            { "id": 2004, "name": "Away Centre Back B", "number": 5, "pos": "D", "grid": "2:3" },
+            { "id": 2005, "name": "Away Left Back", "number": 3, "pos": "D", "grid": "2:4" },
+            { "id": 2006, "name": "Away Holding Mid", "number": 6, "pos": "M", "grid": "3:1" },
+            { "id": 2007, "name": "Away Midfielder", "number": 8, "pos": "M", "grid": "3:2" },
+            { "id": 2008, "name": "Away Right Wing", "number": 7, "pos": "M", "grid": "4:1" },
+            { "id": 2009, "name": "Away Attacking Mid", "number": 10, "pos": "M", "grid": "4:2" },
+            { "id": 2010, "name": "Away Left Wing", "number": 11, "pos": "M", "grid": "4:3" },
+            { "id": 2011, "name": "Away Forward", "number": 9, "pos": "F", "grid": "5:1" }
+          ],
+          "substitutes": [
+            { "id": 2012, "name": "Away Substitute", "number": 19, "pos": "F" },
+            { "id": 2013, "name": "Away Backup Keeper", "number": 13, "pos": "G" }
+          ]
+        }
+      ],
+      "statistics": [
+        {
+          "teamId": 33,
+          "teamName": "Example United",
+          "stats": [
+            { "type": "Shots on Goal", "value": 6 },
+            { "type": "Shots off Goal", "value": 5 },
+            { "type": "Total Shots", "value": 14 },
+            { "type": "Fouls", "value": 11 },
+            { "type": "Corner Kicks", "value": 7 },
+            { "type": "Offsides", "value": 2 },
+            { "type": "Ball Possession", "value": "56%" },
+            { "type": "Yellow Cards", "value": 1 },
+            { "type": "Red Cards", "value": 1 },
+            { "type": "Goalkeeper Saves", "value": 3 },
+            { "type": "Total passes", "value": 512 },
+            { "type": "Passes accurate", "value": 441 },
+            { "type": "Passes %", "value": "86%" }
+          ]
+        },
+        {
+          "teamId": 34,
+          "teamName": "Example City",
+          "stats": [
+            { "type": "Shots on Goal", "value": 4 },
+            { "type": "Shots off Goal", "value": 6 },
+            { "type": "Total Shots", "value": 12 },
+            { "type": "Fouls", "value": 14 },
+            { "type": "Corner Kicks", "value": 4 },
+            { "type": "Offsides", "value": 1 },
+            { "type": "Ball Possession", "value": "44%" },
+            { "type": "Yellow Cards", "value": 2 },
+            { "type": "Red Cards", "value": 0 },
+            { "type": "Goalkeeper Saves", "value": 4 },
+            { "type": "Total passes", "value": 402 },
+            { "type": "Passes accurate", "value": 331 },
+            { "type": "Passes %", "value": "82%" }
+          ]
+        }
+      ]
+    }
+  ]
+}

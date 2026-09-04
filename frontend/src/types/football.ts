@@ -132,6 +132,8 @@ export interface ApiScoreboardEvent {
   competitions: ApiCompetition[];
   status: ApiMatchStatus;
   venue?: { displayName?: string } | null;
+  /** API-Football fixture id — injected client-side when matched to live/finished data. */
+  apfId?: number;
 }
 
 export interface ApiScoreboardLeagueGroup {

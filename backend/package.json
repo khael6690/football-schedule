@@ -10,6 +10,8 @@
     "start:dev": "cross-env NODE_ENV=development nodemon index.js",
     "start:prod": "cross-env NODE_ENV=production node index.js",
     "db:init-live": "node scripts/init-live-storage.js",
+    "backfill:apf": "node scripts/backfill-apf.js",
+    "seed:manual": "node scripts/seed-manual.js",
     "fetcher:seed": "node scripts/fetcher/index.js --mode seed",
     "fetcher:live": "node scripts/fetcher/index.js --mode live",
     "fetcher:check": "node scripts/fetcher/index.js --mode check",

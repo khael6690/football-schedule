@@ -193,6 +193,18 @@ async function fetchStandings(leagueId, season) {
 // Normalizer — convert API-Football fixture to internal format
 // ---------------------------------------------------------------------------
 
+// Map API-Football status.short to internal state
+const STATUS_STATE_MAP = {
+  TBD: 'pre', NS: 'pre',
+  '1H': 'in', HT: 'in', '2H': 'in', ET: 'in', BT: 'in', P: 'in', SUSP: 'in', INT: 'in', LIVE: 'in',
+  FT: 'post', AET: 'post', PEN: 'post',
+  PST: 'unknown', CANC: 'unknown', ABD: 'unknown', AWD: 'unknown', WO: 'unknown',
+};
+
+function mapStatusState(short) {
+  return STATUS_STATE_MAP[short] || 'unknown';
+}
+
 /**
  * Normalize an API-Football fixture object into the app's internal LiveMatch schema.
  * @param {Object} fixture   — raw fixture from API-Football response
@@ -206,13 +218,7 @@ function normalizeLiveFixture(fixture) {
   const score  = fixture.score   || {};
   const events = fixture.events  || [];
 
-  // Map API-Football status to internal state
-  const statusMap = {
-    TBD: 'pre', NS: 'pre',
-    '1H': 'in', HT: 'in', '2H': 'in', ET: 'in', BT: 'in', P: 'in', SUSP: 'in', INT: 'in', LIVE: 'in',
-    FT: 'post', AET: 'post', PEN: 'post',
-    PST: 'unknown', CANC: 'unknown', ABD: 'unknown', AWD: 'unknown', WO: 'unknown',
-  };
+  const statusMap = STATUS_STATE_MAP;
 
   return {
     id: `apf-${f.id}`,
@@ -298,6 +304,8 @@ module.exports = {
   fetchFixtureById,
   fetchStandings,
   normalizeLiveFixture,
+  mapStatusState,
+  STATUS_STATE_MAP,
   getQuotaState,
   PRIORITY_LEAGUES,
   PRIORITY_LEAGUE_IDS,

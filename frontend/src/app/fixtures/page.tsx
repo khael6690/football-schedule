@@ -2,9 +2,9 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { addDays, subDays, isToday, isSameDay } from 'date-fns';
+import { addDays, subDays } from 'date-fns';
 import { cn } from '@/lib/utils';
-import { formatShortMatchDate } from '@/lib/date';
+import { formatShortMatchDate, wibDayAnchor, isSameWibDay, isWibToday, DEFAULT_TIMEZONE } from '@/lib/date';
 import { useFixtures } from '@/hooks/useFixtures';
 import { MatchRow } from '@/components/match/MatchRow';
 import { SkeletonMatchRow } from '@/components/match/SkeletonMatchRow';
@@ -25,18 +25,29 @@ const STATUS_OPTIONS = [
   { value: 'finished', label: 'Selesai' },
 ];
 
+/**
+ * 9 WIB calendar days, oldest first: 3 previous + today + 5 upcoming.
+ * Each entry is the 12:00 WIB anchor of its day, so the WIB calendar day is
+ * stable regardless of the browser timezone.
+ */
 function getDateRange(): Date[] {
-  const today = new Date();
-  const yesterday = subDays(today, 1);
-  const dates = [yesterday, today];
+  const todayWib = wibDayAnchor(new Date());
+  const dates: Date[] = [];
+  for (let i = 3; i >= 1; i--) {
+    dates.push(wibDayAnchor(subDays(todayWib, i)));
+  }
+  dates.push(todayWib);
   for (let i = 1; i <= 5; i++) {
-    dates.push(addDays(today, i));
+    dates.push(wibDayAnchor(addDays(todayWib, i)));
   }
   return dates;
 }
 
+/** Index of today in getDateRange() — 3 past days come first. */
+const TODAY_INDEX = 3;
+
 function DatePill({ date, active, onClick }: { date: Date; active: boolean; onClick: () => void }) {
-  const label = isToday(date) ? 'Hari Ini' : formatShortMatchDate(date, 'id-ID');
+  const label = isWibToday(date) ? 'Hari Ini' : formatShortMatchDate(date, 'id-ID', DEFAULT_TIMEZONE);
   return (
     <button
       onClick={onClick}
@@ -74,7 +85,7 @@ function LeagueTab({ league, active, onClick }: { league: typeof LEAGUES[number]
 function FixturesContent() {
   const searchParams = useSearchParams();
   const dateRange = getDateRange();
-  const [selectedDate, setSelectedDate] = useState<Date>(dateRange[1]); // today
+  const [selectedDate, setSelectedDate] = useState<Date>(dateRange[TODAY_INDEX]); // today (WIB)
   const [selectedLeague, setSelectedLeague] = useState<string>('all');
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
 
@@ -147,7 +158,7 @@ function FixturesContent() {
               <DatePill
                 key={idx}
                 date={date}
-                active={isSameDay(date, selectedDate)}
+                active={isSameWibDay(date, selectedDate)}
                 onClick={() => setSelectedDate(date)}
               />
             ))}

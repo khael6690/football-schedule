@@ -1,9 +1,8 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { isToday } from 'date-fns';
-import { fetchAPI, fetchLiveMatches, fetchFinishedMatches } from '@/lib/api';
-import { toScoreboardDateParam } from '@/lib/date';
+import { fetchAPI, fetchLiveMatches, fetchFinishedMatches, fetchFixturesByDate } from '@/lib/api';
+import { toScoreboardDateParam, toIsoDateParam, isWibToday } from '@/lib/date';
 import type {
   ApiScoreboardResponse,
   ApiLeagueScoreboardResponse,
@@ -19,45 +18,65 @@ export interface FixtureGroup {
   events: ApiScoreboardEvent[];
 }
 
+type EnrichTier = 'live' | 'finished' | 'byDate';
+type EnrichItem = { tier: EnrichTier; m: any };
+
+/** Client staleTime mirroring backend /api/fixtures/date TTL policy (WIB days). */
+function staleTimeForDate(date: Date): number {
+  const d = toScoreboardDateParam(date);
+  const t = toScoreboardDateParam(new Date());
+  if (d < t) return 60 * 60 * 1000;   // past: 1h
+  if (d > t) return 30 * 60 * 1000;   // future: 30m
+  return 60 * 1000;                   // today: 60s
+}
+
 export function useFixtures(date: Date, league?: string) {
   const dateParam = toScoreboardDateParam(date);
-  const todayActive = isToday(date);
+  const isoDate = toIsoDateParam(date);
+  const todayActive = isWibToday(date);
 
   const { data, isLoading, error } = useQuery<FixtureGroup[]>({
     queryKey: ['fixtures', dateParam, league ?? 'all'],
     refetchInterval: todayActive ? 15000 : false,
+    staleTime: staleTimeForDate(date),
     retry: 1,
     queryFn: async (): Promise<FixtureGroup[]> => {
       try {
         let scoreboardRes;
         let liveRes = null;
         let finishedRes = null;
+        let byDateRes = null;
 
-        // Fetch live + finished matches concurrently if we're looking at today.
-        // /api/live returns strictly in-play; today's FT scores come from /api/live/finished.
+        // Today: live + finished (real-time) + byDate as last-resort fallback (NS matches).
+        // Non-today: byDate only (gives apfId + final scores for past dates).
         const fetchLive = todayActive ? fetchLiveMatches().catch(() => null) : Promise.resolve(null);
         const fetchFinished = todayActive ? fetchFinishedMatches().catch(() => null) : Promise.resolve(null);
+        const fetchByDate = fetchFixturesByDate(isoDate).catch(() => null);
 
         if (league && league !== 'all') {
           // League-scoped scoreboard
-          const [res, live, finished] = await Promise.all([
+          const [res, live, finished, byDate] = await Promise.all([
             fetchAPI<ApiLeagueScoreboardResponse>(`/get/soccer/${league}/scoreboard?dates=${dateParam}&tz_offset=7`),
             fetchLive,
-            fetchFinished
+            fetchFinished,
+            fetchByDate
           ]);
           scoreboardRes = res;
           liveRes = live;
           finishedRes = finished;
+          byDateRes = byDate;
         } else {
           // Cross-league scoreboard
-          const [res, live, finished] = await Promise.all([
+          const [res, live, finished, byDate] = await Promise.all([
             fetchAPI<ApiScoreboardResponse>(`/get/soccer/scoreboard?dates=${dateParam}&tz_offset=7`),
             fetchLive,
-            fetchFinished
+            fetchFinished,
+            fetchByDate
           ]);
           scoreboardRes = res;
           liveRes = live;
           finishedRes = finished;
+          byDateRes = byDate;
         }
 
         // Process scoreboard data
@@ -84,36 +103,37 @@ export function useFixtures(date: Date, league?: string) {
           }
         }
 
-        // Enrich with real-time live & finished data from API-Football.
-        // Finished first, then live — live wins on any ID collision.
-        const enrichSource = [
-          ...(finishedRes?.matches ?? []),
-          ...(liveRes?.matches ?? []),
+        // Enrich with API-Football data. Priority: live > finished > byDate.
+        // First hit wins per ESPN event, so byDate never overwrites live/finished.
+        const enrichSource: EnrichItem[] = [
+          ...(liveRes?.matches ?? []).map((m: any) => ({ tier: 'live' as const, m })),
+          ...(finishedRes?.matches ?? []).map((m: any) => ({ tier: 'finished' as const, m })),
+          ...(byDateRes?.fixtures ?? []).map((m: any) => ({ tier: 'byDate' as const, m })),
         ];
         if (enrichSource.length > 0) {
-          const liveMatchesMap = new Map();
-          const liveMatchesList = enrichSource;
-
-          liveMatchesList.forEach((m: any) => {
-            if (m.providers?.footballData) {
-              liveMatchesMap.set(String(m.providers.footballData), m);
+          // footballData id -> first (highest-priority) item
+          const liveMatchesMap = new Map<string, EnrichItem>();
+          enrichSource.forEach((item) => {
+            const fd = item.m.providers?.footballData;
+            if (fd && !liveMatchesMap.has(String(fd))) {
+              liveMatchesMap.set(String(fd), item);
             }
           });
 
           // Mutate the events to inject live/finished scores
           groups.forEach((group) => {
             group.events = group.events.map((ev) => {
-              let liveMatch = liveMatchesMap.get(String(ev.id));
+              let hit: EnrichItem | undefined = liveMatchesMap.get(String(ev.id));
 
               // Fallback fuzzy match by team names if ID mapping is missing
-              if (!liveMatch && ev.competitions && ev.competitions[0]) {
+              if (!hit && ev.competitions && ev.competitions[0]) {
                 const homeComp = ev.competitions[0].competitors.find((c: any) => c.homeAway === 'home');
                 const awayComp = ev.competitions[0].competitors.find((c: any) => c.homeAway === 'away');
                 const evHomeName = (homeComp?.team?.name || homeComp?.team?.displayName || '').toLowerCase();
                 const evAwayName = (awayComp?.team?.name || awayComp?.team?.displayName || '').toLowerCase();
 
                 if (evHomeName && evAwayName) {
-                  liveMatch = liveMatchesList.find((m: any) => {
+                  hit = enrichSource.find(({ m }) => {
                     const mHome = (m.home?.name || '').toLowerCase();
                     const mAway = (m.away?.name || '').toLowerCase();
                     return (mHome.includes(evHomeName) || evHomeName.includes(mHome)) &&
@@ -122,7 +142,28 @@ export function useFixtures(date: Date, league?: string) {
                 }
               }
 
-              if (liveMatch && ev.competitions && ev.competitions[0]) {
+              if (hit && ev.competitions && ev.competitions[0]) {
+                const liveMatch = hit.m;
+
+                // Attach API-Football fixture id for detail page lookup (/api/fixture/:apfId)
+                const apfRaw = liveMatch.providers?.apiFootball ?? String(liveMatch.id ?? '').replace(/^apf-/, '');
+                const apfNum = Number(apfRaw);
+                if (Number.isFinite(apfNum) && apfNum > 0) {
+                  ev.apfId = apfNum;
+                }
+
+                // byDate is schedule-grade data: only use its score/status when the
+                // match is final there AND the ESPN event isn't already final with a score.
+                if (hit.tier === 'byDate') {
+                  const byDateFinal = liveMatch.status?.state === 'post';
+                  const evHasFinalScore =
+                    ev.status?.type?.state === 'post' &&
+                    ev.competitions[0].competitors.every((c: any) => c.score != null);
+                  if (!byDateFinal || evHasFinalScore) {
+                    return ev;
+                  }
+                }
+
                 // Update score if liveMatch has non-null score
                 if (liveMatch.score?.home !== undefined && liveMatch.score?.home !== null) {
                   ev.competitions[0].competitors.forEach((c) => {

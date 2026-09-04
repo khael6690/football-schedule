@@ -80,7 +80,8 @@ export function formatFullMatchDate(
  */
 export function formatShortMatchDate(
   dateInput: string | Date | null | undefined,
-  locale: string = "id-ID"
+  locale: string = "id-ID",
+  timeZone?: string
 ): string {
   if (!dateInput) return "";
   try {
@@ -91,18 +92,61 @@ export function formatShortMatchDate(
       weekday: "short",
       day: "numeric",
       month: "short",
+      ...(timeZone ? { timeZone } : {}),
     });
   } catch {
     return "";
   }
 }
 
+/** WIB (Asia/Jakarta) is a fixed UTC+7 offset — no DST. */
+export const WIB_OFFSET_MS = 7 * 60 * 60 * 1000;
+
 /**
- * Helper to convert Date to YYYYMMDD string for API queries
+ * ISO `YYYY-MM-DD` key of the WIB calendar day containing `date`,
+ * independent of the browser timezone.
+ */
+export function toWibDateKey(date: Date = new Date()): string {
+  const shifted = new Date(date.getTime() + WIB_OFFSET_MS);
+  const y = shifted.getUTCFullYear();
+  const m = String(shifted.getUTCMonth() + 1).padStart(2, "0");
+  const d = String(shifted.getUTCDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+/**
+ * Instant at 12:00 WIB of the WIB day containing `date`.
+ * Safe anchor: stays inside the same WIB day under any browser timezone
+ * and after local DST-affected day arithmetic.
+ */
+export function wibDayAnchor(date: Date = new Date()): Date {
+  const shifted = new Date(date.getTime() + WIB_OFFSET_MS);
+  return new Date(
+    Date.UTC(shifted.getUTCFullYear(), shifted.getUTCMonth(), shifted.getUTCDate(), 12) - WIB_OFFSET_MS
+  );
+}
+
+/** True when both instants fall on the same WIB calendar day. */
+export function isSameWibDay(a: Date, b: Date): boolean {
+  return toWibDateKey(a) === toWibDateKey(b);
+}
+
+/** True when the instant falls on the current WIB calendar day. */
+export function isWibToday(date: Date): boolean {
+  return toWibDateKey(date) === toWibDateKey(new Date());
+}
+
+/**
+ * Helper to convert Date to YYYYMMDD string for API queries (WIB calendar day).
  */
 export function toScoreboardDateParam(date: Date = new Date()): string {
-  const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, "0");
-  const d = String(date.getDate()).padStart(2, "0");
-  return `${y}${m}${d}`;
+  return toWibDateKey(date).replace(/-/g, "");
+}
+
+/**
+ * Same WIB calendar date as toScoreboardDateParam, but ISO `YYYY-MM-DD`
+ * (used by /api/fixtures/date/:date).
+ */
+export function toIsoDateParam(date: Date = new Date()): string {
+  return toWibDateKey(date);
 }

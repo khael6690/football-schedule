@@ -199,12 +199,11 @@ export default function LandingPage() {
               const detail = event.status?.type?.detail || event.status?.type?.shortDetail || "";
               const kickoffTimeWib = formatKickoffTime(event.date, true);
 
-              return (
-                <Link
-                  key={event.id}
-                  href={`/match/${leagueSlug}/${event.id}`}
-                  className="p-4 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex flex-col justify-between gap-4 hover:border-green-600/60 dark:hover:border-green-500/50 transition group shadow-xs hover:shadow-md"
-                >
+              const apfId = (event as { apfId?: number }).apfId;
+              const hasApfId = typeof apfId === "number" && !isNaN(apfId);
+
+              const cardInner = (
+                <>
                   <div className="flex justify-between items-center text-xs text-zinc-500 dark:text-zinc-400">
                     <span className="font-semibold text-zinc-700 dark:text-zinc-300">{leagueName}</span>
                     {isLive ? (
@@ -285,11 +284,34 @@ export default function LandingPage() {
                         `Kickoff: ${kickoffTimeWib}`
                       )}
                     </span>
-                    <span className="text-green-600 dark:text-green-400 font-medium group-hover:underline">
-                      Detail Pertandingan →
-                    </span>
+                    {hasApfId && (
+                      <span className="text-green-600 dark:text-green-400 font-medium group-hover:underline">
+                        Detail Pertandingan →
+                      </span>
+                    )}
                   </div>
-                </Link>
+                </>
+              );
+
+              if (hasApfId) {
+                return (
+                  <Link
+                    key={event.id}
+                    href={`/fixture/${apfId}`}
+                    className="p-4 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex flex-col justify-between gap-4 hover:border-green-600/60 dark:hover:border-green-500/50 transition group shadow-xs hover:shadow-md cursor-pointer"
+                  >
+                    {cardInner}
+                  </Link>
+                );
+              }
+
+              return (
+                <div
+                  key={event.id}
+                  className="p-4 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex flex-col justify-between gap-4 shadow-xs select-none"
+                >
+                  {cardInner}
+                </div>
               );
             })}
           </div>
