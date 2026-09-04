@@ -209,6 +209,23 @@ app.get('/business-context.md', (req, res) => {
     return res.sendFile(path.join(__dirname, 'BUSINESS-CONTEXT.md'));
 });
 
+// Ensure database connection is ready for API requests (crucial for Vercel serverless cold starts)
+const { connectToDatabase } = require('./database');
+app.use(async (req, res, next) => {
+    if (req.path.startsWith('/get') || req.path.startsWith('/api')) {
+        try {
+            await connectToDatabase();
+        } catch (err) {
+            console.error('❌ Database connection failed during request:', err.message);
+            return res.status(500).json({
+                error: 'Database connection failed. Please check MONGODB_URL and Atlas Network Access (0.0.0.0/0).',
+                details: err.message
+            });
+        }
+    }
+    next();
+});
+
 require('./controllers/index')(app);
 
 app.use((req, res, next) => {
