@@ -9,26 +9,36 @@ interface Props {
   match: ApiScoreboardEvent;
 }
 
-function TeamLogo({ club, size = 24 }: { club: ApiCompetitor['team']; size?: number }) {
+function TeamLogo({
+  club,
+  className,
+}: {
+  club: ApiCompetitor['team'];
+  className?: string;
+}) {
+  const teamTitle = club.displayName || club.name || club.shortDisplayName || club.abbreviation || 'Team';
   if (club.logo) {
     // eslint-disable-next-line @next/next/no-img-element
     return (
       <img
         src={club.logo}
-        alt={club.abbreviation ?? club.displayName}
-        width={size}
-        height={size}
-        className="rounded-full object-contain shrink-0"
-        style={{ width: size, height: size }}
+        alt={teamTitle}
+        title={teamTitle}
+        aria-label={teamTitle}
+        className={cn('rounded-full object-contain shrink-0', className)}
       />
     );
   }
   return (
     <div
-      className="rounded-full flex items-center justify-center bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-[9px] font-bold uppercase shrink-0"
-      style={{ width: size, height: size }}
+      title={teamTitle}
+      aria-label={teamTitle}
+      className={cn(
+        'rounded-full flex items-center justify-center bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 font-bold uppercase shrink-0',
+        className
+      )}
     >
-      {(club.abbreviation ?? club.displayName).slice(0, 3)}
+      {(club.abbreviation ?? club.displayName ?? 'T').slice(0, 3)}
     </div>
   );
 }
@@ -109,22 +119,17 @@ export function MatchRow({ match }: Props) {
       </div>
 
       {/* Home team */}
-      <div className="flex items-center gap-2.5 flex-1 min-w-0">
-        <TeamLogo club={home.team} size={22} />
+      <div className="flex items-center gap-2.5 flex-1 min-w-0 justify-end sm:justify-start">
+        <TeamLogo club={home.team} className="w-7 h-7 sm:w-5.5 sm:h-5.5 text-[10px] sm:text-[9px]" />
         <span
           className={cn(
-            'text-sm truncate transition-colors',
+            'hidden sm:inline text-sm truncate transition-colors',
             home.winner
               ? 'text-zinc-950 dark:text-zinc-50 font-bold'
               : 'text-zinc-800 dark:text-zinc-200 font-medium group-hover:text-green-600 dark:group-hover:text-green-400'
           )}
         >
-          <span className="inline sm:hidden">
-            {home.team.abbreviation || home.team.shortDisplayName || home.team.displayName}
-          </span>
-          <span className="hidden sm:inline">
-            {home.team.displayName || home.team.shortDisplayName}
-          </span>
+          {home.team.displayName || home.team.shortDisplayName}
         </span>
       </div>
 
@@ -142,23 +147,18 @@ export function MatchRow({ match }: Props) {
       </div>
 
       {/* Away team */}
-      <div className="flex items-center gap-2.5 flex-1 min-w-0 justify-end">
+      <div className="flex items-center gap-2.5 flex-1 min-w-0 justify-start sm:justify-end">
         <span
           className={cn(
-            'text-sm truncate text-right transition-colors',
+            'hidden sm:inline text-sm truncate text-right transition-colors',
             away.winner
               ? 'text-zinc-950 dark:text-zinc-50 font-bold'
               : 'text-zinc-800 dark:text-zinc-200 font-medium group-hover:text-green-600 dark:group-hover:text-green-400'
           )}
         >
-          <span className="inline sm:hidden">
-            {away.team.abbreviation || away.team.shortDisplayName || away.team.displayName}
-          </span>
-          <span className="hidden sm:inline">
-            {away.team.displayName || away.team.shortDisplayName}
-          </span>
+          {away.team.displayName || away.team.shortDisplayName}
         </span>
-        <TeamLogo club={away.team} size={22} />
+        <TeamLogo club={away.team} className="w-7 h-7 sm:w-5.5 sm:h-5.5 text-[10px] sm:text-[9px]" />
       </div>
 
       {/* Status badge */}

@@ -224,16 +224,17 @@ export default function LandingPage() {
 
                   <div className="flex flex-col gap-2.5 font-medium text-sm">
                     {/* Home Team */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2.5 min-w-0">
                         {home?.team?.logo ? (
                           <img
                             src={home.team.logo}
-                            alt={home.team.name}
-                            className="w-5 h-5 object-contain"
+                            alt={home?.team?.displayName || home?.team?.name || 'Home'}
+                            title={home?.team?.displayName || home?.team?.name || 'Home'}
+                            className="w-5 h-5 object-contain shrink-0"
                           />
                         ) : (
-                          <div className="w-5 h-5 rounded-full bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-[8px] flex items-center justify-center font-bold">
+                          <div className="w-5 h-5 rounded-full bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-[8px] flex items-center justify-center font-bold shrink-0">
                             {(home?.team?.displayName || "H").slice(0, 2)}
                           </div>
                         )}
@@ -241,22 +242,23 @@ export default function LandingPage() {
                           {home?.team?.displayName || home?.team?.name || "Home"}
                         </span>
                       </div>
-                      <span className="font-mono text-zinc-900 dark:text-zinc-100 font-bold">
+                      <span className="font-mono text-zinc-900 dark:text-zinc-100 font-bold shrink-0">
                         {home?.score ?? (isFinished || isLive ? 0 : "")}
                       </span>
                     </div>
 
                     {/* Away Team */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2.5 min-w-0">
                         {away?.team?.logo ? (
                           <img
                             src={away.team.logo}
-                            alt={away.team.name}
-                            className="w-5 h-5 object-contain"
+                            alt={away?.team?.displayName || away?.team?.name || 'Away'}
+                            title={away?.team?.displayName || away?.team?.name || 'Away'}
+                            className="w-5 h-5 object-contain shrink-0"
                           />
                         ) : (
-                          <div className="w-5 h-5 rounded-full bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-[8px] flex items-center justify-center font-bold">
+                          <div className="w-5 h-5 rounded-full bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-[8px] flex items-center justify-center font-bold shrink-0">
                             {(away?.team?.displayName || "A").slice(0, 2)}
                           </div>
                         )}
@@ -264,7 +266,7 @@ export default function LandingPage() {
                           {away?.team?.displayName || away?.team?.name || "Away"}
                         </span>
                       </div>
-                      <span className="font-mono text-zinc-900 dark:text-zinc-100 font-bold">
+                      <span className="font-mono text-zinc-900 dark:text-zinc-100 font-bold shrink-0">
                         {away?.score ?? (isFinished || isLive ? 0 : "")}
                       </span>
                     </div>

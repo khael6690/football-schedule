@@ -73,6 +73,10 @@ export async function fetchLiveMatches(): Promise<LiveMatchResponse> {
   return fetchAPI<LiveMatchResponse>('/api/live');
 }
 
+export async function fetchFinishedMatches(): Promise<LiveMatchResponse> {
+  return fetchAPI<LiveMatchResponse>('/api/live/finished');
+}
+
 export async function fetchLeagueLiveMatches(leagueSlug: string): Promise<LiveMatchResponse> {
   return fetchAPI<LiveMatchResponse>(`/api/live/${leagueSlug}`);
 }

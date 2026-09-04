@@ -22,6 +22,11 @@ interface LiveMatch {
   }>;
 }
 
+/** Only truly in-play matches (state 'in'; excludes FT/AET/PEN/NS etc.). */
+function filterLiveOnly(list: LiveMatch[]): LiveMatch[] {
+  return (list || []).filter((m) => m?.status?.state === "in");
+}
+
 export default function LiveScoresWidget() {
   const [matches, setMatches] = useState<LiveMatch[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,7 +38,7 @@ export default function LiveScoresWidget() {
   const loadLive = useCallback(async () => {
     try {
       const res = await fetchLiveMatches();
-      setMatches(res.matches || []);
+      setMatches(filterLiveOnly(res.matches || []));
       setSource(res.meta?.source || "fetch");
       setStale(res.meta?.stale || false);
     } catch (e) {
@@ -58,7 +63,7 @@ export default function LiveScoresWidget() {
         try {
           const data = JSON.parse(event.data);
           if (data.matches) {
-            setMatches(data.matches);
+            setMatches(filterLiveOnly(data.matches));
             setSource("sse");
             setStale(false);
           }

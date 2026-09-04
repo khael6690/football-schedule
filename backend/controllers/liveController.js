@@ -124,6 +124,36 @@ router.get('/status', (req, res) => {
 
 /**
  * @swagger
+ * /api/live/finished:
+ *   get:
+ *     summary: Get today's finished matches (FT/AET/PEN) from Redis cache
+ *     tags: [Live Scores]
+ *     responses:
+ *       200:
+ *         description: Array of normalized finished matches
+ */
+router.get('/finished', async (req, res) => {
+  try {
+    const result = await liveScoreService.getFinishedToday();
+
+    res.set('Cache-Control', 'public, max-age=60');
+    return res.json({
+      meta: {
+        count: result.fixtures?.length || 0,
+        source: result.source,
+        stale: result.stale || false,
+        generatedAt: new Date().toISOString(),
+      },
+      matches: result.fixtures || [],
+    });
+  } catch (err) {
+    console.error('Error serving /api/live/finished:', err);
+    return res.status(500).json({ error: 'Failed to fetch finished matches' });
+  }
+});
+
+/**
+ * @swagger
  * /api/live/{league}:
  *   get:
  *     summary: Get live matches for a specific league

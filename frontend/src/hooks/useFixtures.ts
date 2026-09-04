@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { isToday } from 'date-fns';
-import { fetchAPI, fetchLiveMatches } from '@/lib/api';
+import { fetchAPI, fetchLiveMatches, fetchFinishedMatches } from '@/lib/api';
 import { toScoreboardDateParam } from '@/lib/date';
 import type {
   ApiScoreboardResponse,
@@ -31,26 +31,33 @@ export function useFixtures(date: Date, league?: string) {
       try {
         let scoreboardRes;
         let liveRes = null;
+        let finishedRes = null;
 
-        // Fetch live matches concurrently if we're looking at today
+        // Fetch live + finished matches concurrently if we're looking at today.
+        // /api/live returns strictly in-play; today's FT scores come from /api/live/finished.
         const fetchLive = todayActive ? fetchLiveMatches().catch(() => null) : Promise.resolve(null);
+        const fetchFinished = todayActive ? fetchFinishedMatches().catch(() => null) : Promise.resolve(null);
 
         if (league && league !== 'all') {
           // League-scoped scoreboard
-          const [res, live] = await Promise.all([
+          const [res, live, finished] = await Promise.all([
             fetchAPI<ApiLeagueScoreboardResponse>(`/get/soccer/${league}/scoreboard?dates=${dateParam}&tz_offset=7`),
-            fetchLive
+            fetchLive,
+            fetchFinished
           ]);
           scoreboardRes = res;
           liveRes = live;
+          finishedRes = finished;
         } else {
           // Cross-league scoreboard
-          const [res, live] = await Promise.all([
+          const [res, live, finished] = await Promise.all([
             fetchAPI<ApiScoreboardResponse>(`/get/soccer/scoreboard?dates=${dateParam}&tz_offset=7`),
-            fetchLive
+            fetchLive,
+            fetchFinished
           ]);
           scoreboardRes = res;
           liveRes = live;
+          finishedRes = finished;
         }
 
         // Process scoreboard data
@@ -77,10 +84,15 @@ export function useFixtures(date: Date, league?: string) {
           }
         }
 
-        // Enrich with real-time live & finished data from API-Football
-        if (liveRes && liveRes.matches && liveRes.matches.length > 0) {
+        // Enrich with real-time live & finished data from API-Football.
+        // Finished first, then live — live wins on any ID collision.
+        const enrichSource = [
+          ...(finishedRes?.matches ?? []),
+          ...(liveRes?.matches ?? []),
+        ];
+        if (enrichSource.length > 0) {
           const liveMatchesMap = new Map();
-          const liveMatchesList = liveRes.matches;
+          const liveMatchesList = enrichSource;
 
           liveMatchesList.forEach((m: any) => {
             if (m.providers?.footballData) {

@@ -283,7 +283,7 @@ async function detectChanges(previous, current) {
       // Mark as finished (post)
       const finishedMatch = {
         ...prev,
-        status: { state: 'post', short: 'FT', long: 'Match Finished', elapsed: 90 },
+        status: { state: 'post', short: 'FT', long: 'Match Finished', elapsed: prev.status?.elapsed ?? null },
       };
       finishedMap.set(finishedMatch.id, finishedMatch);
 
@@ -311,31 +311,44 @@ async function detectChanges(previous, current) {
  * @returns {Promise<{fixtures: Array, source: string, stale: boolean}>}
  */
 async function getLive() {
+  // Only truly in-play matches belong in the live response.
+  // Finished matches stay in the `football:finished:YYYYMMDD` cache
+  // (used by syncTodayFinishedMatches etc.) but are NOT merged here.
+  const isInPlay = m => m?.status?.state === 'in';
+
   const liveCached = await cache.get(cache.KEYS.live()) || [];
-  const finishedTodayKey = `football:finished:${new Date().toISOString().slice(0, 10).replace(/-/g, '')}`;
-  const finishedCached = await cache.get(finishedTodayKey) || [];
-
-  const mergedMap = new Map();
-  finishedCached.forEach(m => mergedMap.set(m.id, m));
-  liveCached.forEach(m => mergedMap.set(m.id, m));
-
-  const merged = Array.from(mergedMap.values());
-
-  if (liveCached.length > 0 || finishedCached.length > 0) {
-    return { fixtures: merged, source: 'cache', stale: false };
+  if (liveCached.length > 0) {
+    return { fixtures: liveCached.filter(isInPlay), source: 'cache', stale: false };
   }
 
   // Cache miss — fetch live immediately
   const liveResult = await fetchAndCacheLive();
-  const allFinished = await cache.get(finishedTodayKey) || [];
-  const finalMap = new Map();
-  allFinished.forEach(m => finalMap.set(m.id, m));
-  liveResult.fixtures.forEach(m => finalMap.set(m.id, m));
-
   return {
     ...liveResult,
-    fixtures: Array.from(finalMap.values())
+    fixtures: (liveResult.fixtures || []).filter(isInPlay),
   };
+}
+
+/**
+ * Get today's finished matches from the finished cache.
+ * Used by GET /api/live/finished. Kept separate from getLive() so the
+ * live response stays strictly in-play.
+ * @returns {Promise<{fixtures: Array, source: string, stale: boolean}>}
+ */
+async function getFinishedToday() {
+  // Finished cache is written under both UTC-date keys (detectChanges)
+  // and WIB-date keys (syncTodayFinishedMatches) — read both, dedupe.
+  const utcKey = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+  const wibKey = new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString().slice(0, 10).replace(/-/g, '');
+  const keys = [...new Set([utcKey, wibKey])];
+
+  const map = new Map();
+  for (const k of keys) {
+    const list = (await cache.get(`football:finished:${k}`)) || [];
+    list.forEach(m => map.set(m.id, m));
+  }
+
+  return { fixtures: Array.from(map.values()), source: 'cache', stale: false };
 }
 
 /**
@@ -539,6 +552,7 @@ function getWorkerStatus() {
 module.exports = {
   fetchAndCacheLive,
   getLive,
+  getFinishedToday,
   getLiveByLeague,
   startWorker,
   stopWorker,
