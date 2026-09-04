@@ -5,7 +5,8 @@ import { fetchFixtureDetail } from '@/lib/api';
 import type { FixtureDetail } from '@/types/fixtureDetail';
 
 export function useFixtureDetail(apfId: number | string | undefined) {
-  const numericId = apfId ? Number(apfId) : undefined;
+  const cleanId = apfId !== undefined && apfId !== null ? String(apfId).replace(/^apf-/, '').trim() : '';
+  const numericId = cleanId ? Number(cleanId) : undefined;
 
   return useQuery<FixtureDetail>({
     queryKey: ['fixture-detail', numericId],

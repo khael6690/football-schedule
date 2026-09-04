@@ -120,6 +120,18 @@ export function useFixtures(date: Date, league?: string) {
             }
           });
 
+          // Helper to normalize team names for resilient matching
+          const cleanTeam = (name: string): string => {
+            return String(name || '')
+              .toLowerCase()
+              .normalize('NFKD')
+              .replace(/[\u0300-\u036f]/g, '')
+              .replace(/[^a-z0-9]/g, ' ')
+              .replace(/\b(fc|cf|afc|bc|ac|sc|club|de|del|la)\b/g, '')
+              .replace(/\s+/g, ' ')
+              .trim();
+          };
+
           // Mutate the events to inject live/finished scores
           groups.forEach((group) => {
             group.events = group.events.map((ev) => {
@@ -129,15 +141,29 @@ export function useFixtures(date: Date, league?: string) {
               if (!hit && ev.competitions && ev.competitions[0]) {
                 const homeComp = ev.competitions[0].competitors.find((c: any) => c.homeAway === 'home');
                 const awayComp = ev.competitions[0].competitors.find((c: any) => c.homeAway === 'away');
-                const evHomeName = (homeComp?.team?.name || homeComp?.team?.displayName || '').toLowerCase();
-                const evAwayName = (awayComp?.team?.name || awayComp?.team?.displayName || '').toLowerCase();
+                const evHomeRaw = (homeComp?.team?.name || homeComp?.team?.displayName || '').toLowerCase();
+                const evAwayRaw = (awayComp?.team?.name || awayComp?.team?.displayName || '').toLowerCase();
+                const evHomeClean = cleanTeam(evHomeRaw);
+                const evAwayClean = cleanTeam(evAwayRaw);
 
-                if (evHomeName && evAwayName) {
+                if (evHomeRaw && evAwayRaw) {
                   hit = enrichSource.find(({ m }) => {
-                    const mHome = (m.home?.name || '').toLowerCase();
-                    const mAway = (m.away?.name || '').toLowerCase();
-                    return (mHome.includes(evHomeName) || evHomeName.includes(mHome)) &&
-                           (mAway.includes(evAwayName) || evAwayName.includes(mAway));
+                    const mHomeRaw = (m.home?.name || '').toLowerCase();
+                    const mAwayRaw = (m.away?.name || '').toLowerCase();
+                    const mHomeClean = cleanTeam(mHomeRaw);
+                    const mAwayClean = cleanTeam(mAwayRaw);
+
+                    const homeMatches =
+                      mHomeRaw.includes(evHomeRaw) ||
+                      evHomeRaw.includes(mHomeRaw) ||
+                      (Boolean(evHomeClean && mHomeClean) && (mHomeClean.includes(evHomeClean) || evHomeClean.includes(mHomeClean)));
+
+                    const awayMatches =
+                      mAwayRaw.includes(evAwayRaw) ||
+                      evAwayRaw.includes(mAwayRaw) ||
+                      (Boolean(evAwayClean && mAwayClean) && (mAwayClean.includes(evAwayClean) || evAwayClean.includes(mAwayClean)));
+
+                    return homeMatches && awayMatches;
                   });
                 }
               }
@@ -191,6 +217,105 @@ export function useFixtures(date: Date, league?: string) {
               return ev;
             });
           });
+        }
+
+        // Fallback: if scoreboard returned no leagues/events for this date, synthesize groups from byDateRes
+        if ((groups.length === 0 || groups.every(g => g.events.length === 0)) && byDateRes?.fixtures && byDateRes.fixtures.length > 0) {
+          const leagueMap: Record<string, string> = {
+            'Premier League': 'eng.1',
+            'Primera Division': 'esp.1',
+            'La Liga': 'esp.1',
+            'Bundesliga': 'ger.1',
+            'Serie A': 'ita.1',
+            'Ligue 1': 'fra.1',
+            'UEFA Champions League': 'uefa.cl',
+          };
+
+          const groupedByLeague = new Map<string, { leagueName: string; leagueLogo?: string; events: any[] }>();
+
+          for (const f of byDateRes.fixtures) {
+            const lName = f.league?.name || 'Other';
+            const slug = f.league?.slug || leagueMap[lName] || lName.toLowerCase().replace(/[^a-z0-9]/g, '.');
+
+            if (league && league !== 'all' && slug !== league) {
+              continue;
+            }
+
+            if (!groupedByLeague.has(slug)) {
+              groupedByLeague.set(slug, {
+                leagueName: lName,
+                leagueLogo: f.league?.logo || undefined,
+                events: [],
+              });
+            }
+
+            const apfRaw = f.providers?.apiFootball ?? String(f.id ?? '').replace(/^apf-/, '');
+            const apfNum = Number(apfRaw);
+            const isFinished = f.status?.state === 'post';
+            const isLive = f.status?.state === 'in';
+
+            const ev: any = {
+              id: f.id,
+              date: f.kickoff,
+              name: `${f.home?.name || 'Home'} vs ${f.away?.name || 'Away'}`,
+              competitions: [
+                {
+                  id: f.id,
+                  date: f.kickoff,
+                  competitors: [
+                    {
+                      id: String(f.home?.id || 'home'),
+                      homeAway: 'home',
+                      score: f.score?.home != null ? String(f.score.home) : null,
+                      winner: (f.home as { winner?: boolean })?.winner ?? ((f.score?.home ?? 0) > (f.score?.away ?? 0)),
+                      team: {
+                        id: String(f.home?.id || 'home'),
+                        name: f.home?.name || 'Home',
+                        displayName: f.home?.name || 'Home',
+                        shortDisplayName: f.home?.name || 'Home',
+                        logo: f.home?.logo || '',
+                      },
+                    },
+                    {
+                      id: String(f.away?.id || 'away'),
+                      homeAway: 'away',
+                      score: f.score?.away != null ? String(f.score.away) : null,
+                      winner: (f.away as { winner?: boolean })?.winner ?? ((f.score?.away ?? 0) > (f.score?.home ?? 0)),
+                      team: {
+                        id: String(f.away?.id || 'away'),
+                        name: f.away?.name || 'Away',
+                        displayName: f.away?.name || 'Away',
+                        shortDisplayName: f.away?.name || 'Away',
+                        logo: f.away?.logo || '',
+                      },
+                    },
+                  ],
+                },
+              ],
+              status: {
+                clock: f.status?.elapsed ? f.status.elapsed * 60 : 0,
+                displayClock: isFinished ? 'FT' : f.status?.elapsed ? `${f.status.elapsed}'` : '',
+                type: {
+                  name: isFinished ? 'FINAL' : isLive ? 'STATUS_IN_PROGRESS' : 'SCHEDULED',
+                  state: f.status?.state || 'unknown',
+                  completed: isFinished,
+                  description: f.status?.long || '',
+                  detail: f.status?.long || '',
+                  shortDetail: f.status?.short || (isFinished ? 'FT' : ''),
+                },
+              },
+              apfId: Number.isFinite(apfNum) && apfNum > 0 ? apfNum : undefined,
+            };
+
+            groupedByLeague.get(slug)!.events.push(ev);
+          }
+
+          groups = Array.from(groupedByLeague.entries()).map(([slug, data]) => ({
+            leagueSlug: slug,
+            leagueName: data.leagueName,
+            leagueLogo: data.leagueLogo,
+            events: data.events,
+          }));
         }
 
         return groups;

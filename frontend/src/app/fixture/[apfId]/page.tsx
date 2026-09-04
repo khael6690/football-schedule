@@ -300,10 +300,22 @@ export default function FixtureDetailPage({ params }: PageProps) {
       {/* Tab Content */}
       <div className="max-w-4xl mx-auto px-4">
         {activeTab === 'timeline' && (
-          <TimelineTab events={events} homeId={home.id} awayId={away.id} />
+          <TimelineTab
+            events={events}
+            homeId={home.id}
+            awayId={away.id}
+            homeName={homeName}
+            awayName={awayName}
+          />
         )}
         {activeTab === 'lineups' && (
-          <LineupsTab lineups={lineups} homeId={home.id} awayId={away.id} />
+          <LineupsTab
+            lineups={lineups}
+            homeId={home.id}
+            awayId={away.id}
+            homeName={homeName}
+            awayName={awayName}
+          />
         )}
         {activeTab === 'stats' && (
           <StatsTab
@@ -326,10 +338,14 @@ function TimelineTab({
   events,
   homeId,
   awayId,
+  homeName,
+  awayName,
 }: {
   events: FixtureDetail['events'];
   homeId: number | null;
   awayId: number | null;
+  homeName: string;
+  awayName: string;
 }) {
   if (!events || events.length === 0) {
     return <EmptyTabState message="Belum ada catatan peristiwa pertandingan" />;
@@ -342,11 +358,26 @@ function TimelineTab({
     return minA - minB;
   });
 
+  const norm = (s: string) => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  const normHome = norm(homeName);
+  const normAway = norm(awayName);
+
   return (
     <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 sm:p-6 shadow-xs">
       <div className="space-y-4 relative before:absolute before:inset-0 before:left-1/2 before:-translate-x-1/2 before:w-px before:bg-zinc-200 dark:before:bg-zinc-800">
         {sorted.map((ev, idx) => {
-          const isHome = homeId != null && ev.teamId === homeId;
+          let isHome = false;
+          if (homeId != null && ev.teamId != null) {
+            isHome = ev.teamId === homeId;
+          } else if (ev.teamName) {
+            const evTeamNorm = norm(ev.teamName);
+            if (evTeamNorm && (normHome.includes(evTeamNorm) || evTeamNorm.includes(normHome))) {
+              isHome = true;
+            } else if (evTeamNorm && (normAway.includes(evTeamNorm) || evTeamNorm.includes(normAway))) {
+              isHome = false;
+            }
+          }
+
           const minuteLabel = `${ev.minute}${ev.extra ? `+${ev.extra}` : ''}'`;
 
           return (
@@ -459,17 +490,30 @@ function LineupsTab({
   lineups,
   homeId,
   awayId,
+  homeName,
+  awayName,
 }: {
   lineups: FixtureDetail['lineups'];
   homeId: number | null;
   awayId: number | null;
+  homeName: string;
+  awayName: string;
 }) {
   if (!lineups || lineups.length === 0) {
     return <EmptyTabState message="Susunan pemain belum dirilis untuk laga ini" />;
   }
 
-  const homeLineup = homeId != null ? lineups.find((l) => l.teamId === homeId) || lineups[0] : lineups[0];
-  const awayLineup = awayId != null ? lineups.find((l) => l.teamId === awayId) || lineups[1] : lineups[1];
+  const norm = (s: string) => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  const normHome = norm(homeName);
+  const normAway = norm(awayName);
+
+  const homeLineup = homeId != null && lineups.some(l => l.teamId === homeId)
+    ? lineups.find((l) => l.teamId === homeId)
+    : lineups.find((l) => norm(l.teamName).includes(normHome) || normHome.includes(norm(l.teamName))) || lineups[0];
+
+  const awayLineup = awayId != null && lineups.some(l => l.teamId === awayId)
+    ? lineups.find((l) => l.teamId === awayId)
+    : lineups.find((l) => norm(l.teamName).includes(normAway) || normAway.includes(norm(l.teamName))) || lineups[1];
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -594,8 +638,17 @@ function StatsTab({
     return <EmptyTabState message="Statistik belum tersedia untuk pertandingan ini" />;
   }
 
-  const homeStats = homeId != null ? statistics.find((s) => s.teamId === homeId) || statistics[0] : statistics[0];
-  const awayStats = awayId != null ? statistics.find((s) => s.teamId === awayId) || statistics[1] : statistics[1];
+  const norm = (s: string) => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  const normHome = norm(homeName);
+  const normAway = norm(awayName);
+
+  const homeStats = homeId != null && statistics.some(s => s.teamId === homeId)
+    ? statistics.find((s) => s.teamId === homeId)
+    : statistics.find((s) => norm(s.teamName).includes(normHome) || normHome.includes(norm(s.teamName))) || statistics[0];
+
+  const awayStats = awayId != null && statistics.some(s => s.teamId === awayId)
+    ? statistics.find((s) => s.teamId === awayId)
+    : statistics.find((s) => norm(s.teamName).includes(normAway) || normAway.includes(norm(s.teamName))) || statistics[1];
 
   const allStatTypes = Array.from(
     new Set([

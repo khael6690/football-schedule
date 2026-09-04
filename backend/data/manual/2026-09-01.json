@@ -4,591 +4,2592 @@
   "fixtures": [
     {
       "fixture_id": null,
-      "sources": ["https://www.espn.com/soccer/match/_/gameId/401879295"],
+      "sources": [
+        "https://www.espn.com/soccer/match/_/gameId/401879295"
+      ],
       "league": {
-        "id": null,
+        "id": 2021,
         "name": "Premier League",
-        "logo": null,
+        "logo": "https://crests.football-data.org/PL.png",
         "country": "England",
         "season": 2026,
         "round": "Regular Season - 2"
       },
       "date": "2026-08-31T19:00:00+00:00",
-      "venue": { "name": "Villa Park", "city": "Birmingham" },
+      "venue": {
+        "name": "Villa Park",
+        "city": "Birmingham"
+      },
       "referee": "Jarred Gillett",
-      "status": { "short": "FT", "long": "Match Finished", "elapsed": 90, "state": "post" },
-      "home": { "id": null, "name": "Aston Villa FC", "logo": null, "winner": false },
-      "away": { "id": null, "name": "Arsenal FC", "logo": null, "winner": true },
-      "goals": { "home": 0, "away": 1 },
+      "status": {
+        "short": "FT",
+        "long": "Match Finished",
+        "elapsed": 90,
+        "state": "post"
+      },
+      "home": {
+        "id": 58,
+        "name": "Aston Villa FC",
+        "logo": "https://crests.football-data.org/58.png",
+        "winner": false
+      },
+      "away": {
+        "id": 57,
+        "name": "Arsenal FC",
+        "logo": "https://crests.football-data.org/57.png",
+        "winner": true
+      },
+      "goals": {
+        "home": 0,
+        "away": 1
+      },
       "score": {
-        "halftime": { "home": 0, "away": 0 },
-        "fulltime": { "home": 0, "away": 1 },
-        "extratime": { "home": null, "away": null },
-        "penalty": { "home": null, "away": null }
+        "halftime": {
+          "home": 0,
+          "away": 0
+        },
+        "fulltime": {
+          "home": 0,
+          "away": 1
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
       },
       "events": [
-        { "minute": 29, "extra": null, "teamId": null, "teamName": "Arsenal FC", "player": "Christos Tzolis", "assist": null, "type": "Card", "detail": "Yellow Card", "comments": "Foul" },
-        { "minute": 45, "extra": null, "teamId": null, "teamName": "Arsenal FC", "player": "Eberechi Eze", "assist": "Christos Tzolis", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 59, "extra": null, "teamId": null, "teamName": "Arsenal FC", "player": "Bukayo Saka", "assist": "Riccardo Calafiori", "type": "Goal", "detail": "Normal Goal", "comments": null },
-        { "minute": 71, "extra": null, "teamId": null, "teamName": "Arsenal FC", "player": "Bruno Guimarães", "assist": "Myles Lewis-Skelly", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 71, "extra": null, "teamId": null, "teamName": "Arsenal FC", "player": "Mikel Merino", "assist": "Martin Ødegaard", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 71, "extra": null, "teamId": null, "teamName": "Aston Villa FC", "player": "Tammy Abraham", "assist": "Nicolas Jackson", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 71, "extra": null, "teamId": null, "teamName": "Aston Villa FC", "player": "Alysson", "assist": "George Hemmings", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 78, "extra": null, "teamId": null, "teamName": "Aston Villa FC", "player": "Aaron Wan-Bissaka", "assist": "Matty Cash", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 78, "extra": null, "teamId": null, "teamName": "Aston Villa FC", "player": "Alejandro Garnacho", "assist": "Ross Barkley", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 79, "extra": null, "teamId": null, "teamName": "Arsenal FC", "player": "Ezri Konsa", "assist": "Cristhian Mosquera", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 80, "extra": null, "teamId": null, "teamName": "Aston Villa FC", "player": "Alysson", "assist": null, "type": "Card", "detail": "Yellow Card", "comments": "Foul" },
-        { "minute": 81, "extra": null, "teamId": null, "teamName": "Aston Villa FC", "player": "John McGinn", "assist": null, "type": "Card", "detail": "Yellow Card", "comments": "Foul" },
-        { "minute": 85, "extra": null, "teamId": null, "teamName": "Arsenal FC", "player": "Martín Zubimendi", "assist": "Declan Rice", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 90, "extra": 6, "teamId": null, "teamName": "Aston Villa FC", "player": "Ian Maatsen", "assist": null, "type": "Card", "detail": "Yellow Card", "comments": "Foul" }
+        {
+          "minute": 29,
+          "extra": null,
+          "teamId": 57,
+          "teamName": "Arsenal FC",
+          "player": "Christos Tzolis",
+          "assist": null,
+          "type": "Card",
+          "detail": "Yellow Card",
+          "comments": "Foul"
+        },
+        {
+          "minute": 45,
+          "extra": null,
+          "teamId": 57,
+          "teamName": "Arsenal FC",
+          "player": "Eberechi Eze",
+          "assist": "Christos Tzolis",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 59,
+          "extra": null,
+          "teamId": 57,
+          "teamName": "Arsenal FC",
+          "player": "Bukayo Saka",
+          "assist": "Riccardo Calafiori",
+          "type": "Goal",
+          "detail": "Normal Goal",
+          "comments": null
+        },
+        {
+          "minute": 71,
+          "extra": null,
+          "teamId": 57,
+          "teamName": "Arsenal FC",
+          "player": "Bruno Guimarães",
+          "assist": "Myles Lewis-Skelly",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 71,
+          "extra": null,
+          "teamId": 57,
+          "teamName": "Arsenal FC",
+          "player": "Mikel Merino",
+          "assist": "Martin Ødegaard",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 71,
+          "extra": null,
+          "teamId": 58,
+          "teamName": "Aston Villa FC",
+          "player": "Tammy Abraham",
+          "assist": "Nicolas Jackson",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 71,
+          "extra": null,
+          "teamId": 58,
+          "teamName": "Aston Villa FC",
+          "player": "Alysson",
+          "assist": "George Hemmings",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 78,
+          "extra": null,
+          "teamId": 58,
+          "teamName": "Aston Villa FC",
+          "player": "Aaron Wan-Bissaka",
+          "assist": "Matty Cash",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 78,
+          "extra": null,
+          "teamId": 58,
+          "teamName": "Aston Villa FC",
+          "player": "Alejandro Garnacho",
+          "assist": "Ross Barkley",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 79,
+          "extra": null,
+          "teamId": 57,
+          "teamName": "Arsenal FC",
+          "player": "Ezri Konsa",
+          "assist": "Cristhian Mosquera",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 80,
+          "extra": null,
+          "teamId": 58,
+          "teamName": "Aston Villa FC",
+          "player": "Alysson",
+          "assist": null,
+          "type": "Card",
+          "detail": "Yellow Card",
+          "comments": "Foul"
+        },
+        {
+          "minute": 81,
+          "extra": null,
+          "teamId": 58,
+          "teamName": "Aston Villa FC",
+          "player": "John McGinn",
+          "assist": null,
+          "type": "Card",
+          "detail": "Yellow Card",
+          "comments": "Foul"
+        },
+        {
+          "minute": 85,
+          "extra": null,
+          "teamId": 57,
+          "teamName": "Arsenal FC",
+          "player": "Martín Zubimendi",
+          "assist": "Declan Rice",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 90,
+          "extra": 6,
+          "teamId": 58,
+          "teamName": "Aston Villa FC",
+          "player": "Ian Maatsen",
+          "assist": null,
+          "type": "Card",
+          "detail": "Yellow Card",
+          "comments": "Foul"
+        }
       ],
       "lineups": [
         {
-          "teamId": null,
+          "teamId": 58,
           "teamName": "Aston Villa FC",
-          "teamLogo": null,
+          "teamLogo": "https://crests.football-data.org/58.png",
           "formation": "4-2-3-1",
           "coach": "Unai Emery",
           "startXI": [
-            { "id": null, "name": "Zion Suzuki", "number": 1, "pos": "G", "grid": null },
-            { "id": null, "name": "Pau Torres", "number": 14, "pos": "D", "grid": null },
-            { "id": null, "name": "Victor Lindelöf", "number": 3, "pos": "D", "grid": null },
-            { "id": null, "name": "Ian Maatsen", "number": 22, "pos": "D", "grid": null },
-            { "id": null, "name": "Matty Cash", "number": 2, "pos": "D", "grid": null },
-            { "id": null, "name": "Emiliano Buendía", "number": 10, "pos": "M", "grid": null },
-            { "id": null, "name": "Ross Barkley", "number": 6, "pos": "M", "grid": null },
-            { "id": null, "name": "Boubacar Kamara", "number": 8, "pos": "M", "grid": null },
-            { "id": null, "name": "Nicolas Jackson", "number": 11, "pos": "F", "grid": null },
-            { "id": null, "name": "George Hemmings", "number": 53, "pos": "M", "grid": null },
-            { "id": null, "name": "John McGinn", "number": 7, "pos": "M", "grid": null }
+            {
+              "id": null,
+              "name": "Zion Suzuki",
+              "number": 1,
+              "pos": "G",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Pau Torres",
+              "number": 14,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Victor Lindelöf",
+              "number": 3,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Ian Maatsen",
+              "number": 22,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Matty Cash",
+              "number": 2,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Emiliano Buendía",
+              "number": 10,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Ross Barkley",
+              "number": 6,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Boubacar Kamara",
+              "number": 8,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Nicolas Jackson",
+              "number": 11,
+              "pos": "F",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "George Hemmings",
+              "number": 53,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "John McGinn",
+              "number": 7,
+              "pos": "M",
+              "grid": null
+            }
           ],
           "substitutes": [
-            { "id": null, "name": "Lamare Bogarde", "number": 26, "pos": "SUB" },
-            { "id": null, "name": "Tyrone Mings", "number": 5, "pos": "SUB" },
-            { "id": null, "name": "Marco Bizot", "number": 40, "pos": "SUB" },
-            { "id": null, "name": "Matteo Ruggeri", "number": 13, "pos": "SUB" },
-            { "id": null, "name": "Tammy Abraham", "number": 18, "pos": "SUB" },
-            { "id": null, "name": "Alysson", "number": 47, "pos": "SUB" },
-            { "id": null, "name": "Luka Lynch", "number": 74, "pos": "SUB" },
-            { "id": null, "name": "Alejandro Garnacho", "number": 17, "pos": "SUB" },
-            { "id": null, "name": "Aaron Wan-Bissaka", "number": 29, "pos": "SUB" }
+            {
+              "id": null,
+              "name": "Lamare Bogarde",
+              "number": 26,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Tyrone Mings",
+              "number": 5,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Marco Bizot",
+              "number": 40,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Matteo Ruggeri",
+              "number": 13,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Tammy Abraham",
+              "number": 18,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Alysson",
+              "number": 47,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Luka Lynch",
+              "number": 74,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Alejandro Garnacho",
+              "number": 17,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Aaron Wan-Bissaka",
+              "number": 29,
+              "pos": "SUB"
+            }
           ]
         },
         {
-          "teamId": null,
+          "teamId": 57,
           "teamName": "Arsenal FC",
-          "teamLogo": null,
+          "teamLogo": "https://crests.football-data.org/57.png",
           "formation": "4-2-3-1",
           "coach": "Mikel Arteta",
           "startXI": [
-            { "id": null, "name": "David Raya", "number": 1, "pos": "G", "grid": null },
-            { "id": null, "name": "Gabriel Magalhães", "number": 6, "pos": "D", "grid": null },
-            { "id": null, "name": "Cristhian Mosquera", "number": 3, "pos": "D", "grid": null },
-            { "id": null, "name": "Riccardo Calafiori", "number": 33, "pos": "D", "grid": null },
-            { "id": null, "name": "Ben White", "number": 4, "pos": "D", "grid": null },
-            { "id": null, "name": "Martin Ødegaard", "number": 8, "pos": "M", "grid": null },
-            { "id": null, "name": "Myles Lewis-Skelly", "number": 49, "pos": "M", "grid": null },
-            { "id": null, "name": "Declan Rice", "number": 41, "pos": "M", "grid": null },
-            { "id": null, "name": "Kai Havertz", "number": 29, "pos": "F", "grid": null },
-            { "id": null, "name": "Christos Tzolis", "number": 17, "pos": "M", "grid": null },
-            { "id": null, "name": "Bukayo Saka", "number": 7, "pos": "M", "grid": null }
+            {
+              "id": null,
+              "name": "David Raya",
+              "number": 1,
+              "pos": "G",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Gabriel Magalhães",
+              "number": 6,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Cristhian Mosquera",
+              "number": 3,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Riccardo Calafiori",
+              "number": 33,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Ben White",
+              "number": 4,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Martin Ødegaard",
+              "number": 8,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Myles Lewis-Skelly",
+              "number": 49,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Declan Rice",
+              "number": 41,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Kai Havertz",
+              "number": 29,
+              "pos": "F",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Christos Tzolis",
+              "number": 17,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Bukayo Saka",
+              "number": 7,
+              "pos": "M",
+              "grid": null
+            }
           ],
           "substitutes": [
-            { "id": null, "name": "Mikel Merino", "number": 23, "pos": "SUB" },
-            { "id": null, "name": "Martín Zubimendi", "number": 36, "pos": "SUB" },
-            { "id": null, "name": "Noni Madueke", "number": 20, "pos": "SUB" },
-            { "id": null, "name": "Viktor Gyökeres", "number": 14, "pos": "SUB" },
-            { "id": null, "name": "Ezri Konsa", "number": 15, "pos": "SUB" },
-            { "id": null, "name": "Eberechi Eze", "number": 10, "pos": "SUB" },
-            { "id": null, "name": "Bruno Guimarães", "number": 39, "pos": "SUB" },
-            { "id": null, "name": "Kepa Arrizabalaga", "number": 13, "pos": "SUB" },
-            { "id": null, "name": "Piero Hincapié", "number": 5, "pos": "SUB" }
+            {
+              "id": null,
+              "name": "Mikel Merino",
+              "number": 23,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Martín Zubimendi",
+              "number": 36,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Noni Madueke",
+              "number": 20,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Viktor Gyökeres",
+              "number": 14,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Ezri Konsa",
+              "number": 15,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Eberechi Eze",
+              "number": 10,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Bruno Guimarães",
+              "number": 39,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Kepa Arrizabalaga",
+              "number": 13,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Piero Hincapié",
+              "number": 5,
+              "pos": "SUB"
+            }
           ]
         }
       ],
       "statistics": [
         {
-          "teamId": null,
+          "teamId": 58,
           "teamName": "Aston Villa FC",
           "stats": [
-            { "type": "Shots on Goal", "value": 0 },
-            { "type": "Total Shots", "value": 7 },
-            { "type": "Fouls", "value": 17 },
-            { "type": "Corner Kicks", "value": 2 },
-            { "type": "Offsides", "value": 0 },
-            { "type": "Ball Possession", "value": "39.2%" },
-            { "type": "Yellow Cards", "value": 3 },
-            { "type": "Red Cards", "value": 0 },
-            { "type": "Goalkeeper Saves", "value": 1 },
-            { "type": "Total passes", "value": 337 },
-            { "type": "Passes accurate", "value": 272 },
-            { "type": "Passes %", "value": "80%" }
+            {
+              "type": "Shots on Goal",
+              "value": 0
+            },
+            {
+              "type": "Total Shots",
+              "value": 7
+            },
+            {
+              "type": "Fouls",
+              "value": 17
+            },
+            {
+              "type": "Corner Kicks",
+              "value": 2
+            },
+            {
+              "type": "Offsides",
+              "value": 0
+            },
+            {
+              "type": "Ball Possession",
+              "value": "39.2%"
+            },
+            {
+              "type": "Yellow Cards",
+              "value": 3
+            },
+            {
+              "type": "Red Cards",
+              "value": 0
+            },
+            {
+              "type": "Goalkeeper Saves",
+              "value": 1
+            },
+            {
+              "type": "Total passes",
+              "value": 337
+            },
+            {
+              "type": "Passes accurate",
+              "value": 272
+            },
+            {
+              "type": "Passes %",
+              "value": "80%"
+            }
           ]
         },
         {
-          "teamId": null,
+          "teamId": 57,
           "teamName": "Arsenal FC",
           "stats": [
-            { "type": "Shots on Goal", "value": 2 },
-            { "type": "Total Shots", "value": 7 },
-            { "type": "Fouls", "value": 6 },
-            { "type": "Corner Kicks", "value": 4 },
-            { "type": "Offsides", "value": 8 },
-            { "type": "Ball Possession", "value": "60.8%" },
-            { "type": "Yellow Cards", "value": 1 },
-            { "type": "Red Cards", "value": 0 },
-            { "type": "Goalkeeper Saves", "value": 0 },
-            { "type": "Total passes", "value": 527 },
-            { "type": "Passes accurate", "value": 462 },
-            { "type": "Passes %", "value": "90%" }
+            {
+              "type": "Shots on Goal",
+              "value": 2
+            },
+            {
+              "type": "Total Shots",
+              "value": 7
+            },
+            {
+              "type": "Fouls",
+              "value": 6
+            },
+            {
+              "type": "Corner Kicks",
+              "value": 4
+            },
+            {
+              "type": "Offsides",
+              "value": 8
+            },
+            {
+              "type": "Ball Possession",
+              "value": "60.8%"
+            },
+            {
+              "type": "Yellow Cards",
+              "value": 1
+            },
+            {
+              "type": "Red Cards",
+              "value": 0
+            },
+            {
+              "type": "Goalkeeper Saves",
+              "value": 0
+            },
+            {
+              "type": "Total passes",
+              "value": 527
+            },
+            {
+              "type": "Passes accurate",
+              "value": 462
+            },
+            {
+              "type": "Passes %",
+              "value": "90%"
+            }
           ]
         }
       ]
     },
     {
       "fixture_id": null,
-      "sources": ["https://www.espn.com/soccer/match/_/gameId/401882901"],
+      "sources": [
+        "https://www.espn.com/soccer/match/_/gameId/401882901"
+      ],
       "league": {
-        "id": null,
+        "id": 2014,
         "name": "Primera Division",
-        "logo": null,
+        "logo": "https://crests.football-data.org/laliga.png",
         "country": "Spain",
         "season": 2026,
         "round": "Regular Season - 3"
       },
       "date": "2026-08-31T17:30:00+00:00",
-      "venue": { "name": "Estadio El Sadar", "city": "Pamplona" },
+      "venue": {
+        "name": "Estadio El Sadar",
+        "city": "Pamplona"
+      },
       "referee": "Jon Ander González Esteban",
-      "status": { "short": "FT", "long": "Match Finished", "elapsed": 90, "state": "post" },
-      "home": { "id": null, "name": "CA Osasuna", "logo": null, "winner": true },
-      "away": { "id": null, "name": "Getafe CF", "logo": null, "winner": false },
-      "goals": { "home": 1, "away": 0 },
+      "status": {
+        "short": "FT",
+        "long": "Match Finished",
+        "elapsed": 90,
+        "state": "post"
+      },
+      "home": {
+        "id": 79,
+        "name": "CA Osasuna",
+        "logo": "https://crests.football-data.org/79.png",
+        "winner": true
+      },
+      "away": {
+        "id": 82,
+        "name": "Getafe CF",
+        "logo": "https://crests.football-data.org/82.png",
+        "winner": false
+      },
+      "goals": {
+        "home": 1,
+        "away": 0
+      },
       "score": {
-        "halftime": { "home": 1, "away": 0 },
-        "fulltime": { "home": 1, "away": 0 },
-        "extratime": { "home": null, "away": null },
-        "penalty": { "home": null, "away": null }
+        "halftime": {
+          "home": 1,
+          "away": 0
+        },
+        "fulltime": {
+          "home": 1,
+          "away": 0
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
       },
       "events": [
-        { "minute": 17, "extra": null, "teamId": null, "teamName": "CA Osasuna", "player": "Jorge Herrando", "assist": null, "type": "Card", "detail": "Yellow Card", "comments": "Foul" },
-        { "minute": 39, "extra": null, "teamId": null, "teamName": "CA Osasuna", "player": "Enzo Boyomo", "assist": "Jorge Herrando", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 45, "extra": null, "teamId": null, "teamName": "Getafe CF", "player": "Djené", "assist": null, "type": "Card", "detail": "Yellow Card", "comments": "Foul" },
-        { "minute": 45, "extra": 2, "teamId": null, "teamName": "CA Osasuna", "player": "Ante Budimir", "assist": null, "type": "Goal", "detail": "Penalty", "comments": null },
-        { "minute": 45, "extra": null, "teamId": null, "teamName": "CA Osasuna", "player": "Jonathan Dubasin", "assist": "Rubén García", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 58, "extra": null, "teamId": null, "teamName": "Getafe CF", "player": "Johan Mojica", "assist": null, "type": "Card", "detail": "Yellow Card", "comments": "Foul" },
-        { "minute": 60, "extra": null, "teamId": null, "teamName": "Getafe CF", "player": "Enes Ünal", "assist": null, "type": "Card", "detail": "Yellow Card", "comments": null },
-        { "minute": 65, "extra": null, "teamId": null, "teamName": "Getafe CF", "player": "Orel Mangala", "assist": null, "type": "Card", "detail": "Yellow Card", "comments": "Foul" },
-        { "minute": 65, "extra": null, "teamId": null, "teamName": "Getafe CF", "player": "Alberto Risco", "assist": "Andrés García", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 67, "extra": null, "teamId": null, "teamName": "CA Osasuna", "player": "Iker Muñoz", "assist": null, "type": "Card", "detail": "Yellow Card", "comments": "Foul" },
-        { "minute": 71, "extra": null, "teamId": null, "teamName": "CA Osasuna", "player": "Raúl García", "assist": "Aimar Oroz", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 71, "extra": null, "teamId": null, "teamName": "CA Osasuna", "player": "Lucas Torró", "assist": "Iker Muñoz", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 76, "extra": null, "teamId": null, "teamName": "Getafe CF", "player": "Nemanja Gudelj", "assist": "Francho Serrano", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 77, "extra": null, "teamId": null, "teamName": "CA Osasuna", "player": "Enrique Barja", "assist": "Moi Gómez", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 80, "extra": null, "teamId": null, "teamName": "CA Osasuna", "player": "Raúl García", "assist": null, "type": "Card", "detail": "Yellow Card", "comments": "Foul" },
-        { "minute": 86, "extra": null, "teamId": null, "teamName": "Getafe CF", "player": "Borja Mayoral", "assist": "Martín Satriano", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 90, "extra": 3, "teamId": null, "teamName": "CA Osasuna", "player": "Sergio Herrera", "assist": null, "type": "Card", "detail": "Yellow Card", "comments": null },
-        { "minute": 90, "extra": 4, "teamId": null, "teamName": "CA Osasuna", "player": "Enrique Barja", "assist": null, "type": "Card", "detail": "Yellow Card", "comments": "Foul" }
+        {
+          "minute": 17,
+          "extra": null,
+          "teamId": 79,
+          "teamName": "CA Osasuna",
+          "player": "Jorge Herrando",
+          "assist": null,
+          "type": "Card",
+          "detail": "Yellow Card",
+          "comments": "Foul"
+        },
+        {
+          "minute": 39,
+          "extra": null,
+          "teamId": 79,
+          "teamName": "CA Osasuna",
+          "player": "Enzo Boyomo",
+          "assist": "Jorge Herrando",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 45,
+          "extra": null,
+          "teamId": 82,
+          "teamName": "Getafe CF",
+          "player": "Djené",
+          "assist": null,
+          "type": "Card",
+          "detail": "Yellow Card",
+          "comments": "Foul"
+        },
+        {
+          "minute": 45,
+          "extra": 2,
+          "teamId": 79,
+          "teamName": "CA Osasuna",
+          "player": "Ante Budimir",
+          "assist": null,
+          "type": "Goal",
+          "detail": "Penalty",
+          "comments": null
+        },
+        {
+          "minute": 45,
+          "extra": null,
+          "teamId": 79,
+          "teamName": "CA Osasuna",
+          "player": "Jonathan Dubasin",
+          "assist": "Rubén García",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 58,
+          "extra": null,
+          "teamId": 82,
+          "teamName": "Getafe CF",
+          "player": "Johan Mojica",
+          "assist": null,
+          "type": "Card",
+          "detail": "Yellow Card",
+          "comments": "Foul"
+        },
+        {
+          "minute": 60,
+          "extra": null,
+          "teamId": 82,
+          "teamName": "Getafe CF",
+          "player": "Enes Ünal",
+          "assist": null,
+          "type": "Card",
+          "detail": "Yellow Card",
+          "comments": null
+        },
+        {
+          "minute": 65,
+          "extra": null,
+          "teamId": 82,
+          "teamName": "Getafe CF",
+          "player": "Orel Mangala",
+          "assist": null,
+          "type": "Card",
+          "detail": "Yellow Card",
+          "comments": "Foul"
+        },
+        {
+          "minute": 65,
+          "extra": null,
+          "teamId": 82,
+          "teamName": "Getafe CF",
+          "player": "Alberto Risco",
+          "assist": "Andrés García",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 67,
+          "extra": null,
+          "teamId": 79,
+          "teamName": "CA Osasuna",
+          "player": "Iker Muñoz",
+          "assist": null,
+          "type": "Card",
+          "detail": "Yellow Card",
+          "comments": "Foul"
+        },
+        {
+          "minute": 71,
+          "extra": null,
+          "teamId": 79,
+          "teamName": "CA Osasuna",
+          "player": "Raúl García",
+          "assist": "Aimar Oroz",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 71,
+          "extra": null,
+          "teamId": 79,
+          "teamName": "CA Osasuna",
+          "player": "Lucas Torró",
+          "assist": "Iker Muñoz",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 76,
+          "extra": null,
+          "teamId": 82,
+          "teamName": "Getafe CF",
+          "player": "Nemanja Gudelj",
+          "assist": "Francho Serrano",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 77,
+          "extra": null,
+          "teamId": 79,
+          "teamName": "CA Osasuna",
+          "player": "Enrique Barja",
+          "assist": "Moi Gómez",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 80,
+          "extra": null,
+          "teamId": 79,
+          "teamName": "CA Osasuna",
+          "player": "Raúl García",
+          "assist": null,
+          "type": "Card",
+          "detail": "Yellow Card",
+          "comments": "Foul"
+        },
+        {
+          "minute": 86,
+          "extra": null,
+          "teamId": 82,
+          "teamName": "Getafe CF",
+          "player": "Borja Mayoral",
+          "assist": "Martín Satriano",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 90,
+          "extra": 3,
+          "teamId": 79,
+          "teamName": "CA Osasuna",
+          "player": "Sergio Herrera",
+          "assist": null,
+          "type": "Card",
+          "detail": "Yellow Card",
+          "comments": null
+        },
+        {
+          "minute": 90,
+          "extra": 4,
+          "teamId": 79,
+          "teamName": "CA Osasuna",
+          "player": "Enrique Barja",
+          "assist": null,
+          "type": "Card",
+          "detail": "Yellow Card",
+          "comments": "Foul"
+        }
       ],
       "lineups": [
         {
-          "teamId": null,
+          "teamId": 79,
           "teamName": "CA Osasuna",
-          "teamLogo": null,
+          "teamLogo": "https://crests.football-data.org/79.png",
           "formation": "4-2-3-1",
           "coach": "Luis Ramis",
           "startXI": [
-            { "id": null, "name": "Sergio Herrera", "number": 1, "pos": "G", "grid": null },
-            { "id": null, "name": "Jorge Herrando", "number": 22, "pos": "D", "grid": null },
-            { "id": null, "name": "Alejandro Catena", "number": 24, "pos": "D", "grid": null },
-            { "id": null, "name": "Abel Bretones", "number": 23, "pos": "D", "grid": null },
-            { "id": null, "name": "Jesús Areso", "number": 12, "pos": "D", "grid": null },
-            { "id": null, "name": "Aimar Oroz", "number": 10, "pos": "M", "grid": null },
-            { "id": null, "name": "Iker Muñoz", "number": 18, "pos": "M", "grid": null },
-            { "id": null, "name": "Jon Moncayola", "number": 7, "pos": "M", "grid": null },
-            { "id": null, "name": "Ante Budimir", "number": 17, "pos": "F", "grid": null },
-            { "id": null, "name": "Moi Gómez", "number": 16, "pos": "M", "grid": null },
-            { "id": null, "name": "Rubén García", "number": 14, "pos": "M", "grid": null }
+            {
+              "id": null,
+              "name": "Sergio Herrera",
+              "number": 1,
+              "pos": "G",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Jorge Herrando",
+              "number": 22,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Alejandro Catena",
+              "number": 24,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Abel Bretones",
+              "number": 23,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Jesús Areso",
+              "number": 12,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Aimar Oroz",
+              "number": 10,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Iker Muñoz",
+              "number": 18,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Jon Moncayola",
+              "number": 7,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Ante Budimir",
+              "number": 17,
+              "pos": "F",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Moi Gómez",
+              "number": 16,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Rubén García",
+              "number": 14,
+              "pos": "M",
+              "grid": null
+            }
           ],
           "substitutes": [
-            { "id": null, "name": "Lucas Torró", "number": 6, "pos": "SUB" },
-            { "id": null, "name": "Raúl García", "number": 9, "pos": "SUB" },
-            { "id": null, "name": "Kike Barja", "number": 11, "pos": "SUB" },
-            { "id": null, "name": "Aitor Fernández", "number": 13, "pos": "SUB" },
-            { "id": null, "name": "Pablo Ibáñez", "number": 19, "pos": "SUB" },
-            { "id": null, "name": "Jose Arnaiz", "number": 20, "pos": "SUB" },
-            { "id": null, "name": "Enzo Boyomo", "number": 4, "pos": "SUB" },
-            { "id": null, "name": "Jonathan Dubasin", "number": 21, "pos": "SUB" },
-            { "id": null, "name": "Iker Benito", "number": 27, "pos": "SUB" },
-            { "id": null, "name": "Unai García", "number": 5, "pos": "SUB" },
-            { "id": null, "name": "Juan Cruz", "number": 3, "pos": "SUB" },
-            { "id": null, "name": "Nacho Vidal", "number": 2, "pos": "SUB" }
+            {
+              "id": null,
+              "name": "Lucas Torró",
+              "number": 6,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Raúl García",
+              "number": 9,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Kike Barja",
+              "number": 11,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Aitor Fernández",
+              "number": 13,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Pablo Ibáñez",
+              "number": 19,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Jose Arnaiz",
+              "number": 20,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Enzo Boyomo",
+              "number": 4,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Jonathan Dubasin",
+              "number": 21,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Iker Benito",
+              "number": 27,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Unai García",
+              "number": 5,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Juan Cruz",
+              "number": 3,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Nacho Vidal",
+              "number": 2,
+              "pos": "SUB"
+            }
           ]
         },
         {
-          "teamId": null,
+          "teamId": 82,
           "teamName": "Getafe CF",
-          "teamLogo": null,
+          "teamLogo": "https://crests.football-data.org/82.png",
           "formation": "4-4-2",
           "coach": "Pepe Bordalás",
           "startXI": [
-            { "id": null, "name": "David Soria", "number": 13, "pos": "G", "grid": null },
-            { "id": null, "name": "Zaid Romero", "number": 2, "pos": "D", "grid": null },
-            { "id": null, "name": "Djené", "number": 22, "pos": "D", "grid": null },
-            { "id": null, "name": "Johan Mojica", "number": 3, "pos": "D", "grid": null },
-            { "id": null, "name": "Juan Iglesias", "number": 21, "pos": "D", "grid": null },
-            { "id": null, "name": "Orel Mangala", "number": 8, "pos": "M", "grid": null },
-            { "id": null, "name": "Francho Serrano", "number": 14, "pos": "M", "grid": null },
-            { "id": null, "name": "Mauro Arambarri", "number": 18, "pos": "M", "grid": null },
-            { "id": null, "name": "Andrés García", "number": 27, "pos": "M", "grid": null },
-            { "id": null, "name": "Enes Ünal", "number": 10, "pos": "F", "grid": null },
-            { "id": null, "name": "Martín Satriano", "number": 9, "pos": "F", "grid": null }
+            {
+              "id": null,
+              "name": "David Soria",
+              "number": 13,
+              "pos": "G",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Zaid Romero",
+              "number": 2,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Djené",
+              "number": 22,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Johan Mojica",
+              "number": 3,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Juan Iglesias",
+              "number": 21,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Orel Mangala",
+              "number": 8,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Francho Serrano",
+              "number": 14,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Mauro Arambarri",
+              "number": 18,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Andrés García",
+              "number": 27,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Enes Ünal",
+              "number": 10,
+              "pos": "F",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Martín Satriano",
+              "number": 9,
+              "pos": "F",
+              "grid": null
+            }
           ],
           "substitutes": [
-            { "id": null, "name": "Alex Sola", "number": 7, "pos": "SUB" },
-            { "id": null, "name": "Nemanja Gudelj", "number": 6, "pos": "SUB" },
-            { "id": null, "name": "Borja Mayoral", "number": 19, "pos": "SUB" },
-            { "id": null, "name": "Peter Federico", "number": 11, "pos": "SUB" },
-            { "id": null, "name": "Jiri Letácek", "number": 1, "pos": "SUB" },
-            { "id": null, "name": "Domingos Duarte", "number": 15, "pos": "SUB" },
-            { "id": null, "name": "Diego Rico", "number": 16, "pos": "SUB" },
-            { "id": null, "name": "Carles Pérez", "number": 17, "pos": "SUB" },
-            { "id": null, "name": "Carles Aleñá", "number": 20, "pos": "SUB" },
-            { "id": null, "name": "Yellu Santiago", "number": 24, "pos": "SUB" },
-            { "id": null, "name": "Alberto Risco", "number": 28, "pos": "SUB" }
+            {
+              "id": null,
+              "name": "Alex Sola",
+              "number": 7,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Nemanja Gudelj",
+              "number": 6,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Borja Mayoral",
+              "number": 19,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Peter Federico",
+              "number": 11,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Jiri Letácek",
+              "number": 1,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Domingos Duarte",
+              "number": 15,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Diego Rico",
+              "number": 16,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Carles Pérez",
+              "number": 17,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Carles Aleñá",
+              "number": 20,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Yellu Santiago",
+              "number": 24,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Alberto Risco",
+              "number": 28,
+              "pos": "SUB"
+            }
           ]
         }
       ],
       "statistics": [
         {
-          "teamId": null,
+          "teamId": 79,
           "teamName": "CA Osasuna",
           "stats": [
-            { "type": "Shots on Goal", "value": 2 },
-            { "type": "Total Shots", "value": 10 },
-            { "type": "Fouls", "value": 17 },
-            { "type": "Corner Kicks", "value": 1 },
-            { "type": "Offsides", "value": 1 },
-            { "type": "Ball Possession", "value": "45%" },
-            { "type": "Yellow Cards", "value": 5 },
-            { "type": "Red Cards", "value": 0 },
-            { "type": "Goalkeeper Saves", "value": 1 },
-            { "type": "Total passes", "value": 382 },
-            { "type": "Passes accurate", "value": 305 },
-            { "type": "Passes %", "value": "80%" }
+            {
+              "type": "Shots on Goal",
+              "value": 2
+            },
+            {
+              "type": "Total Shots",
+              "value": 10
+            },
+            {
+              "type": "Fouls",
+              "value": 17
+            },
+            {
+              "type": "Corner Kicks",
+              "value": 1
+            },
+            {
+              "type": "Offsides",
+              "value": 1
+            },
+            {
+              "type": "Ball Possession",
+              "value": "45%"
+            },
+            {
+              "type": "Yellow Cards",
+              "value": 5
+            },
+            {
+              "type": "Red Cards",
+              "value": 0
+            },
+            {
+              "type": "Goalkeeper Saves",
+              "value": 1
+            },
+            {
+              "type": "Total passes",
+              "value": 382
+            },
+            {
+              "type": "Passes accurate",
+              "value": 305
+            },
+            {
+              "type": "Passes %",
+              "value": "80%"
+            }
           ]
         },
         {
-          "teamId": null,
+          "teamId": 82,
           "teamName": "Getafe CF",
           "stats": [
-            { "type": "Shots on Goal", "value": 1 },
-            { "type": "Total Shots", "value": 11 },
-            { "type": "Fouls", "value": 14 },
-            { "type": "Corner Kicks", "value": 3 },
-            { "type": "Offsides", "value": 2 },
-            { "type": "Ball Possession", "value": "55%" },
-            { "type": "Yellow Cards", "value": 4 },
-            { "type": "Red Cards", "value": 0 },
-            { "type": "Goalkeeper Saves", "value": 1 },
-            { "type": "Total passes", "value": 455 },
-            { "type": "Passes accurate", "value": 372 },
-            { "type": "Passes %", "value": "80%" }
+            {
+              "type": "Shots on Goal",
+              "value": 1
+            },
+            {
+              "type": "Total Shots",
+              "value": 11
+            },
+            {
+              "type": "Fouls",
+              "value": 14
+            },
+            {
+              "type": "Corner Kicks",
+              "value": 3
+            },
+            {
+              "type": "Offsides",
+              "value": 2
+            },
+            {
+              "type": "Ball Possession",
+              "value": "55%"
+            },
+            {
+              "type": "Yellow Cards",
+              "value": 4
+            },
+            {
+              "type": "Red Cards",
+              "value": 0
+            },
+            {
+              "type": "Goalkeeper Saves",
+              "value": 1
+            },
+            {
+              "type": "Total passes",
+              "value": 455
+            },
+            {
+              "type": "Passes accurate",
+              "value": 372
+            },
+            {
+              "type": "Passes %",
+              "value": "80%"
+            }
           ]
         }
       ]
     },
     {
       "fixture_id": null,
-      "sources": ["https://www.espn.com/soccer/match/_/gameId/401882903"],
+      "sources": [
+        "https://www.espn.com/soccer/match/_/gameId/401882903"
+      ],
       "league": {
-        "id": null,
+        "id": 2014,
         "name": "Primera Division",
-        "logo": null,
+        "logo": "https://crests.football-data.org/laliga.png",
         "country": "Spain",
         "season": 2026,
         "round": "Regular Season - 3"
       },
       "date": "2026-08-31T19:30:00+00:00",
-      "venue": { "name": "Estadi Olímpic Lluís Companys", "city": "Barcelona" },
+      "venue": {
+        "name": "Estadi Olímpic Lluís Companys",
+        "city": "Barcelona"
+      },
       "referee": "Francisco José Hernández Maeso",
-      "status": { "short": "FT", "long": "Match Finished", "elapsed": 90, "state": "post" },
-      "home": { "id": null, "name": "FC Barcelona", "logo": null, "winner": true },
-      "away": { "id": null, "name": "Rayo Vallecano de Madrid", "logo": null, "winner": false },
-      "goals": { "home": 5, "away": 2 },
+      "status": {
+        "short": "FT",
+        "long": "Match Finished",
+        "elapsed": 90,
+        "state": "post"
+      },
+      "home": {
+        "id": 81,
+        "name": "FC Barcelona",
+        "logo": "https://crests.football-data.org/81.png",
+        "winner": true
+      },
+      "away": {
+        "id": 87,
+        "name": "Rayo Vallecano de Madrid",
+        "logo": "https://crests.football-data.org/87.png",
+        "winner": false
+      },
+      "goals": {
+        "home": 5,
+        "away": 2
+      },
       "score": {
-        "halftime": { "home": 2, "away": 1 },
-        "fulltime": { "home": 5, "away": 2 },
-        "extratime": { "home": null, "away": null },
-        "penalty": { "home": null, "away": null }
+        "halftime": {
+          "home": 2,
+          "away": 1
+        },
+        "fulltime": {
+          "home": 5,
+          "away": 2
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
       },
       "events": [
-        { "minute": 12, "extra": null, "teamId": null, "teamName": "Rayo Vallecano de Madrid", "player": "Sergio Camello", "assist": "Álvaro García", "type": "Goal", "detail": "Normal Goal", "comments": null },
-        { "minute": 19, "extra": null, "teamId": null, "teamName": "FC Barcelona", "player": "Raphinha", "assist": "Xavi Espart", "type": "Goal", "detail": "Normal Goal", "comments": null },
-        { "minute": 21, "extra": null, "teamId": null, "teamName": "FC Barcelona", "player": "Lamine Yamal", "assist": "Marc Bernal", "type": "Goal", "detail": "Normal Goal", "comments": null },
-        { "minute": 32, "extra": null, "teamId": null, "teamName": "Rayo Vallecano de Madrid", "player": "Adrià Pedrosa", "assist": "Jozhua Vertrouwd", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 51, "extra": null, "teamId": null, "teamName": "FC Barcelona", "player": "Florian Lejeune", "assist": null, "type": "Goal", "detail": "Own Goal", "comments": null },
-        { "minute": 57, "extra": null, "teamId": null, "teamName": "Rayo Vallecano de Madrid", "player": "Pedro Díaz", "assist": "Gnangoro Bouare Samake", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 57, "extra": null, "teamId": null, "teamName": "Rayo Vallecano de Madrid", "player": "Fran Pérez", "assist": "Jorge de Frutos", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 59, "extra": null, "teamId": null, "teamName": "Rayo Vallecano de Madrid", "player": "Sergio Camello", "assist": "Unai López", "type": "Goal", "detail": "Header", "comments": null },
-        { "minute": 64, "extra": null, "teamId": null, "teamName": "FC Barcelona", "player": "Fermín López", "assist": "Dani Olmo", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 64, "extra": null, "teamId": null, "teamName": "FC Barcelona", "player": "Rodri", "assist": "Marc Bernal", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 71, "extra": null, "teamId": null, "teamName": "FC Barcelona", "player": "Raphinha", "assist": "Anthony Gordon", "type": "Goal", "detail": "Normal Goal", "comments": null },
-        { "minute": 75, "extra": null, "teamId": null, "teamName": "Rayo Vallecano de Madrid", "player": "Alexandre Alemão", "assist": "Sergio Camello", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 75, "extra": null, "teamId": null, "teamName": "Rayo Vallecano de Madrid", "player": "Randy Nteka", "assist": "Unai López", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 77, "extra": null, "teamId": null, "teamName": "FC Barcelona", "player": "João Cancelo", "assist": "Pedri", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 77, "extra": null, "teamId": null, "teamName": "FC Barcelona", "player": "Karim Adeyemi", "assist": "Anthony Gordon", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 86, "extra": null, "teamId": null, "teamName": "FC Barcelona", "player": "Hamza Abdelkarim", "assist": "Raphinha", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 90, "extra": null, "teamId": null, "teamName": "Rayo Vallecano de Madrid", "player": "Adrià Pedrosa", "assist": null, "type": "Card", "detail": "Yellow Card", "comments": "Foul" },
-        { "minute": 90, "extra": null, "teamId": null, "teamName": "FC Barcelona", "player": "Lamine Yamal", "assist": "Karim Adeyemi", "type": "Goal", "detail": "Normal Goal", "comments": null }
+        {
+          "minute": 12,
+          "extra": null,
+          "teamId": 87,
+          "teamName": "Rayo Vallecano de Madrid",
+          "player": "Sergio Camello",
+          "assist": "Álvaro García",
+          "type": "Goal",
+          "detail": "Normal Goal",
+          "comments": null
+        },
+        {
+          "minute": 19,
+          "extra": null,
+          "teamId": 81,
+          "teamName": "FC Barcelona",
+          "player": "Raphinha",
+          "assist": "Xavi Espart",
+          "type": "Goal",
+          "detail": "Normal Goal",
+          "comments": null
+        },
+        {
+          "minute": 21,
+          "extra": null,
+          "teamId": 81,
+          "teamName": "FC Barcelona",
+          "player": "Lamine Yamal",
+          "assist": "Marc Bernal",
+          "type": "Goal",
+          "detail": "Normal Goal",
+          "comments": null
+        },
+        {
+          "minute": 32,
+          "extra": null,
+          "teamId": 87,
+          "teamName": "Rayo Vallecano de Madrid",
+          "player": "Adrià Pedrosa",
+          "assist": "Jozhua Vertrouwd",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 51,
+          "extra": null,
+          "teamId": 81,
+          "teamName": "FC Barcelona",
+          "player": "Florian Lejeune",
+          "assist": null,
+          "type": "Goal",
+          "detail": "Own Goal",
+          "comments": null
+        },
+        {
+          "minute": 57,
+          "extra": null,
+          "teamId": 87,
+          "teamName": "Rayo Vallecano de Madrid",
+          "player": "Pedro Díaz",
+          "assist": "Gnangoro Bouare Samake",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 57,
+          "extra": null,
+          "teamId": 87,
+          "teamName": "Rayo Vallecano de Madrid",
+          "player": "Fran Pérez",
+          "assist": "Jorge de Frutos",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 59,
+          "extra": null,
+          "teamId": 87,
+          "teamName": "Rayo Vallecano de Madrid",
+          "player": "Sergio Camello",
+          "assist": "Unai López",
+          "type": "Goal",
+          "detail": "Header",
+          "comments": null
+        },
+        {
+          "minute": 64,
+          "extra": null,
+          "teamId": 81,
+          "teamName": "FC Barcelona",
+          "player": "Fermín López",
+          "assist": "Dani Olmo",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 64,
+          "extra": null,
+          "teamId": 81,
+          "teamName": "FC Barcelona",
+          "player": "Rodri",
+          "assist": "Marc Bernal",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 71,
+          "extra": null,
+          "teamId": 81,
+          "teamName": "FC Barcelona",
+          "player": "Raphinha",
+          "assist": "Anthony Gordon",
+          "type": "Goal",
+          "detail": "Normal Goal",
+          "comments": null
+        },
+        {
+          "minute": 75,
+          "extra": null,
+          "teamId": 87,
+          "teamName": "Rayo Vallecano de Madrid",
+          "player": "Alexandre Alemão",
+          "assist": "Sergio Camello",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 75,
+          "extra": null,
+          "teamId": 87,
+          "teamName": "Rayo Vallecano de Madrid",
+          "player": "Randy Nteka",
+          "assist": "Unai López",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 77,
+          "extra": null,
+          "teamId": 81,
+          "teamName": "FC Barcelona",
+          "player": "João Cancelo",
+          "assist": "Pedri",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 77,
+          "extra": null,
+          "teamId": 81,
+          "teamName": "FC Barcelona",
+          "player": "Karim Adeyemi",
+          "assist": "Anthony Gordon",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 86,
+          "extra": null,
+          "teamId": 81,
+          "teamName": "FC Barcelona",
+          "player": "Hamza Abdelkarim",
+          "assist": "Raphinha",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 90,
+          "extra": null,
+          "teamId": 87,
+          "teamName": "Rayo Vallecano de Madrid",
+          "player": "Adrià Pedrosa",
+          "assist": null,
+          "type": "Card",
+          "detail": "Yellow Card",
+          "comments": "Foul"
+        },
+        {
+          "minute": 90,
+          "extra": null,
+          "teamId": 81,
+          "teamName": "FC Barcelona",
+          "player": "Lamine Yamal",
+          "assist": "Karim Adeyemi",
+          "type": "Goal",
+          "detail": "Normal Goal",
+          "comments": null
+        }
       ],
       "lineups": [
         {
-          "teamId": null,
+          "teamId": 81,
           "teamName": "FC Barcelona",
-          "teamLogo": null,
+          "teamLogo": "https://crests.football-data.org/81.png",
           "formation": "4-2-3-1",
           "coach": "Hansi Flick",
           "startXI": [
-            { "id": null, "name": "Joan García", "number": 13, "pos": "G", "grid": null },
-            { "id": null, "name": "Andreas Christensen", "number": 15, "pos": "D", "grid": null },
-            { "id": null, "name": "Pau Cubarsí", "number": 2, "pos": "D", "grid": null },
-            { "id": null, "name": "Alejandro Balde", "number": 3, "pos": "D", "grid": null },
-            { "id": null, "name": "Xavi Espart", "number": 43, "pos": "D", "grid": null },
-            { "id": null, "name": "Dani Olmo", "number": 20, "pos": "M", "grid": null },
-            { "id": null, "name": "Pedri", "number": 8, "pos": "M", "grid": null },
-            { "id": null, "name": "Marc Bernal", "number": 28, "pos": "M", "grid": null },
-            { "id": null, "name": "Raphinha", "number": 11, "pos": "F", "grid": null },
-            { "id": null, "name": "Anthony Gordon", "number": 19, "pos": "M", "grid": null },
-            { "id": null, "name": "Lamine Yamal", "number": 10, "pos": "M", "grid": null }
+            {
+              "id": null,
+              "name": "Joan García",
+              "number": 13,
+              "pos": "G",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Andreas Christensen",
+              "number": 15,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Pau Cubarsí",
+              "number": 2,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Alejandro Balde",
+              "number": 3,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Xavi Espart",
+              "number": 43,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Dani Olmo",
+              "number": 20,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Pedri",
+              "number": 8,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Marc Bernal",
+              "number": 28,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Raphinha",
+              "number": 11,
+              "pos": "F",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Anthony Gordon",
+              "number": 19,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Lamine Yamal",
+              "number": 10,
+              "pos": "M",
+              "grid": null
+            }
           ],
           "substitutes": [
-            { "id": null, "name": "Marc Casadó", "number": 17, "pos": "SUB" },
-            { "id": null, "name": "Karim Adeyemi", "number": 27, "pos": "SUB" },
-            { "id": null, "name": "Hamza Abdelkarim", "number": 29, "pos": "SUB" },
-            { "id": null, "name": "Wojciech Szczesny", "number": 25, "pos": "SUB" },
-            { "id": null, "name": "Fermín López", "number": 16, "pos": "SUB" },
-            { "id": null, "name": "João Cancelo", "number": 22, "pos": "SUB" },
-            { "id": null, "name": "Rodri", "number": 14, "pos": "SUB" },
-            { "id": null, "name": "Eric García", "number": 24, "pos": "SUB" },
-            { "id": null, "name": "Diego Kochen", "number": 31, "pos": "SUB" }
+            {
+              "id": null,
+              "name": "Marc Casadó",
+              "number": 17,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Karim Adeyemi",
+              "number": 27,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Hamza Abdelkarim",
+              "number": 29,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Wojciech Szczesny",
+              "number": 25,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Fermín López",
+              "number": 16,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "João Cancelo",
+              "number": 22,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Rodri",
+              "number": 14,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Eric García",
+              "number": 24,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Diego Kochen",
+              "number": 31,
+              "pos": "SUB"
+            }
           ]
         },
         {
-          "teamId": null,
+          "teamId": 87,
           "teamName": "Rayo Vallecano de Madrid",
-          "teamLogo": null,
+          "teamLogo": "https://crests.football-data.org/87.png",
           "formation": "4-2-3-1",
           "coach": "Iñigo Pérez",
           "startXI": [
-            { "id": null, "name": "Daniel Cárdenas", "number": 1, "pos": "G", "grid": null },
-            { "id": null, "name": "Pathé Ciss", "number": 6, "pos": "D", "grid": null },
-            { "id": null, "name": "Florian Lejeune", "number": 24, "pos": "D", "grid": null },
-            { "id": null, "name": "Jozhua Vertrouwd", "number": 16, "pos": "D", "grid": null },
-            { "id": null, "name": "Andrei Ratiu", "number": 2, "pos": "D", "grid": null },
-            { "id": null, "name": "Unai López", "number": 17, "pos": "M", "grid": null },
-            { "id": null, "name": "Gnangoro Bouare Samake", "number": 29, "pos": "M", "grid": null },
-            { "id": null, "name": "Óscar Valentín", "number": 23, "pos": "M", "grid": null },
-            { "id": null, "name": "Sergio Camello", "number": 10, "pos": "F", "grid": null },
-            { "id": null, "name": "Álvaro García", "number": 18, "pos": "M", "grid": null },
-            { "id": null, "name": "Jorge de Frutos", "number": 19, "pos": "M", "grid": null }
+            {
+              "id": null,
+              "name": "Daniel Cárdenas",
+              "number": 1,
+              "pos": "G",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Pathé Ciss",
+              "number": 6,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Florian Lejeune",
+              "number": 24,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Jozhua Vertrouwd",
+              "number": 16,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Andrei Ratiu",
+              "number": 2,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Unai López",
+              "number": 17,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Gnangoro Bouare Samake",
+              "number": 29,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Óscar Valentín",
+              "number": 23,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Sergio Camello",
+              "number": 10,
+              "pos": "F",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Álvaro García",
+              "number": 18,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Jorge de Frutos",
+              "number": 19,
+              "pos": "M",
+              "grid": null
+            }
           ],
           "substitutes": [
-            { "id": null, "name": "Pep Chavarría", "number": 3, "pos": "SUB" },
-            { "id": null, "name": "Adrià Pedrosa", "number": 12, "pos": "SUB" },
-            { "id": null, "name": "Pedro Díaz", "number": 4, "pos": "SUB" },
-            { "id": null, "name": "Alexandre Alemão", "number": 9, "pos": "SUB" },
-            { "id": null, "name": "Gerard Gumbau", "number": 15, "pos": "SUB" },
-            { "id": null, "name": "Augusto Batalla", "number": 13, "pos": "SUB" },
-            { "id": null, "name": "Fran Pérez", "number": 7, "pos": "SUB" },
-            { "id": null, "name": "Pelayo Fernández", "number": 22, "pos": "SUB" },
-            { "id": null, "name": "Iván Balliu", "number": 20, "pos": "SUB" },
-            { "id": null, "name": "Randy Nteka", "number": 11, "pos": "SUB" },
-            { "id": null, "name": "Adrián Embarba", "number": 21, "pos": "SUB" },
-            { "id": null, "name": "Pablo Cuñat", "number": 30, "pos": "SUB" }
+            {
+              "id": null,
+              "name": "Pep Chavarría",
+              "number": 3,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Adrià Pedrosa",
+              "number": 12,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Pedro Díaz",
+              "number": 4,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Alexandre Alemão",
+              "number": 9,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Gerard Gumbau",
+              "number": 15,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Augusto Batalla",
+              "number": 13,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Fran Pérez",
+              "number": 7,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Pelayo Fernández",
+              "number": 22,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Iván Balliu",
+              "number": 20,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Randy Nteka",
+              "number": 11,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Adrián Embarba",
+              "number": 21,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Pablo Cuñat",
+              "number": 30,
+              "pos": "SUB"
+            }
           ]
         }
       ],
       "statistics": [
         {
-          "teamId": null,
+          "teamId": 81,
           "teamName": "FC Barcelona",
           "stats": [
-            { "type": "Shots on Goal", "value": 9 },
-            { "type": "Total Shots", "value": 26 },
-            { "type": "Fouls", "value": 4 },
-            { "type": "Corner Kicks", "value": 9 },
-            { "type": "Offsides", "value": 3 },
-            { "type": "Ball Possession", "value": "68.6%" },
-            { "type": "Yellow Cards", "value": 0 },
-            { "type": "Red Cards", "value": 0 },
-            { "type": "Goalkeeper Saves", "value": 3 },
-            { "type": "Total passes", "value": 646 },
-            { "type": "Passes accurate", "value": 579 },
-            { "type": "Passes %", "value": "90%" }
+            {
+              "type": "Shots on Goal",
+              "value": 9
+            },
+            {
+              "type": "Total Shots",
+              "value": 26
+            },
+            {
+              "type": "Fouls",
+              "value": 4
+            },
+            {
+              "type": "Corner Kicks",
+              "value": 9
+            },
+            {
+              "type": "Offsides",
+              "value": 3
+            },
+            {
+              "type": "Ball Possession",
+              "value": "68.6%"
+            },
+            {
+              "type": "Yellow Cards",
+              "value": 0
+            },
+            {
+              "type": "Red Cards",
+              "value": 0
+            },
+            {
+              "type": "Goalkeeper Saves",
+              "value": 3
+            },
+            {
+              "type": "Total passes",
+              "value": 646
+            },
+            {
+              "type": "Passes accurate",
+              "value": 579
+            },
+            {
+              "type": "Passes %",
+              "value": "90%"
+            }
           ]
         },
         {
-          "teamId": null,
+          "teamId": 87,
           "teamName": "Rayo Vallecano de Madrid",
           "stats": [
-            { "type": "Shots on Goal", "value": 5 },
-            { "type": "Total Shots", "value": 11 },
-            { "type": "Fouls", "value": 11 },
-            { "type": "Corner Kicks", "value": 5 },
-            { "type": "Offsides", "value": 4 },
-            { "type": "Ball Possession", "value": "31.4%" },
-            { "type": "Yellow Cards", "value": 1 },
-            { "type": "Red Cards", "value": 0 },
-            { "type": "Goalkeeper Saves", "value": 5 },
-            { "type": "Total passes", "value": 284 },
-            { "type": "Passes accurate", "value": 204 },
-            { "type": "Passes %", "value": "70%" }
+            {
+              "type": "Shots on Goal",
+              "value": 5
+            },
+            {
+              "type": "Total Shots",
+              "value": 11
+            },
+            {
+              "type": "Fouls",
+              "value": 11
+            },
+            {
+              "type": "Corner Kicks",
+              "value": 5
+            },
+            {
+              "type": "Offsides",
+              "value": 4
+            },
+            {
+              "type": "Ball Possession",
+              "value": "31.4%"
+            },
+            {
+              "type": "Yellow Cards",
+              "value": 1
+            },
+            {
+              "type": "Red Cards",
+              "value": 0
+            },
+            {
+              "type": "Goalkeeper Saves",
+              "value": 5
+            },
+            {
+              "type": "Total passes",
+              "value": 284
+            },
+            {
+              "type": "Passes accurate",
+              "value": 204
+            },
+            {
+              "type": "Passes %",
+              "value": "70%"
+            }
           ]
         }
       ]
     },
     {
       "fixture_id": null,
-      "sources": ["https://www.espn.com/soccer/match/_/gameId/401874970"],
+      "sources": [
+        "https://www.espn.com/soccer/match/_/gameId/401874970"
+      ],
       "league": {
-        "id": null,
+        "id": 2019,
         "name": "Serie A",
-        "logo": null,
+        "logo": "https://crests.football-data.org/c111.png",
         "country": "Italy",
         "season": 2026,
         "round": "Regular Season - 2"
       },
       "date": "2026-08-31T18:45:00+00:00",
-      "venue": { "name": "Gewiss Stadium", "city": "Bergamo" },
+      "venue": {
+        "name": "Gewiss Stadium",
+        "city": "Bergamo"
+      },
       "referee": "Daniele Doveri",
-      "status": { "short": "FT", "long": "Match Finished", "elapsed": 90, "state": "post" },
-      "home": { "id": null, "name": "Atalanta BC", "logo": null, "winner": true },
-      "away": { "id": null, "name": "Bologna FC 1909", "logo": null, "winner": false },
-      "goals": { "home": 1, "away": 0 },
+      "status": {
+        "short": "FT",
+        "long": "Match Finished",
+        "elapsed": 90,
+        "state": "post"
+      },
+      "home": {
+        "id": 102,
+        "name": "Atalanta BC",
+        "logo": "https://crests.football-data.org/102.png",
+        "winner": true
+      },
+      "away": {
+        "id": 103,
+        "name": "Bologna FC 1909",
+        "logo": "https://crests.football-data.org/103.png",
+        "winner": false
+      },
+      "goals": {
+        "home": 1,
+        "away": 0
+      },
       "score": {
-        "halftime": { "home": 0, "away": 0 },
-        "fulltime": { "home": 1, "away": 0 },
-        "extratime": { "home": null, "away": null },
-        "penalty": { "home": null, "away": null }
+        "halftime": {
+          "home": 0,
+          "away": 0
+        },
+        "fulltime": {
+          "home": 1,
+          "away": 0
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
       },
       "events": [
-        { "minute": 55, "extra": null, "teamId": null, "teamName": "Atalanta BC", "player": "Nicola Zalewski", "assist": "Charles De Ketelaere", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 56, "extra": null, "teamId": null, "teamName": "Atalanta BC", "player": "Eljif Elmas", "assist": "Giacomo Raspadori", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 60, "extra": null, "teamId": null, "teamName": "Bologna FC 1909", "player": "Riccardo Orsolini", "assist": "Jens Odgaard", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 60, "extra": null, "teamId": null, "teamName": "Bologna FC 1909", "player": "Artem Dovbyk", "assist": "Roberto Piccoli", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 68, "extra": null, "teamId": null, "teamName": "Atalanta BC", "player": "Nikola Krstovic", "assist": "Gianluca Scamacca", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 68, "extra": null, "teamId": null, "teamName": "Atalanta BC", "player": "Lazar Samardzic", "assist": "Éderson", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 72, "extra": null, "teamId": null, "teamName": "Bologna FC 1909", "player": "Nadir Zortea", "assist": "Emil Holm", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 72, "extra": null, "teamId": null, "teamName": "Bologna FC 1909", "player": "Mikel Amondarain", "assist": "Tommaso Pobega", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 73, "extra": null, "teamId": null, "teamName": "Atalanta BC", "player": "Nikola Krstovic", "assist": null, "type": "Card", "detail": "Yellow Card", "comments": null },
-        { "minute": 78, "extra": null, "teamId": null, "teamName": "Atalanta BC", "player": "Raoul Bellanova", "assist": "Sead Kolasinac", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 80, "extra": null, "teamId": null, "teamName": "Bologna FC 1909", "player": "Nikola Moro", "assist": "Riccardo Orsolini", "type": "subst", "detail": "Substitution", "comments": null },
-        { "minute": 90, "extra": 6, "teamId": null, "teamName": "Atalanta BC", "player": "Lazar Samardzic", "assist": "Nicola Zalewski", "type": "Goal", "detail": "Normal Goal", "comments": null }
+        {
+          "minute": 55,
+          "extra": null,
+          "teamId": 102,
+          "teamName": "Atalanta BC",
+          "player": "Nicola Zalewski",
+          "assist": "Charles De Ketelaere",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 56,
+          "extra": null,
+          "teamId": 102,
+          "teamName": "Atalanta BC",
+          "player": "Eljif Elmas",
+          "assist": "Giacomo Raspadori",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 60,
+          "extra": null,
+          "teamId": 103,
+          "teamName": "Bologna FC 1909",
+          "player": "Riccardo Orsolini",
+          "assist": "Jens Odgaard",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 60,
+          "extra": null,
+          "teamId": 103,
+          "teamName": "Bologna FC 1909",
+          "player": "Artem Dovbyk",
+          "assist": "Roberto Piccoli",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 68,
+          "extra": null,
+          "teamId": 102,
+          "teamName": "Atalanta BC",
+          "player": "Nikola Krstovic",
+          "assist": "Gianluca Scamacca",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 68,
+          "extra": null,
+          "teamId": 102,
+          "teamName": "Atalanta BC",
+          "player": "Lazar Samardzic",
+          "assist": "Éderson",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 72,
+          "extra": null,
+          "teamId": 103,
+          "teamName": "Bologna FC 1909",
+          "player": "Nadir Zortea",
+          "assist": "Emil Holm",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 72,
+          "extra": null,
+          "teamId": 103,
+          "teamName": "Bologna FC 1909",
+          "player": "Mikel Amondarain",
+          "assist": "Tommaso Pobega",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 73,
+          "extra": null,
+          "teamId": 102,
+          "teamName": "Atalanta BC",
+          "player": "Nikola Krstovic",
+          "assist": null,
+          "type": "Card",
+          "detail": "Yellow Card",
+          "comments": null
+        },
+        {
+          "minute": 78,
+          "extra": null,
+          "teamId": 102,
+          "teamName": "Atalanta BC",
+          "player": "Raoul Bellanova",
+          "assist": "Sead Kolasinac",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 80,
+          "extra": null,
+          "teamId": 103,
+          "teamName": "Bologna FC 1909",
+          "player": "Nikola Moro",
+          "assist": "Riccardo Orsolini",
+          "type": "subst",
+          "detail": "Substitution",
+          "comments": null
+        },
+        {
+          "minute": 90,
+          "extra": 6,
+          "teamId": 102,
+          "teamName": "Atalanta BC",
+          "player": "Lazar Samardzic",
+          "assist": "Nicola Zalewski",
+          "type": "Goal",
+          "detail": "Normal Goal",
+          "comments": null
+        }
       ],
       "lineups": [
         {
-          "teamId": null,
+          "teamId": 102,
           "teamName": "Atalanta BC",
-          "teamLogo": null,
+          "teamLogo": "https://crests.football-data.org/102.png",
           "formation": "3-4-2-1",
           "coach": "Gian Piero Gasperini",
           "startXI": [
-            { "id": null, "name": "Marco Carnesecchi", "number": 29, "pos": "G", "grid": null },
-            { "id": null, "name": "Giorgio Scalvini", "number": 42, "pos": "D", "grid": null },
-            { "id": null, "name": "Odilon Kossounou", "number": 3, "pos": "D", "grid": null },
-            { "id": null, "name": "Sead Kolasinac", "number": 23, "pos": "D", "grid": null },
-            { "id": null, "name": "Davide Zappacosta", "number": 77, "pos": "D", "grid": null },
-            { "id": null, "name": "Éderson", "number": 13, "pos": "M", "grid": null },
-            { "id": null, "name": "Marten de Roon", "number": 15, "pos": "M", "grid": null },
-            { "id": null, "name": "Matteo Ruggeri", "number": 22, "pos": "M", "grid": null },
-            { "id": null, "name": "Charles De Ketelaere", "number": 17, "pos": "F", "grid": null },
-            { "id": null, "name": "Giacomo Raspadori", "number": 18, "pos": "F", "grid": null },
-            { "id": null, "name": "Gianluca Scamacca", "number": 9, "pos": "F", "grid": null }
+            {
+              "id": null,
+              "name": "Marco Carnesecchi",
+              "number": 29,
+              "pos": "G",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Giorgio Scalvini",
+              "number": 42,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Odilon Kossounou",
+              "number": 3,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Sead Kolasinac",
+              "number": 23,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Davide Zappacosta",
+              "number": 77,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Éderson",
+              "number": 13,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Marten de Roon",
+              "number": 15,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Matteo Ruggeri",
+              "number": 22,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Charles De Ketelaere",
+              "number": 17,
+              "pos": "F",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Giacomo Raspadori",
+              "number": 18,
+              "pos": "F",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Gianluca Scamacca",
+              "number": 9,
+              "pos": "F",
+              "grid": null
+            }
           ],
           "substitutes": [
-            { "id": null, "name": "Rui Patrício", "number": 28, "pos": "SUB" },
-            { "id": null, "name": "Raoul Bellanova", "number": 16, "pos": "SUB" },
-            { "id": null, "name": "Isak Hien", "number": 4, "pos": "SUB" },
-            { "id": null, "name": "Ben Godfrey", "number": 5, "pos": "SUB" },
-            { "id": null, "name": "Marco Palestra", "number": 27, "pos": "SUB" },
-            { "id": null, "name": "Mario Pasalic", "number": 8, "pos": "SUB" },
-            { "id": null, "name": "Lazar Samardzic", "number": 24, "pos": "SUB" },
-            { "id": null, "name": "Francesco Rossi", "number": 31, "pos": "SUB" },
-            { "id": null, "name": "Eljif Elmas", "number": 7, "pos": "SUB" },
-            { "id": null, "name": "Nicola Zalewski", "number": 59, "pos": "SUB" },
-            { "id": null, "name": "Nikola Krstovic", "number": 90, "pos": "SUB" }
+            {
+              "id": null,
+              "name": "Rui Patrício",
+              "number": 28,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Raoul Bellanova",
+              "number": 16,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Isak Hien",
+              "number": 4,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Ben Godfrey",
+              "number": 5,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Marco Palestra",
+              "number": 27,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Mario Pasalic",
+              "number": 8,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Lazar Samardzic",
+              "number": 24,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Francesco Rossi",
+              "number": 31,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Eljif Elmas",
+              "number": 7,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Nicola Zalewski",
+              "number": 59,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Nikola Krstovic",
+              "number": 90,
+              "pos": "SUB"
+            }
           ]
         },
         {
-          "teamId": null,
+          "teamId": 103,
           "teamName": "Bologna FC 1909",
-          "teamLogo": null,
+          "teamLogo": "https://crests.football-data.org/103.png",
           "formation": "4-2-3-1",
           "coach": "Vincenzo Italiano",
           "startXI": [
-            { "id": null, "name": "Lukasz Skorupski", "number": 1, "pos": "G", "grid": null },
-            { "id": null, "name": "Torbjørn Heggem", "number": 6, "pos": "D", "grid": null },
-            { "id": null, "name": "Eivind Helland", "number": 4, "pos": "D", "grid": null },
-            { "id": null, "name": "Juan Miranda", "number": 33, "pos": "D", "grid": null },
-            { "id": null, "name": "Emil Holm", "number": 2, "pos": "D", "grid": null },
-            { "id": null, "name": "Tommaso Pobega", "number": 18, "pos": "M", "grid": null },
-            { "id": null, "name": "Remo Freuler", "number": 8, "pos": "M", "grid": null },
-            { "id": null, "name": "Lewis Ferguson", "number": 19, "pos": "M", "grid": null },
-            { "id": null, "name": "Roberto Piccoli", "number": 99, "pos": "F", "grid": null },
-            { "id": null, "name": "Nicolò Cambiaghi", "number": 28, "pos": "M", "grid": null },
-            { "id": null, "name": "Jens Odgaard", "number": 21, "pos": "M", "grid": null }
+            {
+              "id": null,
+              "name": "Lukasz Skorupski",
+              "number": 1,
+              "pos": "G",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Torbjørn Heggem",
+              "number": 6,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Eivind Helland",
+              "number": 4,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Juan Miranda",
+              "number": 33,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Emil Holm",
+              "number": 2,
+              "pos": "D",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Tommaso Pobega",
+              "number": 18,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Remo Freuler",
+              "number": 8,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Lewis Ferguson",
+              "number": 19,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Roberto Piccoli",
+              "number": 99,
+              "pos": "F",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Nicolò Cambiaghi",
+              "number": 28,
+              "pos": "M",
+              "grid": null
+            },
+            {
+              "id": null,
+              "name": "Jens Odgaard",
+              "number": 21,
+              "pos": "M",
+              "grid": null
+            }
           ],
           "substitutes": [
-            { "id": null, "name": "Federico Ravaglia", "number": 34, "pos": "SUB" },
-            { "id": null, "name": "Massimo Pessina", "number": 25, "pos": "SUB" },
-            { "id": null, "name": "Stefan Posch", "number": 3, "pos": "SUB" },
-            { "id": null, "name": "Martin Erlic", "number": 5, "pos": "SUB" },
-            { "id": null, "name": "Jhon Lucumí", "number": 26, "pos": "SUB" },
-            { "id": null, "name": "Charalampos Lykogiannis", "number": 22, "pos": "SUB" },
-            { "id": null, "name": "Nadir Zortea", "number": 20, "pos": "SUB" },
-            { "id": null, "name": "Nikola Moro", "number": 80, "pos": "SUB" },
-            { "id": null, "name": "Mikel Amondarain", "number": 82, "pos": "SUB" },
-            { "id": null, "name": "Riccardo Orsolini", "number": 7, "pos": "SUB" },
-            { "id": null, "name": "Artem Dovbyk", "number": 9, "pos": "SUB" },
-            { "id": null, "name": "Benjamín Domínguez", "number": 30, "pos": "SUB" }
+            {
+              "id": null,
+              "name": "Federico Ravaglia",
+              "number": 34,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Massimo Pessina",
+              "number": 25,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Stefan Posch",
+              "number": 3,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Martin Erlic",
+              "number": 5,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Jhon Lucumí",
+              "number": 26,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Charalampos Lykogiannis",
+              "number": 22,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Nadir Zortea",
+              "number": 20,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Nikola Moro",
+              "number": 80,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Mikel Amondarain",
+              "number": 82,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Riccardo Orsolini",
+              "number": 7,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Artem Dovbyk",
+              "number": 9,
+              "pos": "SUB"
+            },
+            {
+              "id": null,
+              "name": "Benjamín Domínguez",
+              "number": 30,
+              "pos": "SUB"
+            }
           ]
         }
       ],
       "statistics": [
         {
-          "teamId": null,
+          "teamId": 102,
           "teamName": "Atalanta BC",
           "stats": [
-            { "type": "Shots on Goal", "value": 2 },
-            { "type": "Total Shots", "value": 6 },
-            { "type": "Fouls", "value": 10 },
-            { "type": "Corner Kicks", "value": 1 },
-            { "type": "Offsides", "value": 0 },
-            { "type": "Ball Possession", "value": "41.5%" },
-            { "type": "Yellow Cards", "value": 1 },
-            { "type": "Red Cards", "value": 0 },
-            { "type": "Goalkeeper Saves", "value": 3 },
-            { "type": "Total passes", "value": 478 },
-            { "type": "Passes accurate", "value": 430 },
-            { "type": "Passes %", "value": "90%" }
+            {
+              "type": "Shots on Goal",
+              "value": 2
+            },
+            {
+              "type": "Total Shots",
+              "value": 6
+            },
+            {
+              "type": "Fouls",
+              "value": 10
+            },
+            {
+              "type": "Corner Kicks",
+              "value": 1
+            },
+            {
+              "type": "Offsides",
+              "value": 0
+            },
+            {
+              "type": "Ball Possession",
+              "value": "41.5%"
+            },
+            {
+              "type": "Yellow Cards",
+              "value": 1
+            },
+            {
+              "type": "Red Cards",
+              "value": 0
+            },
+            {
+              "type": "Goalkeeper Saves",
+              "value": 3
+            },
+            {
+              "type": "Total passes",
+              "value": 478
+            },
+            {
+              "type": "Passes accurate",
+              "value": 430
+            },
+            {
+              "type": "Passes %",
+              "value": "90%"
+            }
           ]
         },
         {
-          "teamId": null,
+          "teamId": 103,
           "teamName": "Bologna FC 1909",
           "stats": [
-            { "type": "Shots on Goal", "value": 3 },
-            { "type": "Total Shots", "value": 16 },
-            { "type": "Fouls", "value": 13 },
-            { "type": "Corner Kicks", "value": 2 },
-            { "type": "Offsides", "value": 4 },
-            { "type": "Ball Possession", "value": "58.5%" },
-            { "type": "Yellow Cards", "value": 1 },
-            { "type": "Red Cards", "value": 0 },
-            { "type": "Goalkeeper Saves", "value": 1 },
-            { "type": "Total passes", "value": 683 },
-            { "type": "Passes accurate", "value": 615 },
-            { "type": "Passes %", "value": "90%" }
+            {
+              "type": "Shots on Goal",
+              "value": 3
+            },
+            {
+              "type": "Total Shots",
+              "value": 16
+            },
+            {
+              "type": "Fouls",
+              "value": 13
+            },
+            {
+              "type": "Corner Kicks",
+              "value": 2
+            },
+            {
+              "type": "Offsides",
+              "value": 4
+            },
+            {
+              "type": "Ball Possession",
+              "value": "58.5%"
+            },
+            {
+              "type": "Yellow Cards",
+              "value": 1
+            },
+            {
+              "type": "Red Cards",
+              "value": 0
+            },
+            {
+              "type": "Goalkeeper Saves",
+              "value": 1
+            },
+            {
+              "type": "Total passes",
+              "value": 683
+            },
+            {
+              "type": "Passes accurate",
+              "value": 615
+            },
+            {
+              "type": "Passes %",
+              "value": "90%"
+            }
           ]
         }
       ]
