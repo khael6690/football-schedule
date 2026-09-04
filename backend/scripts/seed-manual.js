@@ -529,9 +529,13 @@ async function seed() {
     let detailWrites = 0;
     let skipped = 0;
 
+    /** @type {Set<number>} fixture ids written in this run — used for cache invalidation */
+    const touchedFixtureIds = new Set();
+
     for (const { payload } of parsed) {
         for (const item of payload.fixtures) {
             const id = resolveFixtureId(item, payload.date_key);
+            touchedFixtureIds.add(id);
             const detail = toDetail(item, id);
             const summary = toSummary(detail, item.sources);
 
@@ -558,6 +562,19 @@ async function seed() {
     const touchedDateKeys = new Set(parsed.map(p => p.payload.date_key));
     for (const dk of touchedDateKeys) {
         const key = `football:fixtures:date:${dk}`;
+        try {
+            await cache.del(key);
+            console.log(`[SEED-MANUAL] invalidated cache ${key}`);
+        } catch (err) {
+            console.warn(`[SEED-MANUAL] cache invalidate failed for ${key}: ${err.message}`);
+        }
+    }
+
+    // Same for each seeded fixture's detail cache (TTL 24h for final matches),
+    // otherwise a re-seed that adds events/lineups/statistics stays invisible
+    // behind the pre-seed cached detail.
+    for (const id of touchedFixtureIds) {
+        const key = `football:fixture:${id}`;
         try {
             await cache.del(key);
             console.log(`[SEED-MANUAL] invalidated cache ${key}`);
