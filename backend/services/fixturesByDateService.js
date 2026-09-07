@@ -130,7 +130,9 @@ async function fetchAndCache(date, archived = []) {
   // Serve API + archived (incl. manual) merged; manual wins on non-final API data
   const fixtures = mergeByFixtureId(enriched, archived);
 
-  const ttl = ttlForDate(date);
+  // If fixtures array is empty, use a very short TTL (60s) instead of 7 days (TTL_PAST),
+  // so empty results or temporary upstream glitches don't lock the date for a week!
+  const ttl = fixtures.length > 0 ? ttlForDate(date) : 60;
   await cache.set(keyFor(date), fixtures, ttl);
 
   console.log(`[FIXTURES-BY-DATE] Cached ${fixtures.length} fixtures for ${date} (api=${enriched.length} archived=${archived.length} ttl=${ttl}s)`);
@@ -157,13 +159,12 @@ async function getFixturesByDate(date) {
   }
 
   // Redis miss -> try the durable Mongo archive (API archive + manual seed)
-  // before spending API quota. Only trusted when the data can no longer
-  // change: past date, or every fixture already final.
+  // before spending API quota. Only trusted when all archived fixtures are
+  // already final. Never trust non-final data just because the calendar date passed.
   const archived = await apfStore.getFixturesByDateKey(date);
   if (archived.length > 0) {
-    const isPast = date < todayWib();
     const allFinal = archived.every(f => f.status?.state === 'post');
-    if (isPast || allFinal) {
+    if (allFinal) {
       await cache.set(keyFor(date), archived, ttl);
       console.log(`[FIXTURES-BY-DATE] Served ${archived.length} fixtures for ${date} from Mongo archive`);
       return { date, fixtures: archived, source: 'db', stale: false, ttl };
@@ -181,8 +182,8 @@ async function getFixturesByDate(date) {
   // Cache miss + low quota -> do not spend a request
   if (isQuotaLow()) {
     console.warn(`[FIXTURES-BY-DATE] Low quota — skipping API call for ${date}`);
-    // Serve whatever the archive has rather than nothing
-    return { date, fixtures: archived, source: 'stale', stale: true, ttl };
+    // Serve whatever the archive has rather than nothing, but with short TTL
+    return { date, fixtures: archived, source: 'stale', stale: true, ttl: 60 };
   }
 
   // In-flight dedupe

@@ -32,6 +32,8 @@ let workerRunning = false;
 let lastLiveCount = 0;
 let lastTotalLiveCount = 0; // includes non-priority
 let consecutiveEmptyPolls = 0;
+let lastFinishedSyncTime = 0;
+const FINISHED_SYNC_INTERVAL_MS = 2 * 60 * 60 * 1000; // 2 hours
 
 // ---------------------------------------------------------------------------
 // SSE (Server-Sent Events) client management
@@ -171,8 +173,8 @@ async function fetchAndCacheLive() {
     consecutiveEmptyPolls = 0;
   }
 
-  // Detect score changes by comparing against previous cache
-  const previous = await cache.get(cache.KEYS.live());
+  // Detect score changes by comparing against previous live snapshot/cache
+  const previous = (await cache.get(cache.KEYS.liveSnapshot())) || (await cache.get(cache.KEYS.live()));
   const changes = [];
   if (previous && Array.isArray(previous)) {
     const detected = await detectChanges(previous, normalized);
@@ -181,6 +183,8 @@ async function fetchAndCacheLive() {
 
   // Update Redis — all leagues
   await cache.set(cache.KEYS.live(), normalized, cache.TTL.LIVE);
+  // Also store snapshot with 1-hour TTL so detectChanges never suffers from expiry
+  await cache.set(cache.KEYS.liveSnapshot(), normalized, 3600);
 
   // Update per-league keys
   const byLeague = {};
@@ -307,6 +311,15 @@ async function detectChanges(previous, current) {
   // Grows the archive daily without extra API calls.
   if (newlyFinished.length > 0) {
     await apfStore.saveFixtures(newlyFinished);
+
+    // Invalidate cached fixture list for affected dates so frontend gets fresh FT score
+    for (const match of newlyFinished) {
+      const kickoff = match.kickoff || match.date;
+      const matchTimeMs = kickoff ? new Date(kickoff).getTime() : Date.now();
+      const wibDate = new Date(matchTimeMs + 7 * 60 * 60 * 1000).toISOString().slice(0, 10);
+      await cache.invalidateDate(wibDate);
+      console.log(`[LIVE] Invalidated date cache for ${wibDate} due to finished match: ${match.home?.name} vs ${match.away?.name}`);
+    }
   }
 
   return changes;
@@ -425,6 +438,17 @@ async function workerTick() {
       + ` sse_clients=${sseClients.size}`
       + (result.skipped ? ' (SKIPPED)' : '')
     );
+
+    // Periodically re-sync finished matches (every 2 hours) if quota is healthy
+    const now = Date.now();
+    if (!quota.exhausted && (quota.remaining === null || quota.remaining > 20)) {
+      if (now - lastFinishedSyncTime >= FINISHED_SYNC_INTERVAL_MS) {
+        lastFinishedSyncTime = now;
+        syncTodayFinishedMatches().catch(err => {
+          console.error('[LIVE] Periodic syncTodayFinishedMatches error:', err.message);
+        });
+      }
+    }
   } catch (err) {
     console.error('[LIVE] Worker tick error:', err.message);
   }
@@ -520,7 +544,12 @@ async function syncTodayFinishedMatches() {
       const redisKey = `football:finished:${wibKey}`;
       await cache.set(redisKey, matches, 86400); // 24h TTL
       console.log(`[LIVE] Cached ${matches.length} finished matches under local date key ${redisKey}`);
+
+      // Invalidate date fixtures cache so frontend merges fresh finished scores
+      const dateDash = `${wibKey.slice(0, 4)}-${wibKey.slice(4, 6)}-${wibKey.slice(6, 8)}`;
+      await cache.invalidateDate(dateDash);
     }
+    lastFinishedSyncTime = Date.now();
 
     // Archive durably (best-effort, never throws)
     if (enriched.length > 0) {

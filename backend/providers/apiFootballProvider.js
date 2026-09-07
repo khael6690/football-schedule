@@ -104,7 +104,17 @@ async function request(endpoint, params = {}) {
 
   // API-Football embeds errors in 200 responses
   if (json.errors && Object.keys(json.errors).length > 0) {
-    console.error('[API-FOOTBALL] API-level errors:', JSON.stringify(json.errors));
+    const errorDetails = typeof json.errors === 'object' ? JSON.stringify(json.errors) : String(json.errors);
+    console.error('[API-FOOTBALL] API-level errors:', errorDetails);
+
+    const err = new Error(`[API-FOOTBALL] API error: ${errorDetails}`);
+    if (json.errors.access || json.errors.token || json.errors.requests) {
+      quotaState.exhausted = true;
+      err.code = 'QUOTA_EXHAUSTED';
+    } else {
+      err.code = 'API_ERROR';
+    }
+    throw err;
   }
 
   return json;
@@ -117,7 +127,7 @@ async function request(endpoint, params = {}) {
 /**
  * Fetch all currently live fixtures.
  * Optionally filtered to priority leagues only.
- * @returns {Promise<Array>} Array of fixture objects
+ * @returns {Promise<Array|null>} Array of fixture objects, or null on error
  */
 async function fetchLiveFixtures() {
   try {
@@ -132,7 +142,7 @@ async function fetchLiveFixtures() {
     console.log(`[API-FOOTBALL] Live fixtures: ${fixtures.length} total → ${filtered.length} priority`);
     return filtered;
   } catch (err) {
-    if (err.code === 'QUOTA_EXHAUSTED') return null; // signal: use cache
+    if (err.code === 'QUOTA_EXHAUSTED' || err.code === 'API_ERROR') return null; // signal: use cache
     console.error('[API-FOOTBALL] fetchLiveFixtures error:', err.message);
     throw err;
   }
@@ -141,7 +151,7 @@ async function fetchLiveFixtures() {
 /**
  * Fetch fixtures for a specific date (YYYY-MM-DD).
  * @param {string} date  — YYYY-MM-DD
- * @returns {Promise<Array>}
+ * @returns {Promise<Array|null>}
  */
 async function fetchFixturesByDate(date) {
   try {
@@ -149,7 +159,7 @@ async function fetchFixturesByDate(date) {
     const fixtures = data.response || [];
     return fixtures.filter(f => PRIORITY_LEAGUE_IDS.includes(f.league?.id));
   } catch (err) {
-    if (err.code === 'QUOTA_EXHAUSTED') return null;
+    if (err.code === 'QUOTA_EXHAUSTED' || err.code === 'API_ERROR') return null;
     console.error('[API-FOOTBALL] fetchFixturesByDate error:', err.message);
     throw err;
   }
@@ -167,7 +177,7 @@ async function fetchFixtureById(fixtureId) {
     const results = data.response || [];
     return results[0] || null;
   } catch (err) {
-    if (err.code === 'QUOTA_EXHAUSTED') return null;
+    if (err.code === 'QUOTA_EXHAUSTED' || err.code === 'API_ERROR') return null;
     console.error('[API-FOOTBALL] fetchFixtureById error:', err.message);
     throw err;
   }
@@ -183,7 +193,7 @@ async function fetchStandings(leagueId, season) {
     const data = await request('/standings', { league: leagueId, season });
     return data.response || [];
   } catch (err) {
-    if (err.code === 'QUOTA_EXHAUSTED') return null;
+    if (err.code === 'QUOTA_EXHAUSTED' || err.code === 'API_ERROR') return null;
     console.error('[API-FOOTBALL] fetchStandings error:', err.message);
     throw err;
   }

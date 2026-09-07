@@ -231,7 +231,7 @@ function isAvailable() {
 // ---------------------------------------------------------------------------
 
 const TTL = {
-  LIVE:       30,       // live match data — very short
+  LIVE:       60,       // 60 seconds — keeps live data fresh while liveSnapshot preserves state for change detection
   FIXTURES:   300,      // 5 minutes
   STANDINGS:  600,      // 10 minutes
   SCOREBOARD: 180,      // 3 minutes
@@ -246,10 +246,12 @@ const TTL = {
 
 const KEYS = {
   live:           ()                => 'football:live',
+  liveSnapshot:   ()                => 'football:live:snapshot',
   liveByLeague:   (league)          => `football:live:${league}`,
   matchesToday:   ()                => 'football:matches:today',
   matchesTomorrow:()                => 'football:matches:tomorrow',
   matchesByDate:  (date)            => `football:matches:${date}`,
+  fixturesByDate: (date)            => `football:fixtures:date:${date}`,
   fixture:        (id)              => `football:fixture:${id}`,
   standings:      (league, season)  => `football:standings:${league}:${season}`,
   scoreboard:     (league, date)    => `football:scoreboard:${league}:${date}`,
@@ -259,6 +261,16 @@ const KEYS = {
   matchSummary:   (league, eventId) => `football:summary:${league}:${eventId}`,
   apiQuota:       ()                => 'football:api-football:quota',
 };
+
+/**
+ * Invalidate cached fixtures for a specific date (YYYY-MM-DD).
+ * @param {string} date
+ * @returns {Promise<number>}
+ */
+async function invalidateDate(date) {
+  if (!date) return 0;
+  return del(`football:fixtures:date:${date}`, `football:matches:${date}`);
+}
 
 // ---------------------------------------------------------------------------
 // Exports
@@ -274,6 +286,7 @@ module.exports = {
   getOrSet,
   ping,
   isAvailable,
+  invalidateDate,
   TTL,
   KEYS,
 };

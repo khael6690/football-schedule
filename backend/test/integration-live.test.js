@@ -175,8 +175,12 @@ describe('API-Football Provider', () => {
       return;
     }
     const fixtures = await apiFootball.fetchLiveFixtures();
-    assert.ok(Array.isArray(fixtures), 'Should return array');
-    console.log(`  Fetched ${fixtures.length} priority live fixtures`);
+    assert.ok(Array.isArray(fixtures) || fixtures === null, 'Should return array or null when quota/access is unavailable');
+    if (fixtures) {
+      console.log(`  Fetched ${fixtures.length} priority live fixtures`);
+    } else {
+      console.log('  API-Football unavailable/exhausted (returned null gracefully)');
+    }
   });
 
   it('normalizeLiveFixture produces correct shape', () => {
