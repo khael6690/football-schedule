@@ -70,6 +70,27 @@ function StatusBadge({ match }: { match: ApiScoreboardEvent }) {
       </span>
     );
   }
+
+  // Check if kickoff is more than 135 minutes in the past (match has concluded or passed schedule)
+  const matchTimeMs = match.date ? new Date(match.date).getTime() : 0;
+  const isPastKickoff = matchTimeMs > 0 && (Date.now() - matchTimeMs > 135 * 60 * 1000);
+  if (isPastKickoff) {
+    const comp = match.competitions?.[0];
+    const hasScores = comp?.competitors?.every((c: any) => c.score != null);
+    if (hasScores) {
+      return (
+        <span className="px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-mono text-xs font-semibold">
+          FT
+        </span>
+      );
+    }
+    return (
+      <span className="px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 font-mono text-[10px] font-medium uppercase whitespace-nowrap">
+        SELESAI
+      </span>
+    );
+  }
+
   // pre — show kick-off time in WIB
   const kickoff = formatKickoffTime(match.date, true);
   if (kickoff) {
@@ -89,9 +110,12 @@ export function MatchRow({ match }: Props) {
 
   if (!home || !away) return null;
 
+  const matchTimeMs = match.date ? new Date(match.date).getTime() : 0;
+  const isPastKickoff = matchTimeMs > 0 && (Date.now() - matchTimeMs > 135 * 60 * 1000);
+
   const state = match.status.type.state;
   const isLive = state === 'in';
-  const isFinished = state === 'post';
+  const isFinished = state === 'post' || (isPastKickoff && home.score != null && away.score != null);
 
   const homeScore = home.score != null ? home.score : null;
   const awayScore = away.score != null ? away.score : null;
@@ -107,7 +131,7 @@ export function MatchRow({ match }: Props) {
           <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse inline-block shadow-sm" />
         ) : (
           <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400 font-medium">
-            {isFinished ? '' : formatKickoffTime(match.date, false)}
+            {isFinished || isPastKickoff ? '' : formatKickoffTime(match.date, false)}
           </span>
         )}
       </div>

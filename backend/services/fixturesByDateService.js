@@ -63,11 +63,21 @@ function todayWib() {
 
 /**
  * TTL in seconds for a given date relative to today (WIB).
+ * Never gives a 7-day TTL if matches in a past date are still non-final!
  * @param {string} date  YYYY-MM-DD
+ * @param {Array}  [fixtures]
  */
-function ttlForDate(date) {
+function ttlForDate(date, fixtures = []) {
   const today = todayWib();
-  if (date < today) return TTL_PAST;
+  if (date < today) {
+    // If we have fixtures and not all of them are final (FT), use short TTL so
+    // we don't lock unfinished matches into Redis for 7 days!
+    if (Array.isArray(fixtures) && fixtures.length > 0) {
+      const allFinal = fixtures.every(f => f.status?.state === 'post');
+      if (!allFinal) return TTL_TODAY;
+    }
+    return TTL_PAST;
+  }
   if (date > today) return TTL_FUTURE;
   return TTL_TODAY;
 }
@@ -113,7 +123,7 @@ async function fetchAndCache(date, archived = []) {
 
   // null => quota exhausted mid-request
   if (raw === null) {
-    return { date, fixtures: archived, source: 'stale', stale: true, ttl: ttlForDate(date) };
+    return { date, fixtures: archived, source: 'stale', stale: true, ttl: ttlForDate(date, archived) };
   }
 
   const normalized = raw.map(apiFootball.normalizeLiveFixture);
@@ -132,7 +142,7 @@ async function fetchAndCache(date, archived = []) {
 
   // If fixtures array is empty, use a very short TTL (60s) instead of 7 days (TTL_PAST),
   // so empty results or temporary upstream glitches don't lock the date for a week!
-  const ttl = fixtures.length > 0 ? ttlForDate(date) : 60;
+  const ttl = fixtures.length > 0 ? ttlForDate(date, fixtures) : 60;
   await cache.set(keyFor(date), fixtures, ttl);
 
   console.log(`[FIXTURES-BY-DATE] Cached ${fixtures.length} fixtures for ${date} (api=${enriched.length} archived=${archived.length} ttl=${ttl}s)`);
@@ -155,7 +165,19 @@ async function getFixturesByDate(date) {
   // Empty arrays are never a valid "hit" — they mask a subsequent write
   // (e.g. manual seed) for the full TTL window. Only serve non-empty caches.
   if (Array.isArray(cached) && cached.length > 0) {
-    return { date, fixtures: cached, source: 'cache', stale: false, ttl };
+    // If this is a past date, check if the cached data is genuinely final.
+    // If it contains non-final matches whose kickoff is already > 2 hours in the past,
+    // don't treat it as an immutable cache hit — allow checking MongoDB/API for fresh FT data!
+    const hasStaleNonFinal = date < todayWib() && cached.some(f => {
+      if (f.status?.state === 'post') return false;
+      const kickoffMs = f.kickoff ? new Date(f.kickoff).getTime() : 0;
+      return kickoffMs > 0 && (Date.now() - kickoffMs > 2 * 3600 * 1000);
+    });
+
+    if (!hasStaleNonFinal) {
+      return { date, fixtures: cached, source: 'cache', stale: false, ttl };
+    }
+    console.log(`[FIXTURES-BY-DATE] Cached data for ${date} has non-final matches past kickoff — refreshing`);
   }
 
   // Redis miss -> try the durable Mongo archive (API archive + manual seed)

@@ -2,8 +2,10 @@ name: Daily Football Data Seed
 
 on:
   schedule:
-    # Berjalan otomatis setiap hari pada jam 00:00 UTC (07:00 WIB)
+    # 00:00 UTC (07:00 WIB) - pagi hari WIB
     - cron: '0 0 * * *'
+    # 22:30 UTC (05:30 WIB) - setelah pertandingan malam Eropa selesai
+    - cron: '30 22 * * *'
   workflow_dispatch: # Memungkinkan tombol "Run workflow" manual di tab Actions GitHub
 
 jobs:
@@ -24,10 +26,20 @@ jobs:
         working-directory: backend
         run: npm ci || npm install
 
-      - name: Run Data Seeding
+      - name: Run Football-Data Seeding
         working-directory: backend
         env:
           MONGODB_URL: ${{ secrets.MONGODB_URL }}
           FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
           NODE_ENV: production
         run: npm run fetcher:seed
+
+      - name: Run API-Football Daily Match Results Sync
+        working-directory: backend
+        env:
+          MONGODB_URL: ${{ secrets.MONGODB_URL }}
+          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
+          UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
+          UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+          NODE_ENV: production
+        run: npm run sync:daily

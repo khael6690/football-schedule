@@ -263,13 +263,21 @@ const KEYS = {
 };
 
 /**
- * Invalidate cached fixtures for a specific date (YYYY-MM-DD).
+ * Invalidate cached fixtures for a specific date (YYYY-MM-DD or YYYYMMDD).
  * @param {string} date
  * @returns {Promise<number>}
  */
 async function invalidateDate(date) {
   if (!date) return 0;
-  return del(`football:fixtures:date:${date}`, `football:matches:${date}`);
+  const dateDash = date.includes('-') ? date : `${date.slice(0, 4)}-${date.slice(4, 6)}-${date.slice(6, 8)}`;
+  const dateClean = date.replace(/-/g, '');
+  return del(
+    `football:fixtures:date:${dateDash}`,
+    `football:matches:${dateDash}`,
+    `football:matches:${dateClean}`,
+    `football:finished:${dateClean}`,
+    `football:finished:${dateDash}`
+  );
 }
 
 // ---------------------------------------------------------------------------

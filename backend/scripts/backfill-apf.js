@@ -39,9 +39,10 @@ const DELAY_MS = 7000;          // 10 req/min limit -> ~8.5 req/min
 const QUOTA_ABORT_AT = 5;
 
 function parseArgs(argv) {
-    const args = { days: 30, from: null, to: null, dryRun: false };
+    const args = { days: 30, from: null, to: null, dryRun: false, force: false };
     for (const a of argv.slice(2)) {
         if (a === '--dry-run') args.dryRun = true;
+        else if (a === '--force') args.force = true;
         else if (a.startsWith('--days=')) args.days = parseInt(a.slice(7), 10);
         else if (a.startsWith('--from=')) args.from = a.slice(7);
         else if (a.startsWith('--to=')) args.to = a.slice(5);
@@ -113,11 +114,13 @@ async function backfill() {
     let stored = 0;
 
     for (const date of dates) {
-        const existing = await apfStore.countFixturesByDateKey(date);
+        const archived = await apfStore.getFixturesByDateKey(date);
+        const existing = archived.length;
+        const allFinal = existing > 0 && archived.every(f => f.status?.state === 'post');
 
-        if (existing > 0) {
+        if (existing > 0 && allFinal && !args.force) {
             skipped++;
-            console.log(`[BACKFILL] ${date} — skip (already in Mongo: ${existing} fixtures)`);
+            console.log(`[BACKFILL] ${date} — skip (already in Mongo: ${existing} fixtures, all FT)`);
             continue;
         }
 

@@ -178,14 +178,17 @@ export function useFixtures(date: Date, league?: string) {
                   ev.apfId = apfNum;
                 }
 
-                // byDate is schedule-grade data: only use its score/status when the
-                // match is final there AND the ESPN event isn't already final with a score.
+                // byDate is schedule-grade data: use its score/status when the
+                // match is final or live there AND the ESPN event isn't already final with a score.
                 if (hit.tier === 'byDate') {
-                  const byDateFinal = liveMatch.status?.state === 'post';
+                  const isFinalOrLive =
+                    liveMatch.status?.state === 'post' ||
+                    liveMatch.status?.state === 'in' ||
+                    liveMatch.status?.short === 'FT';
                   const evHasFinalScore =
                     ev.status?.type?.state === 'post' &&
                     ev.competitions[0].competitors.every((c: any) => c.score != null);
-                  if (!byDateFinal || evHasFinalScore) {
+                  if (!isFinalOrLive || evHasFinalScore) {
                     return ev;
                   }
                 }
@@ -201,14 +204,15 @@ export function useFixtures(date: Date, league?: string) {
                 // Update status
                 if (ev.status && ev.status.type) {
                   const state = liveMatch.status?.state;
-                  if (state === 'post' || state === 'in') {
-                    ev.status.type.state = state as any;
-                    ev.status.type.shortDetail = liveMatch.status?.short || (state === 'post' ? 'FT' : ev.status.type.shortDetail);
+                  if (state === 'post' || state === 'in' || liveMatch.status?.short === 'FT') {
+                    const finalState = (state === 'post' || liveMatch.status?.short === 'FT') ? 'post' : state;
+                    ev.status.type.state = finalState as any;
+                    ev.status.type.shortDetail = liveMatch.status?.short || (finalState === 'post' ? 'FT' : ev.status.type.shortDetail);
                     ev.status.type.detail = liveMatch.status?.long || ev.status.type.detail;
-                    if (liveMatch.status?.elapsed && state === 'in') {
+                    if (liveMatch.status?.elapsed && finalState === 'in') {
                       ev.status.clock = liveMatch.status.elapsed * 60;
                       ev.status.displayClock = `${liveMatch.status.elapsed}'`;
-                    } else if (state === 'post') {
+                    } else if (finalState === 'post') {
                       ev.status.displayClock = 'FT';
                     }
                   }
