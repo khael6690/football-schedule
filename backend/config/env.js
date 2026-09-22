@@ -4,44 +4,44 @@ const dotenv = require('dotenv');
 let configLoaded = false;
 let config = null;
 
-// تابع بارگذاری تنظیمات محیطی
+// Fungsi memuat konfigurasi environment
 function loadEnvConfig() {
   if (configLoaded) return config;
 
-  // تعیین محیط اجرا 
+  // Menentukan environment eksekusi
   const NODE_ENV = (process.env.NODE_ENV || 'development').trim();
 
-  // بارگذاری فایل env مناسب
+  // Memuat file env yang sesuai
   const envFile = NODE_ENV === 'production' ? '.env.production' : '.env.development';
   const envPath = path.resolve(process.cwd(), envFile);
 
-  // بارگذاری متغیرهای محیطی
+  // Memuat variabel environment
   const result = dotenv.config({ path: envPath });
 
   if (result.error) {
-    console.warn(`⚠️ فایل ${envFile} یافت نشد، استفاده از مقادیر پیش‌فرض`);
-    // بارگذاری .env پیش‌فرض
+    console.warn(`⚠️ File ${envFile} tidak ditemukan, menggunakan konfigurasi .env default`);
+    // Memuat .env default
     dotenv.config();
   }
 
-  console.log(`🌍 محیط: ${NODE_ENV}`);
-  console.log(`📁 فایل env: ${envFile}`);
+  console.log(`🌍 Environment: ${NODE_ENV}`);
+  console.log(`📁 File env: ${envFile}`);
 
-  // تنظیمات پیش‌فرض
+  // Konfigurasi default
   config = {
-    // محیط
+    // Environment
     NODE_ENV,
     isDev: NODE_ENV === 'development',
     isProd: NODE_ENV === 'production',
     isDevelopment: NODE_ENV === 'development',
     isProduction: NODE_ENV === 'production',
 
-    // سرور
+    // Server
     PORT: parseInt(process.env.PORT) || 3050,
     API_URL: process.env.API_URL || `http://localhost:${process.env.PORT || 3050}`,
     FRONTEND_URL: process.env.FRONTEND_URL || `http://localhost:${process.env.PORT || 3050}`,
 
-    // دیتابیس
+    // Database
     MONGODB_URL: process.env.MONGODB_URL || 'mongodb://localhost:27017/soccer',
 
     // Rate Limiting
@@ -59,7 +59,7 @@ function loadEnvConfig() {
     // Swagger
     ENABLE_SWAGGER: process.env.ENABLE_SWAGGER === 'true' || NODE_ENV === 'development',
 
-    // تابع برای دریافت CORS origins
+    // Fungsi untuk mendapatkan CORS origins
     getCorsOrigins: function() {
       const origins = process.env.CORS_ORIGINS || process.env.CORS_ORIGIN || '*';
       if (origins === '*') return '*';
@@ -71,10 +71,10 @@ function loadEnvConfig() {
   return config;
 }
 
-// Export both function and config object
+// Export function dan config object
 module.exports = { loadEnvConfig, config: null };
 
-// Getter for config to ensure it's loaded
+// Getter untuk config memastikan konfigurasi sudah dimuat
 Object.defineProperty(module.exports, 'config', {
   get: function() {
     if (!config) loadEnvConfig();
